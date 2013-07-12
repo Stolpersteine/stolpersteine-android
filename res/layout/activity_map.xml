@@ -8,9 +8,37 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MapActivity" >
 
-    <TextView
+    <EditText
+        android:id="@+id/editTextQuery"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/buttonSearch"
+        android:ems="10"
+        android:hint="@string/hint_query"
+        android:inputType="textPersonName"
+        android:minHeight="48dp"
+        android:textSize="24sp" >
+        <requestFocus />
+    </EditText>
+
+    <Button
+        android:id="@+id/buttonSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:text="@string/search"
+        android:minHeight="48dp"
+        android:textSize="24sp" />
+    
+    <fragment
+        android:id="@+id/fragmentMap"
+        android:name="com.google.android.gms.maps.MapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/editTextQuery" />
 
 </RelativeLayout>
