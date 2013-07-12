@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- General -->
     <string name="app_name">Stolpersteine</string>
+    
+    <!-- Map Activity UI -->
     <string name="hint_query">Name</string>
     <string name="search">Search</string>
+    <string name="action_positioning">Positioning</string>
+    
+    <!-- Alerts -->
+    <string name="alert_pos_btn">Settings</string>
+    <string name="alert_neg_btn">Cancel</string>
+    <string name="alert_title">Notification</string>
+    <string name="alert_gps_msg">GPS is disabled, do you want to go to system settings and turn it on?</string>
+    <string name="alert_mock_location_msg">Allow mock locations is disabled, do you want to go to system settings and turn it on?</string>
+    
     <!--
     <string name=""></string>
     -->
