@@ -39,7 +39,7 @@ public class LocationFinder extends Service implements LocationListener {
             isNetworkAvailable = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
             
             if (!isGPSAvailable && !isNetworkAvailable) {
-                Log.d("DreiRi", "No provider is available");
+                Log.d("Location", "No provider is available");
             } else {
                 positionable = true;
                 if (isGPSAvailable) {
@@ -68,12 +68,12 @@ public class LocationFinder extends Service implements LocationListener {
     }
     
     private Location getLocationByGPS() {
-        Log.d("DreiRi", "Positioning with GPS");
+        Log.d("Location", "Positioning with GPS");
         return getLocationByProvider(LocationManager.GPS_PROVIDER);
     }
     
     private Location getLocationByNetwork() {
-        Log.d("DreiRi", "Positioning with Network");
+        Log.d("Location", "Positioning with Network");
         return getLocationByProvider(LocationManager.NETWORK_PROVIDER);
     }
     
