@@ -46,10 +46,10 @@ public class Client {
     
     private class ReadJSONFeedTask extends AsyncTask<String, Void, String> {
         
-        private JSONResponsible jsonResponsible;
+        private OnJSONResponse onJSONResponse;
         
-        private ReadJSONFeedTask(JSONResponsible jsonResponsible) {
-            this.jsonResponsible = jsonResponsible;
+        private ReadJSONFeedTask(OnJSONResponse onJSONResponse) {
+            this.onJSONResponse = onJSONResponse;
         }
 
         @Override
@@ -62,7 +62,7 @@ public class Client {
             try {
                 JSONArray jsonArray = new JSONArray(result);
                 Log.i("HTTP", "Number of Stolpersteine retrieved: " + jsonArray.length());
-                jsonResponsible.actOnJSON(jsonArray);
+                onJSONResponse.execute(jsonArray);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -70,8 +70,8 @@ public class Client {
         
     }
     
-    public void getJSONFeed(String uri, JSONResponsible actionjsonResponsible) {
-        new ReadJSONFeedTask(actionjsonResponsible).execute(uri);
+    public void getJSONFeed(String uri, OnJSONResponse onJSONResponse) {
+        new ReadJSONFeedTask(onJSONResponse).execute(uri);
     }
     
 }
