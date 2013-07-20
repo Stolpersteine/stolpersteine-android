@@ -93,5 +93,9 @@ public class Location {
     public boolean equals(Location location) {
         return (this.street.equals(location.street) && this.zipCode.equals(location.zipCode)) ? true : false;
     }
+    
+    public String address() {
+        return this.street + ", " + this.zipCode + " " + this.city;
+    }
 
 }
