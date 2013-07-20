@@ -25,7 +25,7 @@ public class UIEnhancer {
         SpannableString spannableString = new SpannableString(text);
         Drawable image = activity.getResources().getDrawable(imageResource);
         image.setBounds(0, 0, image.getIntrinsicWidth(), image.getIntrinsicHeight());
-        spannableString.setSpan(new ImageSpan(image, ImageSpan.ALIGN_BASELINE), start, end, SpannableString.SPAN_INCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(new ImageSpan(image, ImageSpan.ALIGN_BOTTOM), start, end, SpannableString.SPAN_INCLUSIVE_EXCLUSIVE);
         textView.setText(spannableString);
     }
 
