@@ -38,10 +38,19 @@
         </activity>
         <activity
             android:name="com.dreiri.stolpersteine.InfoActivity"
-            android:label="Info Activity"
+            android:label="Info"
             android:parentActivityName="com.dreiri.stolpersteine.MapActivity" >
             <intent-filter>
                 <action android:name="com.dreiri.stolpersteine.InfoActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.dreiri.stolpersteine.BioActivity"
+            android:label="Biography"
+            android:parentActivityName="com.dreiri.stolpersteine.InfoActivity" >
+            <intent-filter>
+                <action android:name="com.dreiri.stolpersteine.BioActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
