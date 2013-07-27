@@ -16,7 +16,7 @@ public class Person implements Parcelable {
     }
     
     public Person(String firstName, String lastName) {
-        new Person(firstName, lastName, "");
+        this(firstName, lastName, "");
     }
     
     public Person(Parcel orig) {

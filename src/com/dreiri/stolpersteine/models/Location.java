@@ -19,30 +19,30 @@ public class Location implements Parcelable {
         this.street = street;
         this.zipCode = zipCode;
         this.city = city;
-        this.sublocalities.addAll(sublocalities);
         this.coordinates = coordinates;
+        if (sublocalities != null) {
+            this.sublocalities.addAll(sublocalities);
+        }
     }
     
     public Location(String street, String zipCode, String city, ArrayList<String> sublocalities, double latitude, double longitude) {
-        LatLng coordinates = new LatLng(latitude, longitude);
-        new Location(street, zipCode, city, sublocalities, coordinates);
+        this(street, zipCode, city, sublocalities, new LatLng(latitude, longitude));
     }
     
     public Location(String street, String zipCode, String city, ArrayList<String> sublocalities, String latitude, String longitude) {
-        LatLng coordinates = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
-        new Location(street, zipCode, city, sublocalities, coordinates);
+        this(street, zipCode, city, sublocalities, new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude)));
     }
     
     public Location(String street, String zipCode, String city, LatLng coordinates) {
-        new Location(street, zipCode, city, new ArrayList<String>(), coordinates);
+        this(street, zipCode, city, null, coordinates);
     }
     
     public Location(String street, String zipCode, String city, ArrayList<String> sublocalities) {
-        new Location(street, zipCode, city, sublocalities, null);
+        this(street, zipCode, city, sublocalities, null);
     }
     
     public Location(String street, String zipCode, String city) {
-        new Location(street, zipCode, city, new ArrayList<String>(), null);
+        this(street, zipCode, city, null, null);
     }
     
     public Location(Parcel orig) {
@@ -80,6 +80,14 @@ public class Location implements Parcelable {
     public void setSublocalities(ArrayList<String> sublocalities) {
         this.sublocalities.clear();
         this.sublocalities.addAll(sublocalities);
+    }
+    
+    public boolean addSublocalities(ArrayList<String> sublocalities) {
+        return this.sublocalities.addAll(sublocalities);
+    }
+    
+    public boolean addSublocality(String sublocality) {
+        return this.sublocalities.add(sublocality);
     }
 
     public LatLng getCoordinates() {
