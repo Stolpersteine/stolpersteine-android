@@ -124,7 +124,6 @@ public class Location implements Parcelable {
         dest.writeString(this.street);
         dest.writeString(this.zipCode);
         dest.writeString(this.city);
-//        dest.writeSerializable(this.sublocalities);
         dest.writeList(this.sublocalities);
         dest.writeParcelable(this.coordinates, 0);
     }
@@ -133,7 +132,6 @@ public class Location implements Parcelable {
         this.street = orig.readString();
         this.zipCode = orig.readString();
         this.city = orig.readString();
-//        this.sublocalities = orig.readArrayList(String.class.getClassLoader());
         orig.readList(this.sublocalities, getClass().getClassLoader());
         this.coordinates = orig.readParcelable(LatLng.class.getClassLoader());
     }
