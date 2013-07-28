@@ -10,10 +10,12 @@ import android.widget.TextView;
 
 import com.dreiri.stolpersteine.models.Location;
 import com.dreiri.stolpersteine.models.Person;
+import com.dreiri.stolpersteine.models.Stolperstein;
 import com.dreiri.stolpersteine.utils.UIEnhancer;
 
 public class InfoActivity extends Activity {
 
+    Stolperstein stolperstein;
     Person person;
     Location location;
     String bioUrl;
@@ -25,10 +27,9 @@ public class InfoActivity extends Activity {
         setContentView(R.layout.fragment_info);
         
         Intent intent = getIntent();
-        if (intent.hasExtra("person") && intent.hasExtra("location")) {
-            person = intent.getParcelableExtra("person");
-            location = intent.getParcelableExtra("location");
-            bioUrl = person.getBiography();
+        if (intent.hasExtra("stolperstein")) {
+            stolperstein = intent.getParcelableExtra("stolperstein");
+            readProperties(stolperstein);
         }
         
         TextView textViewName = (TextView) findViewById(R.id.textViewName);
@@ -59,17 +60,22 @@ public class InfoActivity extends Activity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable("person", person);
-        outState.putParcelable("location", location);
+        outState.putParcelable("stolperstein", stolperstein);
     }
     
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        if (savedInstanceState != null && savedInstanceState.containsKey("person") && savedInstanceState.containsKey("location")) {
-            person = savedInstanceState.getParcelable("person");
-            location = savedInstanceState.getParcelable("location");
+        if (savedInstanceState != null && savedInstanceState.containsKey("stolperstein")) {
+            stolperstein = savedInstanceState.getParcelable("stolperstein");
+            readProperties(stolperstein);
         }
+    }
+    
+    private void readProperties(Stolperstein stolperstein) {
+        person = stolperstein.getPerson();
+        location = stolperstein.getLocation();
+        bioUrl = person.getBiography();
     }
 
 }
