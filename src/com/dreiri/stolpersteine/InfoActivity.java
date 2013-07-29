@@ -1,17 +1,24 @@
 package com.dreiri.stolpersteine;
 
+import java.io.IOException;
+import java.net.URL;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.dreiri.stolpersteine.models.Location;
 import com.dreiri.stolpersteine.models.Person;
 import com.dreiri.stolpersteine.models.Stolperstein;
-import com.dreiri.stolpersteine.utils.UIEnhancer;
 
 public class InfoActivity extends Activity {
 
@@ -19,6 +26,7 @@ public class InfoActivity extends Activity {
     Person person;
     Location location;
     String bioUrl;
+    String bioData;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,17 +42,34 @@ public class InfoActivity extends Activity {
         
         TextView textViewName = (TextView) findViewById(R.id.textViewName);
         TextView textViewAddress = (TextView) findViewById(R.id.textViewAddress);
-        TextView textViewBio = (TextView) findViewById(R.id.textViewBio);
+        Button btnBio = (Button) findViewById(R.id.btnBio);
         
         textViewName.setText(person.name());
         textViewAddress.setText(location.address());
-        UIEnhancer.insertImageIntoTextView(this, R.drawable.img_doughface, R.id.textViewBio);
+//        UIEnhancer.insertImageIntoTextView(this, R.drawable.img_doughface, R.id.textViewBio);
         
-        textViewBio.setOnClickListener(new OnClickListener() {
+        // pre-caching
+        Thread downloadThread = new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                try {
+                    // Document document = Jsoup.connect(bioUrl).get();
+                    Document document = Jsoup.parse(new URL(bioUrl).openStream(), "utf-8", bioUrl);
+                    Elements elements = document.select("div#biografie_seite");
+                    bioData = elements.toString();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        downloadThread.start();
+        
+        btnBio.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent("com.dreiri.stolpersteine.BioActivity");
-                intent.putExtra("bioUrl", bioUrl);
+                intent.putExtra("bioData", bioData);
                 startActivity(intent);
             }
         });
