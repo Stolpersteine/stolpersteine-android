@@ -3,6 +3,8 @@ package com.dreiri.stolpersteine.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.android.gms.maps.model.LatLng;
+
 public class Stolperstein implements Parcelable {
 
     private Person person;
@@ -31,6 +33,18 @@ public class Stolperstein implements Parcelable {
 
     public void setLocation(Location location) {
         this.location = location;
+    }
+    
+    public LatLng coordinates() {
+        return location.getCoordinates();
+    }
+    
+    public String address() {
+        return location.address();
+    }
+    
+    public String name() {
+        return person.name();
     }
     
     @Override
