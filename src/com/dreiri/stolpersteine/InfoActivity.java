@@ -42,7 +42,7 @@ public class InfoActivity extends Activity {
         
         TextView textViewName = (TextView) findViewById(R.id.textViewName);
         TextView textViewAddress = (TextView) findViewById(R.id.textViewAddress);
-        Button btnBio = (Button) findViewById(R.id.btnBio);
+        final Button btnBio = (Button) findViewById(R.id.btnBio);
         
         textViewName.setText(person.name());
         textViewAddress.setText(location.address());
@@ -58,21 +58,20 @@ public class InfoActivity extends Activity {
                     Document document = Jsoup.parse(new URL(bioUrl).openStream(), "utf-8", bioUrl);
                     Elements elements = document.select("div#biografie_seite");
                     bioData = elements.toString();
+                    btnBio.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(InfoActivity.this, BioActivity.class);
+                            intent.putExtra("bioData", bioData);
+                            startActivity(intent);
+                        }
+                    });
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         };
         downloadThread.start();
-        
-        btnBio.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent("com.dreiri.stolpersteine.BioActivity");
-                intent.putExtra("bioData", bioData);
-                startActivity(intent);
-            }
-        });
     }
     
     @Override
