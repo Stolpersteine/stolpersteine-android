@@ -61,7 +61,7 @@ public class Client {
         protected void onPostExecute(String result) {
             try {
                 JSONArray jsonArray = new JSONArray(result);
-                Log.i("HTTP", "Number of Stolpersteine retrieved: " + jsonArray.length());
+                Log.i("HTTP", "Number of JSON object(s) retrieved: " + jsonArray.length());
                 onJSONResponse.execute(jsonArray);
             } catch (Exception e) {
                 e.printStackTrace();
