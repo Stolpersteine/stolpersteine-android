@@ -1,4 +1,4 @@
-package com.dreiri.stolpersteine;
+package com.dreiri.stolpersteine.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.dreiri.stolpersteine.R;
 import com.dreiri.stolpersteine.callback.Callback;
 import com.dreiri.stolpersteine.client.StolpersteineClient;
 import com.dreiri.stolpersteine.models.Stolperstein;

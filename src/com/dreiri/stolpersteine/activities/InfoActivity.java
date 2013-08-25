@@ -1,4 +1,4 @@
-package com.dreiri.stolpersteine;
+package com.dreiri.stolpersteine.activities;
 
 import java.io.IOException;
 import java.net.URL;
@@ -16,6 +16,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.dreiri.stolpersteine.R;
 import com.dreiri.stolpersteine.models.Location;
 import com.dreiri.stolpersteine.models.Person;
 import com.dreiri.stolpersteine.models.Stolperstein;
