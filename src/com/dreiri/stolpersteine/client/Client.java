@@ -1,4 +1,4 @@
-package com.dreiri.stolpersteine.utils;
+package com.dreiri.stolpersteine.client;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,6 +12,8 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
+
+import com.dreiri.stolpersteine.callback.OnJSONResponse;
 
 import android.os.AsyncTask;
 import android.util.Log;
