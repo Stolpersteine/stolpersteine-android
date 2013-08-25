@@ -1,9 +1,4 @@
-
 package com.dreiri.stolpersteine;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,12 +6,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.dreiri.stolpersteine.models.Location;
-import com.dreiri.stolpersteine.models.Person;
+import com.dreiri.stolpersteine.callback.Callback;
+import com.dreiri.stolpersteine.client.StolpersteineClient;
 import com.dreiri.stolpersteine.models.Stolperstein;
-import com.dreiri.stolpersteine.utils.Client;
 import com.dreiri.stolpersteine.utils.LocationFinder;
-import com.dreiri.stolpersteine.utils.OnJSONResponse;
 import com.dreiri.stolpersteine.utils.RichMapMarker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -31,7 +24,6 @@ public class MapActivity extends Activity {
     GoogleMap map;
     LatLng berlin = new LatLng(52.5191710, 13.40609120);
     RichMapMarker richMapMarker = new RichMapMarker();
-    StringBuilder baseUri = new StringBuilder("https://stolpersteine-api.eu01.aws.af.cm/v1");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,11 +33,19 @@ public class MapActivity extends Activity {
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(berlin, 12));
         map.setOnInfoWindowClickListener(new InfoWindowHandler());
         
-        Client client = new Client();
-        StringBuilder queryUri = baseUri.append("/stolpersteine?offset=0&limit=10");
-        client.getJSONFeed(queryUri.toString(), new JSONResponseHandler());
+        StolpersteineClient stolpersteineClient = new StolpersteineClient();
+        stolpersteineClient.getNumbersOfResultsAndHandleThem(50, new Callback() {
+            
+            @Override
+            public void handle(Object object) {
+                Stolperstein stolperstein = (Stolperstein) object;
+                MarkerOptions markerOptions = new MarkerOptions().position(stolperstein.coordinates()).title(stolperstein.name()).snippet(stolperstein.address()).icon(BitmapDescriptorFactory.fromResource(R.drawable.stolpersteine_tile));
+                Marker marker = map.addMarker(markerOptions);
+                richMapMarker.setProperty(marker, stolperstein);
+            }
+        });
     }
-    
+        
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -68,42 +68,13 @@ public class MapActivity extends Activity {
         return true;
     }
     
-    private class JSONResponseHandler implements OnJSONResponse {
-
-        @Override
-        public void execute(JSONArray jsonArray) {
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject;
-                try {
-                    jsonObject = jsonArray.getJSONObject(i);
-                    JSONObject jsonPerson = jsonObject.getJSONObject("person");
-                    JSONObject jsonLocation = jsonObject.getJSONObject("location");
-                    JSONObject jsonCoordinates = jsonLocation.getJSONObject("coordinates");
-                    LatLng coordinates = new LatLng(jsonCoordinates.getDouble("latitude"), jsonCoordinates.getDouble("longitude"));
-                    
-                    Person person = new Person(jsonPerson.getString("firstName"), jsonPerson.getString("lastName"), jsonPerson.getString("biographyUrl"));
-                    Location location = new Location(jsonLocation.getString("street"), jsonLocation.getString("zipCode"), jsonLocation.getString("city"), coordinates);
-                    Stolperstein stolperstein = new Stolperstein(person, location);
-                    
-                    MarkerOptions markerOptions = new MarkerOptions().position(coordinates).title(person.name()).snippet(location.address()).icon(BitmapDescriptorFactory.fromResource(R.drawable.stolpersteine_tile)); 
-                    Marker marker = map.addMarker(markerOptions);
-                    
-                    richMapMarker.setProperty(marker, stolperstein);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        
-    }
-    
     private class InfoWindowHandler implements OnInfoWindowClickListener {
 
         @Override
         public void onInfoWindowClick(Marker marker) {
             if (richMapMarker.hasMarker(marker)) {
                 Stolperstein stolperstein = (Stolperstein) richMapMarker.getProperty(marker);
-                Intent intent = new Intent("com.dreiri.stolpersteine.InfoActivity");
+                Intent intent = new Intent(MapActivity.this, InfoActivity.class);
                 intent.putExtra("stolperstein", stolperstein);
                 startActivity(intent);
             }
