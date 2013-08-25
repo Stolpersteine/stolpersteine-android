@@ -22,17 +22,9 @@ public class BioActivity extends Activity {
         browser = (WebView) findViewById(R.id.webkit);
         browser.getSettings().setBuiltInZoomControls(true);
         browser.getSettings().setDisplayZoomControls(false);
-        
-        Thread downloadThread = new Thread() {
-            @Override
-            public void run() {
-                super.run();
-                String mimeType = "text/html";
-                String encoding = "utf-8";
-                browser.loadData(bioData, mimeType, encoding);
-            }
-        };
-        downloadThread.start();
+        String mimeType = "text/html";
+        String encoding = "utf-8";
+        browser.loadData(bioData, mimeType, encoding);
     }
     
     @Override
