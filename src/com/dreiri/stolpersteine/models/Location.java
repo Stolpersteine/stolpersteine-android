@@ -111,7 +111,23 @@ public class Location implements Parcelable {
     }
     
     public String address() {
-        return this.street + ", " + this.zipCode + " " + this.city;
+        if (this.street != null && this.zipCode != null && this.city != null) {
+            return this.street + ", " + this.zipCode + " " + this.city;
+        } else if (this.street == null && this.zipCode != null && this.city != null) {
+            return this.zipCode + " " + this.city;
+        } else if (this.street != null && this.zipCode == null && this.city != null) {
+            return this.street + ", " + this.city;
+        } else if (this.street != null && this.zipCode != null && this.city == null) {
+            return this.street + ", " + this.zipCode;
+        } else if (this.street == null && this.zipCode == null && this.city != null) {
+            return this.city;
+        } else if (this.street == null && this.zipCode != null && this.city == null) {
+            return this.zipCode;
+        } else if (this.street != null && this.zipCode == null && this.city == null) {
+            return this.street;
+        } else {
+            return "";
+        }
     }
 
     @Override

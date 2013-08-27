@@ -32,25 +32,71 @@ public class StolpersteineClient {
         public void execute(JSONArray jsonArray) {
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject;
+                JSONObject jsonPerson;
+                JSONObject jsonLocation;
+                
                 try {
                     jsonObject = jsonArray.getJSONObject(i);
-                    JSONObject jsonPerson = jsonObject.getJSONObject("person");
-                    JSONObject jsonLocation = jsonObject.getJSONObject("location");
-                    JSONObject jsonCoordinates = jsonLocation.getJSONObject("coordinates");
-                    LatLng coordinates = new LatLng(jsonCoordinates.getDouble("latitude"), jsonCoordinates.getDouble("longitude"));
-                    Person person = new Person(jsonPerson.getString("firstName"), jsonPerson.getString("lastName"), jsonPerson.getString("biographyUrl"));
-                    Location location = new Location(jsonLocation.getString("street"), jsonLocation.getString("zipCode"), jsonLocation.getString("city"), coordinates);
-                    Stolperstein stolperstein = new Stolperstein(person, location);
-                    
-                    if (callback != null) {
-                        callback.handle(stolperstein);
-                    }
+                    jsonPerson = jsonObject.getJSONObject("person");
+                    jsonLocation = jsonObject.getJSONObject("location");
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    continue;
+                }
+                
+                JSONObject jsonCoordinates = getJSONObjectFromJSONObjectSafely("coordinates", jsonLocation);
+                
+                String firstName = getStringFromJSONObjectSafely("firstName", jsonPerson);
+                String lastName = getStringFromJSONObjectSafely("lastName", jsonPerson);
+                String biographyUrl = getStringFromJSONObjectSafely("biographyUrl", jsonPerson);
+                
+                String street = getStringFromJSONObjectSafely("street", jsonLocation);
+                String zipCode = getStringFromJSONObjectSafely("zipCode", jsonLocation);
+                String city = getStringFromJSONObjectSafely("city", jsonLocation);
+                double latitude = getDoubleFromJSONObjectSafely("latitude", jsonCoordinates);
+                double longitude = getDoubleFromJSONObjectSafely("longitude", jsonCoordinates);
+                
+                Person person = new Person(firstName, lastName, biographyUrl);
+                LatLng coordinates = new LatLng(latitude, longitude);
+                Location location = new Location(street, zipCode, city, coordinates);
+                Stolperstein stolperstein = new Stolperstein(person, location);
+                
+                if (callback != null) {
+                    callback.handle(stolperstein);
                 }
             }
         }
         
+    }
+    
+    private JSONObject getJSONObjectFromJSONObjectSafely(String name, JSONObject jsonObjectIn) {
+        JSONObject jsonObjectOut = null;
+        try {
+            jsonObjectOut = jsonObjectIn.getJSONObject(name);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObjectOut;
+    }
+    
+    private String getStringFromJSONObjectSafely(String name, JSONObject jsonObject) {
+        String out = null;
+        try {
+            out = jsonObject.getString(name);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return out;
+    }
+    
+    private double getDoubleFromJSONObjectSafely(String name, JSONObject jsonObject) {
+        double out = 0.0;
+        try {
+            out = jsonObject.getDouble(name);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return out;
     }
 
 }
