@@ -111,23 +111,150 @@ public class Location implements Parcelable {
     }
     
     public String address() {
-        if (this.street != null && this.zipCode != null && this.city != null) {
-            return this.street + ", " + this.zipCode + " " + this.city;
-        } else if (this.street == null && this.zipCode != null && this.city != null) {
-            return this.zipCode + " " + this.city;
-        } else if (this.street != null && this.zipCode == null && this.city != null) {
-            return this.street + ", " + this.city;
-        } else if (this.street != null && this.zipCode != null && this.city == null) {
-            return this.street + ", " + this.zipCode;
-        } else if (this.street == null && this.zipCode == null && this.city != null) {
-            return this.city;
-        } else if (this.street == null && this.zipCode != null && this.city == null) {
-            return this.zipCode;
-        } else if (this.street != null && this.zipCode == null && this.city == null) {
-            return this.street;
-        } else {
+        AddressContext addressContext = new AddressContext(this);
+        return addressContext.getAddress();
+    }
+    
+    private class AddressContext {
+        
+        private AddressFormatter addressFormatter;
+        
+        private AddressContext(Location location) {
+            if (location.street != null && location.zipCode != null && location.city != null) {
+                addressFormatter = new AddressWithAllFields(location);
+            } else if (location.street == null && location.zipCode != null && location.city != null) {
+                addressFormatter = new AddressWithoutStreet(location);
+            } else if (location.street != null && location.zipCode == null && location.city != null) {
+                addressFormatter = new AddressWithoutZipCode(location);
+            } else if (location.street != null && location.zipCode != null && location.city == null) {
+                addressFormatter = new AddressWithoutCity(location);
+            } else if (location.street == null && location.zipCode == null && location.city != null) {
+                addressFormatter = new AddressWithoutStreetAndZipCode(location);
+            } else if (location.street == null && location.zipCode != null && location.city == null) {
+                addressFormatter = new AddressWithoutStreetAndCity(location);
+            } else if (location.street != null && location.zipCode == null && location.city == null) {
+                addressFormatter = new AddressWithoutZipCodeAndCity(location);
+            } else {
+                addressFormatter = new AddressWithoutAnything(location);
+            }
+        }
+        
+        private String getAddress() {
+            return addressFormatter.formatAddress();
+        }
+        
+    }
+
+    private abstract class AddressFormatter {
+        
+        protected Location location;
+        
+        abstract String formatAddress();
+        
+    }
+    
+    private class AddressWithAllFields extends AddressFormatter {
+        
+        private AddressWithAllFields(Location location) {
+            this.location = location;
+        }
+
+        @Override
+        String formatAddress() {
+            return location.street + ", " + location.zipCode + " " + location.city;
+        }
+        
+    }
+    
+    private class AddressWithoutStreet extends AddressFormatter {
+        
+        private AddressWithoutStreet(Location location) {
+            this.location = location;
+        }
+
+        @Override
+        String formatAddress() {
+            return location.zipCode + " " + location.city;
+        }
+        
+    }
+    
+    private class AddressWithoutZipCode extends AddressFormatter {
+        
+        private AddressWithoutZipCode(Location location) {
+            this.location = location;
+        }
+
+        @Override
+        String formatAddress() {
+            return location.street + ", " + location.city;
+        }
+        
+    }
+    
+    private class AddressWithoutCity extends AddressFormatter {
+        
+        private AddressWithoutCity(Location location) {
+            this.location = location;
+        }
+
+        @Override
+        String formatAddress() {
+            return location.street + ", " + location.zipCode;
+        }
+        
+    }
+    
+    private class AddressWithoutStreetAndZipCode extends AddressFormatter {
+        
+        private AddressWithoutStreetAndZipCode(Location location) {
+            this.location = location;
+        }
+
+        @Override
+        String formatAddress() {
+            return location.city;
+        }
+        
+    }
+    
+    private class AddressWithoutStreetAndCity extends AddressFormatter {
+        
+        private AddressWithoutStreetAndCity(Location location) {
+            this.location = location;
+        }
+
+        @Override
+        String formatAddress() {
+            return location.zipCode;
+        }
+        
+    }
+    
+    private class AddressWithoutZipCodeAndCity extends AddressFormatter {
+        
+        private AddressWithoutZipCodeAndCity(Location location) {
+            this.location = location;
+        }
+
+        @Override
+        String formatAddress() {
+            return location.street;
+        }
+        
+    }
+    
+    private class AddressWithoutAnything extends AddressFormatter {
+        
+        private AddressWithoutAnything(Location location) {
+            this.location = location;
+        }
+
+        @Override
+        String formatAddress() {
             return "";
         }
+        
     }
 
     @Override
