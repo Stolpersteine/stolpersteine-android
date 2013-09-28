@@ -22,9 +22,8 @@ public class BioActivity extends Activity {
         browser = (WebView) findViewById(R.id.webkit);
         browser.getSettings().setBuiltInZoomControls(true);
         browser.getSettings().setDisplayZoomControls(false);
-        String mimeType = "text/html";
-        String encoding = "utf-8";
-        browser.loadData(bioData, mimeType, encoding);
+        String mimeType = "text/html; charset=UTF-8";
+        browser.loadData(bioData, mimeType, null);
     }
     
     @Override
