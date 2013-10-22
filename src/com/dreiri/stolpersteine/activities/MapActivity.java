@@ -35,14 +35,14 @@ public class MapActivity extends Activity {
         map.setOnInfoWindowClickListener(new InfoWindowHandler());
         
         StolpersteineClient stolpersteineClient = new StolpersteineClient();
-        stolpersteineClient.getNumbersOfResultsAndHandleThem(50, new Callback() {
+        stolpersteineClient.getNumbersOfResultsAndHandleThem(100, new Callback() {
             
             @Override
             public void handle(Object object) {
                 Stolperstein stolperstein = (Stolperstein) object;
                 MarkerOptions markerOptions = new MarkerOptions().position(stolperstein.coordinates()).title(stolperstein.name()).snippet(stolperstein.address()).icon(BitmapDescriptorFactory.fromResource(R.drawable.stolpersteine_tile));
                 Marker marker = map.addMarker(markerOptions);
-                richMapMarker.setProperty(marker, stolperstein);
+                richMapMarker.addProperty(marker, stolperstein);
             }
         });
     }
@@ -74,7 +74,7 @@ public class MapActivity extends Activity {
         @Override
         public void onInfoWindowClick(Marker marker) {
             if (richMapMarker.hasMarker(marker)) {
-                Stolperstein stolperstein = (Stolperstein) richMapMarker.getProperty(marker);
+                Stolperstein stolperstein = (Stolperstein) richMapMarker.getProperties(marker).get(0);
                 Intent intent = new Intent(MapActivity.this, InfoActivity.class);
                 intent.putExtra("stolperstein", stolperstein);
                 startActivity(intent);
