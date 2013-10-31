@@ -1,8 +1,12 @@
 package com.dreiri.stolpersteine.client;
 
+import java.util.ArrayList;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import android.util.Log;
 
 import com.dreiri.stolpersteine.callback.Callback;
 import com.dreiri.stolpersteine.callback.OnJSONResponse;
@@ -12,6 +16,8 @@ import com.dreiri.stolpersteine.models.Stolperstein;
 import com.google.android.gms.maps.model.LatLng;
 
 public class StolpersteineClient {
+	final static int NETWORK_BATCH_SIZE = 500;
+	
     Client client;
     Callback callback;
     StringBuilder baseUri = new StringBuilder("https://stolpersteine-api.eu01.aws.af.cm/v1");
@@ -20,9 +26,28 @@ public class StolpersteineClient {
         this.client = new Client();
     }
     
-    public void getNumbersOfResultsAndHandleThem(int number, Callback callback) {
+    public void retrieveStolpersteine() {
+    	retrieveStolpersteine(0, NETWORK_BATCH_SIZE);
+    }
+
+    public void retrieveStolpersteine(final int offset, int limit) {
+    	getNumbersOfResultsAndHandleThem(0, NETWORK_BATCH_SIZE, new Callback() {
+            @Override
+            public void handle(ArrayList<Stolperstein> stolpersteine) {
+            	Log.i("", "Received: " + stolpersteine.size());
+            	if (stolpersteine.size() == NETWORK_BATCH_SIZE) {
+            		retrieveStolpersteine(offset + NETWORK_BATCH_SIZE, NETWORK_BATCH_SIZE);
+            	}
+            }
+        });
+    }
+    
+    public void getNumbersOfResultsAndHandleThem(int offset, int limit, Callback callback) {
         this.callback = callback;
-        StringBuilder queryUri = baseUri.append("/stolpersteine?offset=0&limit=").append(number);
+        StringBuilder queryUri = baseUri.append("/stolpersteine?offset=")
+        								.append(offset)
+        								.append("&limit=")
+        								.append(limit);
         client.getJSONFeed(queryUri.toString(), new JSONResponseHandler());
     }
     
@@ -30,6 +55,7 @@ public class StolpersteineClient {
 
         @Override
         public void execute(JSONArray jsonArray) {
+        	ArrayList<Stolperstein> stolpersteine = new ArrayList<Stolperstein>(jsonArray.length());
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject;
                 JSONObject jsonPerson;
@@ -60,10 +86,11 @@ public class StolpersteineClient {
                 LatLng coordinates = new LatLng(latitude, longitude);
                 Location location = new Location(street, zipCode, city, coordinates);
                 Stolperstein stolperstein = new Stolperstein(person, location);
-                
-                if (callback != null) {
-                    callback.handle(stolperstein);
-                }
+                stolpersteine.add(stolperstein);
+            }
+            
+            if (callback != null) {
+                callback.handle(stolpersteine);
             }
         }
         
