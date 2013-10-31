@@ -1,6 +1,7 @@
 package com.dreiri.stolpersteine.client;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -28,7 +29,7 @@ public class StolpersteineClient {
     public void retrieveStolpersteine(final int offset, int limit, final Callback callback) {
     	retrieveRangeOfResultsAndHandleThem(offset, limit, new Callback() {
         	@Override
-            public void handle(ArrayList<Stolperstein> stolpersteine) {
+            public void handle(List<Stolperstein> stolpersteine) {
         	    callback.handle(stolpersteine);
             	if (stolpersteine.size() == NETWORK_BATCH_SIZE) {
             		retrieveStolpersteine(offset + NETWORK_BATCH_SIZE, NETWORK_BATCH_SIZE, callback);
@@ -52,7 +53,7 @@ public class StolpersteineClient {
 
         @Override
         public void execute(JSONArray jsonArray) {
-        	ArrayList<Stolperstein> stolpersteine = new ArrayList<Stolperstein>(jsonArray.length());
+        	List<Stolperstein> stolpersteine = new ArrayList<Stolperstein>(jsonArray.length());
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.optJSONObject(i);
                 

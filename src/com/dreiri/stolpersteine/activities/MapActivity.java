@@ -1,10 +1,13 @@
 package com.dreiri.stolpersteine.activities;
 
-import java.util.ArrayList;
+import java.util.List;
+
+import org.csdgn.util.KDTree;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -27,6 +30,7 @@ public class MapActivity extends Activity {
     GoogleMap map;
     LatLng berlin = new LatLng(52.5191710, 13.40609120);
     RichMapMarker richMapMarker = new RichMapMarker();
+    KDTree<Stolperstein> tree = new KDTree<Stolperstein>(2);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,19 +44,26 @@ public class MapActivity extends Activity {
         stolpersteineClient.retrieveAllStolpersteine(new Callback() {
             
             @Override
-            public void handle(ArrayList<Stolperstein> stolpersteine) {
+            public void handle(List<Stolperstein> stolpersteine) {
                 for (Stolperstein stolperstein : stolpersteine) {
-                    MarkerOptions markerOptions = new MarkerOptions()
-                            .position(stolperstein.coordinates())
-                            .title(stolperstein.name())
-                            .snippet(stolperstein.address())
-                            .icon(BitmapDescriptorFactory
-                                    .fromResource(R.drawable.stolpersteine_tile));
-                    Marker marker = map.addMarker(markerOptions);
-                    richMapMarker.addProperty(marker, stolperstein);
+                	LatLng coordinates = stolperstein.coordinates();
+                	double[] key = new double[] {coordinates.latitude, coordinates.longitude}; 
+                	tree.add(key, stolperstein);
+                }
+                
+                double[] bottomLeft = new double[] {52.50, 13.40};
+                double[] topRight = new double[] {52.52, 13.41};
+                List<Stolperstein> list = tree.getRange(bottomLeft, topRight);
+                for (Stolperstein stolperstein : list) {
+					MarkerOptions markerOptions = new MarkerOptions()
+							.position(stolperstein.coordinates())
+							.title(stolperstein.name())
+							.snippet(stolperstein.address())
+							.icon(BitmapDescriptorFactory.fromResource(R.drawable.stolpersteine_tile));
+					Marker marker = map.addMarker(markerOptions);
+					richMapMarker.addProperty(marker, stolperstein);
                 }
             }
-            
         });
     }
         
