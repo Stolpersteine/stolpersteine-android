@@ -3,7 +3,6 @@ package com.dreiri.stolpersteine.client;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.dreiri.stolpersteine.callback.Callback;
@@ -30,7 +29,7 @@ public class StolpersteineClient {
 
     public void retrieveStolpersteine(final int offset, int limit) {
 //    	Log.i("XXX", "Request: " + offset + " " + limit);
-    	getRangeOfResultsAndHandleThem(offset, limit, new Callback() {
+    	retrieveRangeOfResultsAndHandleThem(offset, limit, new Callback() {
         	@Override
             public void handle(ArrayList<Stolperstein> stolpersteine) {
 //            	Log.i("XXX", "Received: " + stolpersteine.size());
@@ -41,7 +40,7 @@ public class StolpersteineClient {
         });
     }
     
-    public void getRangeOfResultsAndHandleThem(int offset, int limit, Callback callback) {
+    public void retrieveRangeOfResultsAndHandleThem(int offset, int limit, Callback callback) {
         this.callback = callback;
         StringBuilder queryUri = new StringBuilder()
         								.append(baseUri) 
@@ -58,30 +57,21 @@ public class StolpersteineClient {
         public void execute(JSONArray jsonArray) {
         	ArrayList<Stolperstein> stolpersteine = new ArrayList<Stolperstein>(jsonArray.length());
             for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject;
-                JSONObject jsonPerson;
-                JSONObject jsonLocation;
+                JSONObject jsonObject = jsonArray.optJSONObject(i);
                 
-                try {
-                    jsonObject = jsonArray.getJSONObject(i);
-                    jsonPerson = jsonObject.getJSONObject("person");
-                    jsonLocation = jsonObject.getJSONObject("location");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    continue;
-                }
+                JSONObject jsonPerson = jsonObject.optJSONObject("person");
+                String firstName = jsonPerson.optString("firstName", null);
+                String lastName = jsonPerson.optString("lastName", null);
+                String biographyUrl = jsonPerson.optString("biographyUrl", null);
+
+                JSONObject jsonLocation = jsonObject.optJSONObject("location");
+                String street = jsonLocation.optString("street", null);
+                String zipCode = jsonLocation.optString("zipCode", null);
+                String city = jsonLocation.optString("city", null);
                 
-                JSONObject jsonCoordinates = getJSONObjectFromJSONObjectSafely("coordinates", jsonLocation);
-                
-                String firstName = getStringFromJSONObjectSafely("firstName", jsonPerson);
-                String lastName = getStringFromJSONObjectSafely("lastName", jsonPerson);
-                String biographyUrl = getStringFromJSONObjectSafely("biographyUrl", jsonPerson);
-                
-                String street = getStringFromJSONObjectSafely("street", jsonLocation);
-                String zipCode = getStringFromJSONObjectSafely("zipCode", jsonLocation);
-                String city = getStringFromJSONObjectSafely("city", jsonLocation);
-                double latitude = getDoubleFromJSONObjectSafely("latitude", jsonCoordinates);
-                double longitude = getDoubleFromJSONObjectSafely("longitude", jsonCoordinates);
+                JSONObject jsonCoordinates = jsonLocation.optJSONObject("coordinates");
+                double latitude = jsonCoordinates.optDouble("latitude", 0.0);
+                double longitude = jsonCoordinates.optDouble("longitude", 0.0);
                 
                 Person person = new Person(firstName, lastName, biographyUrl);
                 LatLng coordinates = new LatLng(latitude, longitude);
@@ -97,24 +87,4 @@ public class StolpersteineClient {
         
     }
     
-    private JSONObject getJSONObjectFromJSONObjectSafely(String name, JSONObject jsonObjectIn) {
-        JSONObject jsonObjectOut = null;
-        try {
-          	jsonObjectOut = jsonObjectIn.getJSONObject(name);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return jsonObjectOut;
-    }
-    
-    private String getStringFromJSONObjectSafely(String name, JSONObject jsonObject) {
-        String out = jsonObject.optString(name, null);
-        return out;
-    }
-    
-    private double getDoubleFromJSONObjectSafely(String name, JSONObject jsonObject) {
-        double out = jsonObject.optDouble(name, 0.0);
-        return out;
-    }
-
 }
