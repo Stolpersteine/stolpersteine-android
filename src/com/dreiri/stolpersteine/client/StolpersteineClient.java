@@ -23,18 +23,17 @@ public class StolpersteineClient {
         this.client = new Client();
     }
     
-    public void retrieveAllStolpersteine() {
-    	retrieveStolpersteine(0, NETWORK_BATCH_SIZE);
+    public void retrieveAllStolpersteine(Callback callback) {
+    	retrieveStolpersteine(0, NETWORK_BATCH_SIZE, callback);
     }
 
-    public void retrieveStolpersteine(final int offset, int limit) {
-//    	Log.i("XXX", "Request: " + offset + " " + limit);
+    public void retrieveStolpersteine(final int offset, int limit, final Callback callback) {
     	retrieveRangeOfResultsAndHandleThem(offset, limit, new Callback() {
         	@Override
             public void handle(ArrayList<Stolperstein> stolpersteine) {
-//            	Log.i("XXX", "Received: " + stolpersteine.size());
+        	    callback.handle(stolpersteine);
             	if (stolpersteine.size() == NETWORK_BATCH_SIZE) {
-            		retrieveStolpersteine(offset + NETWORK_BATCH_SIZE, NETWORK_BATCH_SIZE);
+            		retrieveStolpersteine(offset + NETWORK_BATCH_SIZE, NETWORK_BATCH_SIZE, callback);
             	}
             }
         });

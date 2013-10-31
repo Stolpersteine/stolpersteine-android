@@ -1,5 +1,7 @@
 package com.dreiri.stolpersteine.activities;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -35,7 +37,23 @@ public class MapActivity extends Activity {
         map.setOnInfoWindowClickListener(new InfoWindowHandler());
         
         StolpersteineClient stolpersteineClient = new StolpersteineClient();
-        stolpersteineClient.retrieveAllStolpersteine();
+        stolpersteineClient.retrieveAllStolpersteine(new Callback() {
+            
+            @Override
+            public void handle(ArrayList<Stolperstein> stolpersteine) {
+                for (Stolperstein stolperstein : stolpersteine) {
+                    MarkerOptions markerOptions = new MarkerOptions()
+                            .position(stolperstein.coordinates())
+                            .title(stolperstein.name())
+                            .snippet(stolperstein.address())
+                            .icon(BitmapDescriptorFactory
+                                    .fromResource(R.drawable.stolpersteine_tile));
+                    Marker marker = map.addMarker(markerOptions);
+                    richMapMarker.addProperty(marker, stolperstein);
+                }
+            }
+            
+        });
     }
         
     @Override
