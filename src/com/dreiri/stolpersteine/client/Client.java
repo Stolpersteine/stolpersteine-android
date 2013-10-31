@@ -13,7 +13,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 
-import com.dreiri.stolpersteine.callback.OnJSONResponse;
 
 import android.os.AsyncTask;
 import android.util.Log;

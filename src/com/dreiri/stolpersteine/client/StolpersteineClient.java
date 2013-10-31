@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.dreiri.stolpersteine.callback.Callback;
-import com.dreiri.stolpersteine.callback.OnJSONResponse;
 import com.dreiri.stolpersteine.models.Location;
 import com.dreiri.stolpersteine.models.Person;
 import com.dreiri.stolpersteine.models.Stolperstein;

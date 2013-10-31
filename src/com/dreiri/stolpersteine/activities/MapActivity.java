@@ -9,7 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.dreiri.stolpersteine.R;
-import com.dreiri.stolpersteine.callback.Callback;
+import com.dreiri.stolpersteine.client.Callback;
 import com.dreiri.stolpersteine.client.StolpersteineClient;
 import com.dreiri.stolpersteine.models.Stolperstein;
 import com.dreiri.stolpersteine.utils.LocationFinder;

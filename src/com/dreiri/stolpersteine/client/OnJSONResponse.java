@@ -1,4 +1,4 @@
-package com.dreiri.stolpersteine.callback;
+package com.dreiri.stolpersteine.client;
 
 import org.json.JSONArray;
 
