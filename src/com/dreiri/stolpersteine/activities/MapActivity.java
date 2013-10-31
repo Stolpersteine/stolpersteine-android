@@ -35,7 +35,7 @@ public class MapActivity extends Activity {
         map.setOnInfoWindowClickListener(new InfoWindowHandler());
         
         StolpersteineClient stolpersteineClient = new StolpersteineClient();
-        stolpersteineClient.retrieveStolpersteine();
+        stolpersteineClient.retrieveAllStolpersteine();
     }
         
     @Override

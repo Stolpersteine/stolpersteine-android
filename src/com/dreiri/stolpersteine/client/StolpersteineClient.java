@@ -6,8 +6,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.util.Log;
-
 import com.dreiri.stolpersteine.callback.Callback;
 import com.dreiri.stolpersteine.callback.OnJSONResponse;
 import com.dreiri.stolpersteine.models.Location;
@@ -26,14 +24,13 @@ public class StolpersteineClient {
         this.client = new Client();
     }
     
-    public void retrieveStolpersteine() {
+    public void retrieveAllStolpersteine() {
     	retrieveStolpersteine(0, NETWORK_BATCH_SIZE);
     }
 
     public void retrieveStolpersteine(final int offset, int limit) {
 //    	Log.i("XXX", "Request: " + offset + " " + limit);
-
-    	getNumbersOfResultsAndHandleThem(offset, limit, new Callback() {
+    	getRangeOfResultsAndHandleThem(offset, limit, new Callback() {
         	@Override
             public void handle(ArrayList<Stolperstein> stolpersteine) {
 //            	Log.i("XXX", "Received: " + stolpersteine.size());
@@ -44,7 +41,7 @@ public class StolpersteineClient {
         });
     }
     
-    public void getNumbersOfResultsAndHandleThem(int offset, int limit, Callback callback) {
+    public void getRangeOfResultsAndHandleThem(int offset, int limit, Callback callback) {
         this.callback = callback;
         StringBuilder queryUri = new StringBuilder()
         								.append(baseUri) 
