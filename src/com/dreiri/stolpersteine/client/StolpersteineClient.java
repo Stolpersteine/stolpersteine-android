@@ -31,10 +31,12 @@ public class StolpersteineClient {
     }
 
     public void retrieveStolpersteine(final int offset, int limit) {
-    	getNumbersOfResultsAndHandleThem(0, NETWORK_BATCH_SIZE, new Callback() {
-            @Override
+//    	Log.i("XXX", "Request: " + offset + " " + limit);
+
+    	getNumbersOfResultsAndHandleThem(offset, limit, new Callback() {
+        	@Override
             public void handle(ArrayList<Stolperstein> stolpersteine) {
-            	Log.i("", "Received: " + stolpersteine.size());
+//            	Log.i("XXX", "Received: " + stolpersteine.size());
             	if (stolpersteine.size() == NETWORK_BATCH_SIZE) {
             		retrieveStolpersteine(offset + NETWORK_BATCH_SIZE, NETWORK_BATCH_SIZE);
             	}
@@ -44,7 +46,9 @@ public class StolpersteineClient {
     
     public void getNumbersOfResultsAndHandleThem(int offset, int limit, Callback callback) {
         this.callback = callback;
-        StringBuilder queryUri = baseUri.append("/stolpersteine?offset=")
+        StringBuilder queryUri = new StringBuilder()
+        								.append(baseUri) 
+        								.append("/stolpersteine?offset=")
         								.append(offset)
         								.append("&limit=")
         								.append(limit);
@@ -99,7 +103,7 @@ public class StolpersteineClient {
     private JSONObject getJSONObjectFromJSONObjectSafely(String name, JSONObject jsonObjectIn) {
         JSONObject jsonObjectOut = null;
         try {
-            jsonObjectOut = jsonObjectIn.getJSONObject(name);
+          	jsonObjectOut = jsonObjectIn.getJSONObject(name);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -107,22 +111,12 @@ public class StolpersteineClient {
     }
     
     private String getStringFromJSONObjectSafely(String name, JSONObject jsonObject) {
-        String out = null;
-        try {
-            out = jsonObject.getString(name);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        String out = jsonObject.optString(name, null);
         return out;
     }
     
     private double getDoubleFromJSONObjectSafely(String name, JSONObject jsonObject) {
-        double out = 0.0;
-        try {
-            out = jsonObject.getDouble(name);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        double out = jsonObject.optDouble(name, 0.0);
         return out;
     }
 
