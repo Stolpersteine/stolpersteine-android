@@ -16,7 +16,7 @@ public class BioActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getActionBar().setDisplayHomeAsUpEnabled(true);
-        setContentView(R.layout.activity_web);
+        setContentView(R.layout.activity_bio);
         Intent intent = getIntent();
         final String bioData = intent.getStringExtra("bioData");
         browser = (WebView) findViewById(R.id.webkit);
