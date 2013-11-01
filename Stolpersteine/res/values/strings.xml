@@ -12,6 +12,10 @@
     <!-- Info Activity UI -->
     <string name="text_bio">Biography</string>
     
+    <!-- Bio Activity Menu -->
+    <string name="action_item_text">Text View</string>
+    <string name="action_item_web">Web View</string>
+    
     <!-- Alerts -->
     <string name="alert_pos_btn">Settings</string>
     <string name="alert_neg_btn">Cancel</string>

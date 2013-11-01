@@ -55,7 +55,6 @@ public class InfoActivity extends Activity {
             public void run() {
                 super.run();
                 try {
-                    // Document document = Jsoup.connect(bioUrl).get();
                     Document document = Jsoup.parse(new URL(bioUrl).openStream(), "utf-8", bioUrl);
                     Elements elements = document.select("div#biografie_seite");
                     bioData = elements.toString();
@@ -64,6 +63,7 @@ public class InfoActivity extends Activity {
                         public void onClick(View v) {
                             Intent intent = new Intent(InfoActivity.this, BioActivity.class);
                             intent.putExtra("bioData", bioData);
+                            intent.putExtra("bioUrl", bioUrl);
                             startActivity(intent);
                         }
                     });

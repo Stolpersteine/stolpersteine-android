@@ -4,13 +4,18 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.webkit.WebView;
 
 import com.dreiri.stolpersteine.R;
 
 public class BioActivity extends Activity {
-
+    
+    protected enum ViewFormat {TEXT, WEB};
+    ViewFormat viewFormat;
     WebView browser;
+    String bioData;
+    String bioUrl;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,12 +23,13 @@ public class BioActivity extends Activity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_bio);
         Intent intent = getIntent();
-        final String bioData = intent.getStringExtra("bioData");
+        bioData = intent.getStringExtra("bioData");
+        bioUrl = intent.getStringExtra("bioUrl");
         browser = (WebView) findViewById(R.id.webkit);
         browser.getSettings().setBuiltInZoomControls(true);
         browser.getSettings().setDisplayZoomControls(false);
-        String mimeType = "text/html; charset=UTF-8";
-        browser.loadData(bioData, mimeType, null);
+        viewFormat = ViewFormat.TEXT;
+        loadContentInBrowser(browser, bioData);
     }
     
     @Override
@@ -31,6 +37,36 @@ public class BioActivity extends Activity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.bio, menu);
         return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_text:
+                if (viewFormat == ViewFormat.WEB) {
+                    viewFormat = ViewFormat.TEXT;
+                    loadContentInBrowser(browser, bioData);
+                }
+                break;
+            case R.id.action_web:
+                if (viewFormat == ViewFormat.TEXT) {
+                    viewFormat = ViewFormat.WEB;
+                    loadUrlInBrowser(browser, bioUrl);
+                }
+                break;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+    
+    protected void loadContentInBrowser(WebView browser, String content) {
+        String mimeType = "text/html; charset=UTF-8";
+        browser.loadData(content, mimeType, null);
+    }
+    
+    protected void loadUrlInBrowser(WebView browser, String url) {
+        browser.loadUrl(url);
     }
 
 }
