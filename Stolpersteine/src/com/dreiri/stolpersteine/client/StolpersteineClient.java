@@ -26,7 +26,7 @@ public class StolpersteineClient {
     	retrieveStolpersteine(0, NETWORK_BATCH_SIZE, callback);
     }
 
-    public void retrieveStolpersteine(final int offset, int limit, final Callback callback) {
+    public void retrieveStolpersteine(final int offset, final int limit, final Callback callback) {
     	retrieveRangeOfResultsAndHandleThem(offset, limit, new Callback() {
         	@Override
             public void handle(List<Stolperstein> stolpersteine) {

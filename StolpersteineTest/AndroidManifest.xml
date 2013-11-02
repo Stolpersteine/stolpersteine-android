@@ -3,19 +3,21 @@
     package="com.dreiri.stolpersteine.client.test"
     android:versionCode="1"
     android:versionName="1.0" >
-
+    
     <uses-sdk
-        android:minSdkVersion="8"
+        android:minSdkVersion="11"
         android:targetSdkVersion="18"/>
-
+    
     <instrumentation
         android:name="android.test.InstrumentationTestRunner"
         android:targetPackage="com.dreiri.stolpersteine" />
 
     <application
+        android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
         <uses-library android:name="android.test.runner" />
+        
     </application>
 
 </manifest>
