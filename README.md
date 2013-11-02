@@ -4,9 +4,8 @@ Andoid app to display the locations of [Stolpersteine](http://en.wikipedia.org/w
 
 ## Contributors
 
-[Jing Li](https://github.com/thyrlian) [@thyrlian](https://twitter.com/thyrlian)
-
-[Claus Höfele](http://github.com/choefele) [@claushoefele](https://twitter.com/claushoefele)
+- [Jing Li](https://github.com/thyrlian) [@thyrlian](https://twitter.com/thyrlian)
+- [Claus Höfele](http://github.com/choefele) [@claushoefele](https://twitter.com/claushoefele)
 
 ## License
 
