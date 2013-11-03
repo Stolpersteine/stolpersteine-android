@@ -1,4 +1,0 @@
-stolpersteine-android
-=====================
-
-Stolpersteine Android

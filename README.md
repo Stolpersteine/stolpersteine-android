@@ -37,6 +37,12 @@ Configure a virtual device with Android 4.2.2 or higher using the Google APIs. A
 2. Choose StolpersteineTest folder and import
 3. Configure to run as Android JUnit Test
 
+### Requires Android Version
+API Level 11+
+
+Android 3.0.x(HONEYCOMB) or above
+
+
 ## License
 
 Copyright (C) 2013 Option-U Software
