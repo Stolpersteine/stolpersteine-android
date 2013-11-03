@@ -4,8 +4,38 @@ Andoid app to display the locations of [Stolpersteine](http://en.wikipedia.org/w
 
 ## Contributors
 
-- [Jing Li](https://github.com/thyrlian) [@thyrlian](https://twitter.com/thyrlian)
-- [Claus Höfele](http://github.com/choefele) [@claushoefele](https://twitter.com/claushoefele)
+- [Jing Li](https://github.com/thyrlian) ([@thyrlian](https://twitter.com/thyrlian))
+- [Claus Höfele](http://github.com/choefele) ([@claushoefele](https://twitter.com/claushoefele))
+
+## Building the App with ADT
+
+### Google Play Services
+
+1. Install Google Play Services in Extras through the Android SDK Manager 
+2. File > Import > Android/Existing Android Code into Workspace and choose <android-sdk>/extras/google/google_play_services/libproject/google-play-services_lib/
+
+See http://developer.android.com/google/play-services/setup.html
+
+### Import Stolpersteine project
+
+1. File > Import... > Android/Existing Android Code Into Workspace
+2. Choose Stolpersteine folder and import
+
+### API Key
+
+Use your own API key in AndroidManifest.xml or have the SHA1 of your keystore registered with an existing API key.
+
+    keytool -list -v -keystore ~/.android/debug.keystore
+
+### Run App
+
+Configure a virtual device with Android 4.2.2 or higher using the Google APIs. Alternatively, use a hardware device.
+
+### Run Tests
+
+1. File > Import... > Android/Existing Android Code Into Workspace
+2. Choose StolpersteineTest folder and import
+3. Configure to run as Android JUnit Test
 
 ## License
 
