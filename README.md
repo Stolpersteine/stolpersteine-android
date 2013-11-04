@@ -11,8 +11,8 @@ Andoid app to display the locations of [Stolpersteine](http://en.wikipedia.org/w
 
 ### Google Play Services
 
-1. Install Google Play Services in Extras through the Android SDK Manager 
-2. File > Import > Android/Existing Android Code into Workspace and choose <android-sdk>/extras/google/google_play_services/libproject/google-play-services_lib/
+1. Install Google Play Services in Extras through the Android SDK Manager
+2. File > Import > Android/Existing Android Code into Workspace and choose <android-sdk>/extras/google/google_play_services/libproject/google-play-services_lib/ (for R19, use the one from google_play_services_froyo)
 
 See http://developer.android.com/google/play-services/setup.html
 
