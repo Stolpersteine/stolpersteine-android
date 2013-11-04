@@ -32,7 +32,7 @@ See http://developer.android.com/google/play-services/setup.html
 
 1. File > Import... > Android/Existing Android Code Into Workspace
 2. Choose StolpersteineTest folder and import
-3. Add dependency to Stolpersteine in Properties > Android > Library
+3. Add dependency to Stolpersteine in Properties > Java Build Path > Projects
 3. Configure to run as Android JUnit Test
 
 ### Requires Android Version
