@@ -16,32 +16,29 @@ Andoid app to display the locations of [Stolpersteine](http://en.wikipedia.org/w
 
 See http://developer.android.com/google/play-services/setup.html
 
-### Import Stolpersteine project
+### Run App
 
 1. File > Import... > Android/Existing Android Code Into Workspace
 2. Choose Stolpersteine folder and import
-
-### API Key
-
-Use your own API key in AndroidManifest.xml or have the SHA1 of your keystore registered with an existing API key.
+3. Add dependency to Google Play Services in Properties > Android > Library
+4. Use your own API key in AndroidManifest.xml or have the SHA1 of your keystore registered with an existing API key.
 
     keytool -list -v -keystore ~/.android/debug.keystore
-
-### Run App
-
-Configure a virtual device with Android 4.2.2 or higher using the Google APIs. Alternatively, use a hardware device.
+    
+5. Configure a virtual device with Android 4.2.2 or higher using the Google APIs. Alternatively, use a hardware device.
+6. Run as Android Application
 
 ### Run Tests
 
 1. File > Import... > Android/Existing Android Code Into Workspace
 2. Choose StolpersteineTest folder and import
+3. Add dependency to Stolpersteine in Properties > Android > Library
 3. Configure to run as Android JUnit Test
 
 ### Requires Android Version
 API Level 11+
 
 Android 3.0.x(HONEYCOMB) or above
-
 
 ## License
 
