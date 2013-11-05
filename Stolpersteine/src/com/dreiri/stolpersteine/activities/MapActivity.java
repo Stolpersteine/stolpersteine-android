@@ -11,9 +11,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.dreiri.stolpersteine.R;
-import com.dreiri.stolpersteine.client.Callback;
-import com.dreiri.stolpersteine.client.StolpersteineClient;
-import com.dreiri.stolpersteine.models.Stolperstein;
+import com.dreiri.stolpersteine.api.Callback;
+import com.dreiri.stolpersteine.api.Stolperstein;
+import com.dreiri.stolpersteine.api.SynchronizationController;
 import com.dreiri.stolpersteine.utils.LocationFinder;
 import com.dreiri.stolpersteine.utils.RichMapMarker;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -39,13 +39,13 @@ public class MapActivity extends Activity {
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(berlin, 12));
         map.setOnInfoWindowClickListener(new InfoWindowHandler());
         
-        StolpersteineClient stolpersteineClient = new StolpersteineClient();
+        SynchronizationController stolpersteineClient = new SynchronizationController();
         stolpersteineClient.retrieveAllStolpersteine(new Callback() {
             
             @Override
             public void handle(List<Stolperstein> stolpersteine) {
                 for (Stolperstein stolperstein : stolpersteine) {
-                	LatLng coordinates = stolperstein.coordinates();
+                	LatLng coordinates = stolperstein.getLocation().getCoordinates();
                 	double[] key = new double[] {coordinates.latitude, coordinates.longitude}; 
                 	tree.add(key, stolperstein);
                 }
@@ -55,9 +55,9 @@ public class MapActivity extends Activity {
                 List<Stolperstein> list = tree.getRange(bottomLeft, topRight);
                 for (Stolperstein stolperstein : list) {
 					MarkerOptions markerOptions = new MarkerOptions()
-							.position(stolperstein.coordinates())
-							.title(stolperstein.name())
-							.snippet(stolperstein.address())
+							.position(stolperstein.getLocation().getCoordinates())
+							.title(stolperstein.getPerson().getNameAsString())
+							.snippet(stolperstein.getLocation().getAddressAsString())
 							.icon(BitmapDescriptorFactory.fromResource(R.drawable.stolpersteine_tile));
 					Marker marker = map.addMarker(markerOptions);
 					richMapMarker.addProperty(marker, stolperstein);

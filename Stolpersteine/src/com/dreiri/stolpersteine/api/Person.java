@@ -1,22 +1,19 @@
-package com.dreiri.stolpersteine.models;
+package com.dreiri.stolpersteine.api;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 public class Person implements Parcelable {
-
+	
     private String firstName;
     private String lastName;
-    private String biography;
+    private URI biographyUri;
     
-    public Person(String firstName, String lastName, String biography) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.biography = biography;
-    }
-    
-    public Person(String firstName, String lastName) {
-        this(firstName, lastName, "");
+    public Person() {
     }
     
     public Person(Parcel orig) {
@@ -39,15 +36,15 @@ public class Person implements Parcelable {
         this.lastName = lastName;
     }
 
-    public String getBiography() {
-        return biography;
+    public URI getBiographyUri() {
+        return biographyUri;
     }
 
-    public void setBiography(String biography) {
-        this.biography = biography;
+    public void setBiography(URI biography) {
+        this.biographyUri = biography;
     }
     
-    public String name() {
+    public String getNameAsString() {
         return firstName + " " + lastName;
     }
 
@@ -60,13 +57,18 @@ public class Person implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.firstName);
         dest.writeString(this.lastName);
-        dest.writeString(this.biography);
+        dest.writeString(this.biographyUri.toString());
     }
     
     private void readFromParcel(Parcel orig) {
         this.firstName = orig.readString();
         this.lastName = orig.readString();
-        this.biography = orig.readString();
+        
+        try {
+        	this.biographyUri = new URI(orig.readString());
+        } catch (URISyntaxException e) {
+        	Log.e("Stolpersteine", "Failed to read biography URI from parcel", e);
+        }
     }
     
     public static final Parcelable.Creator<Person> CREATOR = new Parcelable.Creator<Person>() {

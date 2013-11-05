@@ -17,9 +17,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.dreiri.stolpersteine.R;
-import com.dreiri.stolpersteine.models.Location;
-import com.dreiri.stolpersteine.models.Person;
-import com.dreiri.stolpersteine.models.Stolperstein;
+import com.dreiri.stolpersteine.api.Location;
+import com.dreiri.stolpersteine.api.Person;
+import com.dreiri.stolpersteine.api.Stolperstein;
 
 public class InfoActivity extends Activity {
 
@@ -45,8 +45,8 @@ public class InfoActivity extends Activity {
         TextView textViewAddress = (TextView) findViewById(R.id.textViewAddress);
         final Button btnBio = (Button) findViewById(R.id.btnBio);
         
-        textViewName.setText(person.name());
-        textViewAddress.setText(location.address());
+        textViewName.setText(person.getNameAsString());
+        textViewAddress.setText(location.getAddressAsString());
 //        UIEnhancer.insertImageIntoTextView(this, R.drawable.img_doughface, R.id.textViewBio);
         
         // pre-caching
@@ -100,7 +100,7 @@ public class InfoActivity extends Activity {
     private void readProperties(Stolperstein stolperstein) {
         person = stolperstein.getPerson();
         location = stolperstein.getLocation();
-        bioUrl = person.getBiography();
+        bioUrl = person.getBiographyUri().toString();
     }
 
 }

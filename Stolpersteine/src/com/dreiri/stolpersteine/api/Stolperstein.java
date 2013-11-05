@@ -1,25 +1,64 @@
-package com.dreiri.stolpersteine.models;
+package com.dreiri.stolpersteine.api;
+
+import java.net.URI;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.android.gms.maps.model.LatLng;
-
 public class Stolperstein implements Parcelable {
+	
+	public enum Type {
+		STOLPERSTEIN, STOLPERSCHWELLE;
+	}
 
-    private Person person;
+	private String id;
+	private Type type;
+	private String sourceName;
+	private URI sourceUri;
+
+	private Person person;
     private Location location;
     
-    public Stolperstein(Person person, Location location) {
-        this.person = person;
-        this.location = location;
+    public Stolperstein() {
     }
     
     public Stolperstein(Parcel orig) {
         readFromParcel(orig);
     }
     
-    public Person getPerson() {
+    public String getId() {
+	    return id;
+    }
+
+	public void setId(String id) {
+	    this.id = id;
+    }
+
+    public Type getType() {
+	    return type;
+    }
+
+	public void setType(Type type) {
+	    this.type = type;
+    }
+
+	public String getSourceName() {
+	    return sourceName;
+    }
+
+	public void setSourceName(String sourceName) {
+	    this.sourceName = sourceName;
+    }
+
+	public URI getSourceUri() {
+	    return sourceUri;
+    }
+
+	public void setSourceUri(URI sourceUri) {
+	    this.sourceUri = sourceUri;
+    }
+
+	public Person getPerson() {
         return person;
     }
 
@@ -33,18 +72,6 @@ public class Stolperstein implements Parcelable {
 
     public void setLocation(Location location) {
         this.location = location;
-    }
-    
-    public LatLng coordinates() {
-        return location.getCoordinates();
-    }
-    
-    public String address() {
-        return location.address();
-    }
-    
-    public String name() {
-        return person.name();
     }
     
     @Override
@@ -63,7 +90,7 @@ public class Stolperstein implements Parcelable {
         this.location = orig.readParcelable(Location.class.getClassLoader());
     }
     
-    public static final Parcelable.Creator<Stolperstein> CREATOR = new Parcelable.Creator<Stolperstein>() {
+	public static final Parcelable.Creator<Stolperstein> CREATOR = new Parcelable.Creator<Stolperstein>() {
 
         @Override
         public Stolperstein createFromParcel(Parcel source) {
@@ -75,5 +102,4 @@ public class Stolperstein implements Parcelable {
             return new Stolperstein[size];
         }
     };
-
 }

@@ -1,6 +1,4 @@
-package com.dreiri.stolpersteine.models;
-
-import java.util.ArrayList;
+package com.dreiri.stolpersteine.api;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -12,39 +10,11 @@ public class Location implements Parcelable {
     private String street;
     private String zipCode;
     private String city;
-    private ArrayList<String> sublocalities = new ArrayList<String>();
     private LatLng coordinates; 
     
-    public Location(String street, String zipCode, String city, ArrayList<String> sublocalities, LatLng coordinates) {
-        this.street = street;
-        this.zipCode = zipCode;
-        this.city = city;
-        this.coordinates = coordinates;
-        if (sublocalities != null) {
-            this.sublocalities.addAll(sublocalities);
-        }
+    public Location() {
     }
-    
-    public Location(String street, String zipCode, String city, ArrayList<String> sublocalities, double latitude, double longitude) {
-        this(street, zipCode, city, sublocalities, new LatLng(latitude, longitude));
-    }
-    
-    public Location(String street, String zipCode, String city, ArrayList<String> sublocalities, String latitude, String longitude) {
-        this(street, zipCode, city, sublocalities, new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude)));
-    }
-    
-    public Location(String street, String zipCode, String city, LatLng coordinates) {
-        this(street, zipCode, city, null, coordinates);
-    }
-    
-    public Location(String street, String zipCode, String city, ArrayList<String> sublocalities) {
-        this(street, zipCode, city, sublocalities, null);
-    }
-    
-    public Location(String street, String zipCode, String city) {
-        this(street, zipCode, city, null, null);
-    }
-    
+
     public Location(Parcel orig) {
         readFromParcel(orig);
     }
@@ -73,23 +43,6 @@ public class Location implements Parcelable {
         this.city = city;
     }
 
-    public ArrayList<String> getSublocalities() {
-        return sublocalities;
-    }
-
-    public void setSublocalities(ArrayList<String> sublocalities) {
-        this.sublocalities.clear();
-        this.sublocalities.addAll(sublocalities);
-    }
-    
-    public boolean addSublocalities(ArrayList<String> sublocalities) {
-        return this.sublocalities.addAll(sublocalities);
-    }
-    
-    public boolean addSublocality(String sublocality) {
-        return this.sublocalities.add(sublocality);
-    }
-
     public LatLng getCoordinates() {
         return coordinates;
     }
@@ -98,19 +51,11 @@ public class Location implements Parcelable {
         this.coordinates = coordinates;
     }
     
-    public double getLatitude() {
-        return coordinates.latitude;
-    }
-    
-    public double getLongitude() {
-        return coordinates.longitude;
-    }
-    
     public boolean equals(Location location) {
         return (this.street.equals(location.street) && this.zipCode.equals(location.zipCode)) ? true : false;
     }
     
-    public String address() {
+    public String getAddressAsString() {
         AddressContext addressContext = new AddressContext(this);
         return addressContext.getAddress();
     }
@@ -267,7 +212,6 @@ public class Location implements Parcelable {
         dest.writeString(this.street);
         dest.writeString(this.zipCode);
         dest.writeString(this.city);
-        dest.writeList(this.sublocalities);
         dest.writeParcelable(this.coordinates, 0);
     }
     
@@ -275,7 +219,6 @@ public class Location implements Parcelable {
         this.street = orig.readString();
         this.zipCode = orig.readString();
         this.city = orig.readString();
-        orig.readList(this.sublocalities, getClass().getClassLoader());
         this.coordinates = orig.readParcelable(LatLng.class.getClassLoader());
     }
     

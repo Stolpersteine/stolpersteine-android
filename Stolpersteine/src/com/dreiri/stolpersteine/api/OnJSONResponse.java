@@ -1,4 +1,4 @@
-package com.dreiri.stolpersteine.client;
+package com.dreiri.stolpersteine.api;
 
 import org.json.JSONArray;
 
