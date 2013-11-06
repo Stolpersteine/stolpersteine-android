@@ -6,8 +6,8 @@ import java.util.concurrent.TimeUnit;
 
 import android.test.AndroidTestCase;
 
-import com.dreiri.stolpersteine.api.Callback;
 import com.dreiri.stolpersteine.api.NetworkService;
+import com.dreiri.stolpersteine.api.NetworkService.Callback;
 import com.dreiri.stolpersteine.api.model.Stolperstein;
 
 public class NetworkServiceTest extends AndroidTestCase {

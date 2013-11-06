@@ -11,7 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.dreiri.stolpersteine.R;
-import com.dreiri.stolpersteine.api.Callback;
+import com.dreiri.stolpersteine.api.NetworkService.Callback;
 import com.dreiri.stolpersteine.api.SynchronizationController;
 import com.dreiri.stolpersteine.api.model.Stolperstein;
 import com.dreiri.stolpersteine.utils.LocationFinder;
@@ -40,7 +40,7 @@ public class MapActivity extends Activity {
         map.setOnInfoWindowClickListener(new InfoWindowHandler());
         
         SynchronizationController stolpersteineClient = new SynchronizationController();
-        stolpersteineClient.retrieveAllStolpersteine(new Callback() {
+        stolpersteineClient.retrieveStolpersteine(new Callback() {
             
             @Override
             public void handle(List<Stolperstein> stolpersteine) {
