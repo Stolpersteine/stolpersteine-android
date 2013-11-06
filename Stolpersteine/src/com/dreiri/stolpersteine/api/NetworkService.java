@@ -50,6 +50,11 @@ public class NetworkService {
     		if (keyword != null) {
     			queryBuilder.append("&q=").append(keyword);
     		}
+
+    		String street = searchData.getStreet() != null ? searchData.getStreet() : defaultSearchData.getStreet();
+    		if (street!= null) {
+    			queryBuilder.append("&street=").append(street);
+    		}
     	}
 
         return queryBuilder.toString();

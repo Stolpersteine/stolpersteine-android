@@ -5,7 +5,6 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import android.test.AndroidTestCase;
-import android.util.Log;
 
 import com.dreiri.stolpersteine.api.NetworkService;
 import com.dreiri.stolpersteine.api.NetworkService.Callback;
@@ -67,11 +66,29 @@ public class NetworkServiceTest extends AndroidTestCase {
 			public void handle(List<Stolperstein> stolpersteine) {
 				assertTrue(stolpersteine.size() > 0);
 				for (Stolperstein stolperstein : stolpersteine) {
-					Log.i("Stolpersteine", stolperstein.getPerson().getFirstName());
-					Log.i("Stolpersteine", stolperstein.getPerson().getLastName());
-					
 					boolean found = stolperstein.getPerson().getFirstName().startsWith(searchData.getKeyword());
 					found |= stolperstein.getPerson().getLastName().startsWith(searchData.getKeyword());
+
+		            assertTrue("Wrong search result", found);
+				}
+
+				doneLatch.countDown();
+			}
+		});
+		
+		assertTrue(doneLatch.await(TIME_OUT, TimeUnit.SECONDS));
+	}
+
+	public void testRetrieveStolpersteineStreet() throws InterruptedException {
+		final SearchData searchData = new SearchData();
+		searchData.setStreet("Turmstra§e");
+		
+		networkService.retrieveStolpersteine(searchData, 0, 5, new Callback() {
+			@Override
+			public void handle(List<Stolperstein> stolpersteine) {
+				assertTrue(stolpersteine.size() > 0);
+				for (Stolperstein stolperstein : stolpersteine) {
+					boolean found = stolperstein.getLocation().getStreet().startsWith(searchData.getStreet());
 
 		            assertTrue("Wrong search result", found);
 				}
