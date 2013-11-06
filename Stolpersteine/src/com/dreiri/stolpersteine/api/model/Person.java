@@ -55,14 +55,14 @@ public class Person implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.firstName);
-        dest.writeString(this.lastName);
-        dest.writeString(this.biographyUri.toString());
+        dest.writeString(firstName);
+        dest.writeString(lastName);
+        dest.writeString(biographyUri.toString());
     }
     
     private void readFromParcel(Parcel orig) {
-        this.firstName = orig.readString();
-        this.lastName = orig.readString();
+        firstName = orig.readString();
+        lastName = orig.readString();
         
         try {
         	this.biographyUri = new URI(orig.readString());

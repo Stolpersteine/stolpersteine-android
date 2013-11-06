@@ -209,17 +209,17 @@ public class Location implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.street);
-        dest.writeString(this.zipCode);
-        dest.writeString(this.city);
-        dest.writeParcelable(this.coordinates, 0);
+        dest.writeString(street);
+        dest.writeString(zipCode);
+        dest.writeString(city);
+        dest.writeParcelable(coordinates, flags);
     }
     
     private void readFromParcel(Parcel orig) {
-        this.street = orig.readString();
-        this.zipCode = orig.readString();
-        this.city = orig.readString();
-        this.coordinates = orig.readParcelable(LatLng.class.getClassLoader());
+        street = orig.readString();
+        zipCode = orig.readString();
+        city = orig.readString();
+        coordinates = orig.readParcelable(LatLng.class.getClassLoader());
     }
     
     public static final Parcelable.Creator<Location> CREATOR = new Parcelable.Creator<Location>() {

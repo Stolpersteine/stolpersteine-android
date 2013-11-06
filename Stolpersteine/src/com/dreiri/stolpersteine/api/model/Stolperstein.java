@@ -70,13 +70,21 @@ public class Stolperstein implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeParcelable(this.person, 0);
-        dest.writeParcelable(this.location, 0);
+        dest.writeString(id);
+        dest.writeInt(type.ordinal());
+        
+        dest.writeParcelable(person, flags);
+        dest.writeParcelable(person, flags);
+        dest.writeParcelable(location, flags);
     }
     
     private void readFromParcel(Parcel orig) {
-        this.person = orig.readParcelable(Person.class.getClassLoader());
-        this.location = orig.readParcelable(Location.class.getClassLoader());
+        id = orig.readString();
+        type = Type.values()[orig.readInt()];
+        
+        source = orig.readParcelable(Source.class.getClassLoader());
+        person = orig.readParcelable(Person.class.getClassLoader());
+        location = orig.readParcelable(Location.class.getClassLoader());
     }
     
 	public static final Parcelable.Creator<Stolperstein> CREATOR = new Parcelable.Creator<Stolperstein>() {
