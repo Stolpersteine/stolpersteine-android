@@ -12,8 +12,8 @@ import android.view.MenuItem;
 
 import com.dreiri.stolpersteine.R;
 import com.dreiri.stolpersteine.api.Callback;
-import com.dreiri.stolpersteine.api.Stolperstein;
 import com.dreiri.stolpersteine.api.SynchronizationController;
+import com.dreiri.stolpersteine.api.model.Stolperstein;
 import com.dreiri.stolpersteine.utils.LocationFinder;
 import com.dreiri.stolpersteine.utils.RichMapMarker;
 import com.google.android.gms.maps.CameraUpdateFactory;

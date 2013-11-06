@@ -2,6 +2,8 @@ package com.dreiri.stolpersteine.api;
 
 import java.util.List;
 
+import com.dreiri.stolpersteine.api.model.Stolperstein;
+
 
 public class SynchronizationController {
 	final static int NETWORK_BATCH_SIZE = 500;

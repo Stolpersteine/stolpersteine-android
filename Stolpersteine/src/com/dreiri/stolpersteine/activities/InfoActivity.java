@@ -17,9 +17,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.dreiri.stolpersteine.R;
-import com.dreiri.stolpersteine.api.Location;
-import com.dreiri.stolpersteine.api.Person;
-import com.dreiri.stolpersteine.api.Stolperstein;
+import com.dreiri.stolpersteine.api.model.Location;
+import com.dreiri.stolpersteine.api.model.Person;
+import com.dreiri.stolpersteine.api.model.Stolperstein;
 
 public class InfoActivity extends Activity {
 

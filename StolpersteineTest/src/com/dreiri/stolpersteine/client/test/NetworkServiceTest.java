@@ -8,7 +8,7 @@ import android.test.AndroidTestCase;
 
 import com.dreiri.stolpersteine.api.Callback;
 import com.dreiri.stolpersteine.api.NetworkService;
-import com.dreiri.stolpersteine.api.Stolperstein;
+import com.dreiri.stolpersteine.api.model.Stolperstein;
 
 public class NetworkServiceTest extends AndroidTestCase {
 	private CountDownLatch doneLatch;
@@ -30,8 +30,9 @@ public class NetworkServiceTest extends AndroidTestCase {
 					assertTrue("Wrong type", 
 							stolperstein.getType() == Stolperstein.Type.STOLPERSTEIN || 
 							stolperstein.getType() == Stolperstein.Type.STOLPERSCHWELLE);
-					assertNotNull("Wrong source name", stolperstein.getSourceName());
-					assertNotNull("Wrong source URI", stolperstein.getSourceUri());
+                                        assertNotNull("Wrong source", stolperstein.getSource());
+					assertNotNull("Wrong source name", stolperstein.getSource().getName());
+					assertNotNull("Wrong source URI", stolperstein.getSource().getUri());
 					assertNotNull("Wrong person", stolperstein.getPerson());
 					assertNotNull("Wrong person first name", stolperstein.getPerson().getFirstName());
 					assertNotNull("Wrong person last name", stolperstein.getPerson().getLastName());

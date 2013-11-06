@@ -1,4 +1,4 @@
-package com.dreiri.stolpersteine.api;
+package com.dreiri.stolpersteine.api.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

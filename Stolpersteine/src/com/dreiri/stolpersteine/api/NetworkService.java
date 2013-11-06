@@ -20,6 +20,10 @@ import org.json.JSONObject;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.dreiri.stolpersteine.api.model.Location;
+import com.dreiri.stolpersteine.api.model.Person;
+import com.dreiri.stolpersteine.api.model.Source;
+import com.dreiri.stolpersteine.api.model.Stolperstein;
 import com.google.android.gms.maps.model.LatLng;
 
 public class NetworkService {
@@ -55,9 +59,11 @@ public class NetworkService {
                 		stolperstein.setType(Stolperstein.Type.STOLPERSTEIN);
                 	}
                 	
+                	Source source = new Source();
                 	JSONObject jsonSource = jsonObject.optJSONObject("source");
-                	stolperstein.setSourceName(jsonSource.getString("name"));
-                	stolperstein.setSourceUri(new URI(jsonSource.getString("url")));
+                	source.setName(jsonSource.getString("name"));
+                	source.setUri(new URI(jsonSource.getString("url")));
+                	stolperstein.setSource(source);
 
                     Person person = new Person();
                     JSONObject jsonPerson = jsonObject.getJSONObject("person");

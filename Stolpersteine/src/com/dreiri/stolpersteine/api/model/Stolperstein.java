@@ -1,6 +1,4 @@
-package com.dreiri.stolpersteine.api;
-
-import java.net.URI;
+package com.dreiri.stolpersteine.api.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -13,9 +11,8 @@ public class Stolperstein implements Parcelable {
 
 	private String id;
 	private Type type;
-	private String sourceName;
-	private URI sourceUri;
 
+	private Source source;
 	private Person person;
     private Location location;
     
@@ -42,23 +39,15 @@ public class Stolperstein implements Parcelable {
 	    this.type = type;
     }
 
-	public String getSourceName() {
-	    return sourceName;
+	public Source getSource() {
+        return source;
     }
 
-	public void setSourceName(String sourceName) {
-	    this.sourceName = sourceName;
+    public void setSource(Source source) {
+        this.source = source;
     }
 
-	public URI getSourceUri() {
-	    return sourceUri;
-    }
-
-	public void setSourceUri(URI sourceUri) {
-	    this.sourceUri = sourceUri;
-    }
-
-	public Person getPerson() {
+    public Person getPerson() {
         return person;
     }
 
