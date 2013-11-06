@@ -30,17 +30,29 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class NetworkService {
     private final String baseUri = "https://stolpersteine-api.eu01.aws.af.cm/v1";
+    private SearchData defaultSearchData = new SearchData();
 	
     public void retrieveStolpersteine(SearchData searchData, int offset, int limit, Callback callback) {
-        String query = new StringBuilder(baseUri)
-        	.append("/stolpersteine?offset=")
-        	.append(offset)
-        	.append("&limit=")
-        	.append(limit)
-        	.toString();
-
+        String query = buildQuery(searchData, offset, limit);
         ReadJSONFeedTask task = new ReadJSONFeedTask(callback);
     	task.execute(URI.create(query));
+    }
+    
+    String buildQuery(SearchData searchData, int offset, int limit) {
+    	StringBuilder queryBuilder = new StringBuilder(baseUri)
+    		.append("/stolpersteine?offset=")
+    		.append(offset)
+    		.append("&limit=")
+    		.append(limit);
+    	
+    	if (searchData != null) {
+    		String keyword = searchData.getKeyword() != null ? searchData.getKeyword() : defaultSearchData.getKeyword();
+    		if (keyword != null) {
+    			queryBuilder.append("&q=").append(keyword);
+    		}
+    	}
+
+        return queryBuilder.toString();
     }
     
     Stolperstein parseStolperstein(JSONObject jsonObject) throws JSONException, URISyntaxException {

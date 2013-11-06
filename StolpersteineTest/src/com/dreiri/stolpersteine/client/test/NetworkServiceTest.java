@@ -5,12 +5,15 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import android.test.AndroidTestCase;
+import android.util.Log;
 
 import com.dreiri.stolpersteine.api.NetworkService;
 import com.dreiri.stolpersteine.api.NetworkService.Callback;
+import com.dreiri.stolpersteine.api.SearchData;
 import com.dreiri.stolpersteine.api.model.Stolperstein;
 
 public class NetworkServiceTest extends AndroidTestCase {
+	private static int TIME_OUT = 5;
 	private CountDownLatch doneLatch;
 	private NetworkService networkService;
 	
@@ -52,6 +55,31 @@ public class NetworkServiceTest extends AndroidTestCase {
 			}
 		});
 
-		assertTrue(doneLatch.await(15, TimeUnit.SECONDS));
+		assertTrue(doneLatch.await(TIME_OUT, TimeUnit.SECONDS));
+	}
+	
+	public void testRetrieveStolpersteineKeyword() throws InterruptedException {
+		final SearchData searchData = new SearchData();
+		searchData.setKeyword("Ern");
+		
+		networkService.retrieveStolpersteine(searchData, 0, 5, new Callback() {
+			@Override
+			public void handle(List<Stolperstein> stolpersteine) {
+				assertTrue(stolpersteine.size() > 0);
+				for (Stolperstein stolperstein : stolpersteine) {
+					Log.i("Stolpersteine", stolperstein.getPerson().getFirstName());
+					Log.i("Stolpersteine", stolperstein.getPerson().getLastName());
+					
+					boolean found = stolperstein.getPerson().getFirstName().startsWith(searchData.getKeyword());
+					found |= stolperstein.getPerson().getLastName().startsWith(searchData.getKeyword());
+
+		            assertTrue("Wrong search result", found);
+				}
+
+				doneLatch.countDown();
+			}
+		});
+		
+		assertTrue(doneLatch.await(TIME_OUT, TimeUnit.SECONDS));
 	}
 }
