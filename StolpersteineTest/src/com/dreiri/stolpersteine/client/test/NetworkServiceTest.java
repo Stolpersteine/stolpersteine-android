@@ -137,4 +137,37 @@ public class NetworkServiceTest extends AndroidTestCase {
 		
 		assertTrue(doneLatch.await(TIME_OUT, TimeUnit.SECONDS));
 	}
+	
+	public void testRetrieveStolpersteinePaging() throws InterruptedException {
+		// Load first two stolpersteine
+		networkService.retrieveStolpersteine(null, 0, 2, new Callback() {
+			@Override
+            public void handle(List<Stolperstein> stolpersteine) {
+				assertEquals(2, stolpersteine.size());
+				final String stolpersteinId0 = stolpersteine.get(0).getId();
+				final String stolpersteinId1 = stolpersteine.get(1).getId();
+				
+				// First page
+				networkService.retrieveStolpersteine(null, 0, 1, new Callback() {
+					@Override
+		            public void handle(List<Stolperstein> stolpersteine) {
+						assertEquals(1, stolpersteine.size());
+						assertEquals(stolpersteinId0, stolpersteine.get(0).getId());
+
+						// Second page
+						networkService.retrieveStolpersteine(null, 1, 1, new Callback() {
+							@Override
+				            public void handle(List<Stolperstein> stolpersteine) {
+								assertEquals(1, stolpersteine.size());
+								assertEquals(stolpersteinId1, stolpersteine.get(0).getId());
+								
+								doneLatch.countDown();
+							}
+						});
+					}
+				});
+            }
+		});
+		assertTrue(doneLatch.await(TIME_OUT, TimeUnit.SECONDS));
+	}
 }
