@@ -32,7 +32,15 @@ public class NetworkService {
     private final String baseUri = "https://stolpersteine-api.eu01.aws.af.cm/v1";
     private SearchData defaultSearchData = new SearchData();
 	
-    public void retrieveStolpersteine(SearchData searchData, int offset, int limit, Callback callback) {
+    public SearchData getDefaultSearchData() {
+		return defaultSearchData;
+	}
+
+	public void setDefaultSearchData(SearchData defaultSearchData) {
+		this.defaultSearchData = defaultSearchData;
+	}
+
+	public void retrieveStolpersteine(SearchData searchData, int offset, int limit, Callback callback) {
         String query = buildQuery(searchData, offset, limit);
         ReadJSONFeedTask task = new ReadJSONFeedTask(callback);
     	task.execute(URI.create(query));
@@ -54,6 +62,11 @@ public class NetworkService {
     		String street = searchData.getStreet() != null ? searchData.getStreet() : defaultSearchData.getStreet();
     		if (street!= null) {
     			queryBuilder.append("&street=").append(street);
+    		}
+
+    		String city = searchData.getCity() != null ? searchData.getCity() : defaultSearchData.getCity();
+    		if (city!= null) {
+    			queryBuilder.append("&city=").append(city);
     		}
     	}
 

@@ -99,4 +99,42 @@ public class NetworkServiceTest extends AndroidTestCase {
 		
 		assertTrue(doneLatch.await(TIME_OUT, TimeUnit.SECONDS));
 	}
+
+	public void testRetrieveStolpersteineCity() throws InterruptedException {
+		final SearchData searchData = new SearchData();
+		searchData.setCity("Berlin");
+		
+		networkService.retrieveStolpersteine(searchData, 0, 5, new Callback() {
+			@Override
+			public void handle(List<Stolperstein> stolpersteine) {
+				assertTrue(stolpersteine.size() > 0);
+				for (Stolperstein stolperstein : stolpersteine) {
+					boolean found = stolperstein.getLocation().getCity().startsWith(searchData.getCity());
+
+		            assertTrue("Wrong search result", found);
+				}
+
+				doneLatch.countDown();
+			}
+		});
+		
+		assertTrue(doneLatch.await(TIME_OUT, TimeUnit.SECONDS));
+	}
+
+	public void testRetrieveStolpersteineCityInvalid() throws InterruptedException {
+		networkService.getDefaultSearchData().setCity("Berlin"); // will be overridden by specific search data
+		final SearchData searchData = new SearchData();
+		searchData.setCity("xyz");
+		
+		networkService.retrieveStolpersteine(searchData, 0, 5, new Callback() {
+			@Override
+			public void handle(List<Stolperstein> stolpersteine) {
+				assertEquals(0, stolpersteine.size());
+
+				doneLatch.countDown();
+			}
+		});
+		
+		assertTrue(doneLatch.await(TIME_OUT, TimeUnit.SECONDS));
+	}
 }
