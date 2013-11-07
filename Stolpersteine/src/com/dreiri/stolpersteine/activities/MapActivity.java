@@ -7,12 +7,17 @@ import org.csdgn.util.KDTree;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.dreiri.stolpersteine.R;
 import com.dreiri.stolpersteine.api.NetworkService;
 import com.dreiri.stolpersteine.api.NetworkService.Callback;
+import com.dreiri.stolpersteine.api.SearchData;
 import com.dreiri.stolpersteine.api.SynchronizationController;
 import com.dreiri.stolpersteine.api.model.Stolperstein;
 import com.dreiri.stolpersteine.utils.LocationFinder;
@@ -41,55 +46,83 @@ public class MapActivity extends Activity {
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.fragmentMap)).getMap();
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(berlin, 12));
         map.setOnInfoWindowClickListener(new InfoWindowHandler());
-        
+
         stolpersteineClient.retrieveStolpersteine(new Callback() {
-            
+
             @Override
             public void handle(List<Stolperstein> stolpersteine) {
                 for (Stolperstein stolperstein : stolpersteine) {
-                	LatLng coordinates = stolperstein.getLocation().getCoordinates();
-                	double[] key = new double[] {coordinates.latitude, coordinates.longitude}; 
-                	tree.add(key, stolperstein);
+                    LatLng coordinates = stolperstein.getLocation().getCoordinates();
+                    double[] key = new double[] { coordinates.latitude, coordinates.longitude };
+                    tree.add(key, stolperstein);
                 }
-                
-                double[] bottomLeft = new double[] {52.50, 13.40};
-                double[] topRight = new double[] {52.52, 13.41};
+
+                double[] bottomLeft = new double[] { 52.50, 13.40 };
+                double[] topRight = new double[] { 52.52, 13.41 };
                 List<Stolperstein> list = tree.getRange(bottomLeft, topRight);
                 for (Stolperstein stolperstein : list) {
-					MarkerOptions markerOptions = new MarkerOptions()
-							.position(stolperstein.getLocation().getCoordinates())
-							.title(stolperstein.getPerson().getNameAsString())
-							.snippet(stolperstein.getLocation().getAddressAsString())
-							.icon(BitmapDescriptorFactory.fromResource(R.drawable.stolpersteine_tile));
-					Marker marker = map.addMarker(markerOptions);
-					richMapMarker.addProperty(marker, stolperstein);
+                    MarkerOptions markerOptions = new MarkerOptions()
+                            .position(stolperstein.getLocation().getCoordinates())
+                            .title(stolperstein.getPerson().getNameAsString())
+                            .snippet(stolperstein.getLocation().getAddressAsString())
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.stolpersteine_tile));
+                    Marker marker = map.addMarker(markerOptions);
+                    richMapMarker.addProperty(marker, stolperstein);
                 }
             }
         });
+
+        EditText editTextQuery = (EditText) findViewById(R.id.editTextQuery);
+        editTextQuery.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                SearchData searchData = new SearchData();
+                searchData.setKeyword(s.toString());
+                networkService.retrieveStolpersteine(searchData, 0, 10, new Callback() {
+
+                    @Override
+                    public void handle(List<Stolperstein> stolpersteine) {
+                        for (Stolperstein stolperstein : stolpersteine) {
+                            String firstName = stolperstein.getPerson().getFirstName();
+                            Toast.makeText(MapActivity.this, firstName, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        });
     }
-        
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.map, menu);
         return true;
     }
-    
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_positioning:
-                LocationFinder locationFinder = new LocationFinder(MapActivity.this);
-                LatLng currentLocation = new LatLng(locationFinder.getLat(), locationFinder.getLng());
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
-                map.animateCamera(CameraUpdateFactory.zoomTo(16), 2000, null);
-                break;
-            default:
-                break;
+        case R.id.action_positioning:
+            LocationFinder locationFinder = new LocationFinder(MapActivity.this);
+            LatLng currentLocation = new LatLng(locationFinder.getLat(), locationFinder.getLng());
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
+            map.animateCamera(CameraUpdateFactory.zoomTo(16), 2000, null);
+            break;
+        default:
+            break;
         }
         return true;
     }
-    
+
     private class InfoWindowHandler implements OnInfoWindowClickListener {
 
         @Override
@@ -101,7 +134,7 @@ public class MapActivity extends Activity {
                 startActivity(intent);
             }
         }
-        
+
     }
 
 }
