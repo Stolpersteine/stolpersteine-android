@@ -83,7 +83,7 @@ public class NetworkServiceTest extends AndroidTestCase {
 
 	public void testRetrieveStolpersteineStreet() throws InterruptedException {
 		final SearchData searchData = new SearchData();
-		searchData.setStreet("Turmstra");
+		searchData.setStreet("Turmstraße");
 
 		networkService.retrieveStolpersteine(searchData, 0, 5, new Callback() {
 			@Override
