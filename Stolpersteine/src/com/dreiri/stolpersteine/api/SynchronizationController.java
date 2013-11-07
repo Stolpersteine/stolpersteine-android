@@ -7,15 +7,18 @@ import com.dreiri.stolpersteine.api.model.Stolperstein;
 
 public class SynchronizationController {
 	final static int NETWORK_BATCH_SIZE = 500;
-	
-    private NetworkService client = new NetworkService();
+    private NetworkService networkService;
+    
+    public SynchronizationController(NetworkService networkService) {
+        this.networkService = networkService;
+    }
     
     public void retrieveStolpersteine(Callback callback) {
     	retrieveStolpersteine(0, NETWORK_BATCH_SIZE, callback);
     }
 
     private void retrieveStolpersteine(final int offset, final int limit, final Callback callback) {
-    	client.retrieveStolpersteine(null, offset, limit, new Callback() {
+        networkService.retrieveStolpersteine(null, offset, limit, new Callback() {
         	@Override
             public void handle(List<Stolperstein> stolpersteine) {
         	    callback.handle(stolpersteine);

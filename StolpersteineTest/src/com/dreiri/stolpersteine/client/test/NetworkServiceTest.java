@@ -36,7 +36,6 @@ public class NetworkServiceTest extends AndroidTestCase {
 					assertNotNull("Wrong source name", stolperstein.getSource().getName());
 					assertNotNull("Wrong source URI", stolperstein.getSource().getUri());
 					assertNotNull("Wrong person", stolperstein.getPerson());
-					assertNotNull("Wrong person first name", stolperstein.getPerson().getFirstName());
 					assertNotNull("Wrong person last name", stolperstein.getPerson().getLastName());
 					assertNotNull("Wrong person biography URI", stolperstein.getPerson().getBiographyUri());
 					assertNotNull("Wrong location street", stolperstein.getLocation().getStreet());
@@ -45,7 +44,11 @@ public class NetworkServiceTest extends AndroidTestCase {
 					assertFalse("Wrong location longitude", stolperstein.getLocation().getCoordinates().longitude == 0.0);
 					
 					// Optional fields
-					if (stolperstein.getLocation().getZipCode() != null) {
+                    if (!stolperstein.getPerson().getFirstName().isEmpty()) {
+                        assertTrue("Wrong location first name", stolperstein.getPerson().getFirstName().length() > 0);
+                    }
+
+                    if (!stolperstein.getLocation().getZipCode().isEmpty()) {
 						assertTrue("Wrong location zip code", stolperstein.getLocation().getZipCode().length() > 0);
 					}
 				}
@@ -54,7 +57,7 @@ public class NetworkServiceTest extends AndroidTestCase {
 			}
 		});
 
-		assertTrue(doneLatch.await(TIME_OUT, TimeUnit.SECONDS));
+		assertTrue(doneLatch.await(TIME_OUT + 20, TimeUnit.SECONDS));
 	}
 	
 	public void testRetrieveStolpersteineKeyword() throws InterruptedException {
@@ -81,7 +84,7 @@ public class NetworkServiceTest extends AndroidTestCase {
 
 	public void testRetrieveStolpersteineStreet() throws InterruptedException {
 		final SearchData searchData = new SearchData();
-		searchData.setStreet("Turmstra§e");
+		searchData.setStreet("Turmstra");
 		
 		networkService.retrieveStolpersteine(searchData, 0, 5, new Callback() {
 			@Override

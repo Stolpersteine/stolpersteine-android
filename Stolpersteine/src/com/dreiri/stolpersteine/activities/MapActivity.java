@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.dreiri.stolpersteine.R;
+import com.dreiri.stolpersteine.api.NetworkService;
 import com.dreiri.stolpersteine.api.NetworkService.Callback;
 import com.dreiri.stolpersteine.api.SynchronizationController;
 import com.dreiri.stolpersteine.api.model.Stolperstein;
@@ -26,6 +27,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapActivity extends Activity {
+    NetworkService networkService = new NetworkService();
+    SynchronizationController stolpersteineClient = new SynchronizationController(networkService);
     GoogleMap map;
     LatLng berlin = new LatLng(52.5191710, 13.40609120);
     RichMapMarker richMapMarker = new RichMapMarker();
@@ -39,7 +42,6 @@ public class MapActivity extends Activity {
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(berlin, 12));
         map.setOnInfoWindowClickListener(new InfoWindowHandler());
         
-        SynchronizationController stolpersteineClient = new SynchronizationController();
         stolpersteineClient.retrieveStolpersteine(new Callback() {
             
             @Override
