@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 import com.dreiri.stolpersteine.R;
@@ -25,9 +26,14 @@ public class BioActivity extends Activity {
         Intent intent = getIntent();
         bioData = intent.getStringExtra("bioData");
         bioUrl = intent.getStringExtra("bioUrl");
-        browser = (WebView) findViewById(R.id.webkit);
-        browser.getSettings().setBuiltInZoomControls(true);
-        browser.getSettings().setDisplayZoomControls(false);
+        
+        browser = (WebView) findViewById(R.id.webview);
+        WebSettings settings = browser.getSettings();
+        settings.setBuiltInZoomControls(true);
+        settings.setDisplayZoomControls(false);
+        settings.setLoadWithOverviewMode(true);
+        settings.setUseWideViewPort(true);
+        
         viewFormat = ViewFormat.TEXT;
         loadContentInBrowser(browser, bioData);
     }
