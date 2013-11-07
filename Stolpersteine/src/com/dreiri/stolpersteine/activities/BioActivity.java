@@ -15,6 +15,7 @@ public class BioActivity extends Activity {
     protected enum ViewFormat {TEXT, WEB};
     ViewFormat viewFormat;
     WebView browser;
+    WebSettings settings;
     String bioData;
     String bioUrl;
     
@@ -28,11 +29,9 @@ public class BioActivity extends Activity {
         bioUrl = intent.getStringExtra("bioUrl");
         
         browser = (WebView) findViewById(R.id.webview);
-        WebSettings settings = browser.getSettings();
+        settings = browser.getSettings();
         settings.setBuiltInZoomControls(true);
         settings.setDisplayZoomControls(false);
-        settings.setLoadWithOverviewMode(true);
-        settings.setUseWideViewPort(true);
         
         viewFormat = ViewFormat.TEXT;
         loadContentInBrowser(browser, bioData);
@@ -51,12 +50,16 @@ public class BioActivity extends Activity {
             case R.id.action_text:
                 if (viewFormat == ViewFormat.WEB) {
                     viewFormat = ViewFormat.TEXT;
+                    settings.setLoadWithOverviewMode(false);
+                    settings.setUseWideViewPort(false);
                     loadContentInBrowser(browser, bioData);
                 }
                 break;
             case R.id.action_web:
                 if (viewFormat == ViewFormat.TEXT) {
                     viewFormat = ViewFormat.WEB;
+                    settings.setLoadWithOverviewMode(true);
+                    settings.setUseWideViewPort(true);
                     loadUrlInBrowser(browser, bioUrl);
                 }
                 break;
