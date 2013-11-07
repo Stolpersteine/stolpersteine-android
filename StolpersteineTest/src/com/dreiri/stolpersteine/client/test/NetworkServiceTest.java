@@ -24,7 +24,7 @@ public class NetworkServiceTest extends AndroidTestCase {
 	public void testRetrieveStolpersteine() throws InterruptedException {
 		networkService.retrieveStolpersteine(null, 0, 5, new Callback() {
 			@Override
-			public void handle(List<Stolperstein> stolpersteine) {
+			public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine) {
 				assertEquals("Wrong number of stolpersteine", 5, stolpersteine.size());
 				for (Stolperstein stolperstein : stolpersteine) {
 					// Mandatory fields
@@ -65,7 +65,7 @@ public class NetworkServiceTest extends AndroidTestCase {
 
 		networkService.retrieveStolpersteine(searchData, 0, 5, new Callback() {
 			@Override
-			public void handle(List<Stolperstein> stolpersteine) {
+			public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine) {
 				assertTrue(stolpersteine.size() > 0);
 				for (Stolperstein stolperstein : stolpersteine) {
 					boolean found = stolperstein.getPerson().getFirstName().startsWith(searchData.getKeyword());
@@ -87,7 +87,7 @@ public class NetworkServiceTest extends AndroidTestCase {
 
 		networkService.retrieveStolpersteine(searchData, 0, 5, new Callback() {
 			@Override
-			public void handle(List<Stolperstein> stolpersteine) {
+			public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine) {
 				assertTrue(stolpersteine.size() > 0);
 				for (Stolperstein stolperstein : stolpersteine) {
 					boolean found = stolperstein.getLocation().getStreet().startsWith(searchData.getStreet());
@@ -108,7 +108,7 @@ public class NetworkServiceTest extends AndroidTestCase {
 
 		networkService.retrieveStolpersteine(searchData, 0, 5, new Callback() {
 			@Override
-			public void handle(List<Stolperstein> stolpersteine) {
+			public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine) {
 				assertTrue(stolpersteine.size() > 0);
 				for (Stolperstein stolperstein : stolpersteine) {
 					boolean found = stolperstein.getLocation().getCity().startsWith(searchData.getCity());
@@ -130,7 +130,7 @@ public class NetworkServiceTest extends AndroidTestCase {
 
 		networkService.retrieveStolpersteine(searchData, 0, 5, new Callback() {
 			@Override
-			public void handle(List<Stolperstein> stolpersteine) {
+			public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine) {
 				assertEquals(0, stolpersteine.size());
 
 				doneLatch.countDown();
@@ -144,7 +144,7 @@ public class NetworkServiceTest extends AndroidTestCase {
 		// Load first two stolpersteine
 		networkService.retrieveStolpersteine(null, 0, 2, new Callback() {
 			@Override
-			public void handle(List<Stolperstein> stolpersteine) {
+			public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine) {
 				assertEquals(2, stolpersteine.size());
 				final String stolpersteinId0 = stolpersteine.get(0).getId();
 				final String stolpersteinId1 = stolpersteine.get(1).getId();
@@ -152,14 +152,14 @@ public class NetworkServiceTest extends AndroidTestCase {
 				// First page
 				networkService.retrieveStolpersteine(null, 0, 1, new Callback() {
 					@Override
-					public void handle(List<Stolperstein> stolpersteine) {
+					public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine) {
 						assertEquals(1, stolpersteine.size());
 						assertEquals(stolpersteinId0, stolpersteine.get(0).getId());
 
 						// Second page
 						networkService.retrieveStolpersteine(null, 1, 1, new Callback() {
 							@Override
-							public void handle(List<Stolperstein> stolpersteine) {
+							public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine) {
 								assertEquals(1, stolpersteine.size());
 								assertEquals(stolpersteinId1, stolpersteine.get(0).getId());
 

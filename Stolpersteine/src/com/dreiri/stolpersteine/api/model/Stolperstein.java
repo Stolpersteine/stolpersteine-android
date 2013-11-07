@@ -73,7 +73,7 @@ public class Stolperstein implements Parcelable {
         dest.writeString(id);
         dest.writeInt(type.ordinal());
         
-        dest.writeParcelable(person, flags);
+        dest.writeParcelable(source, flags);
         dest.writeParcelable(person, flags);
         dest.writeParcelable(location, flags);
     }

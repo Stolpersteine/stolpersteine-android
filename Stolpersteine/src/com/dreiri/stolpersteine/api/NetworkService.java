@@ -168,7 +168,7 @@ public class NetworkService {
     }
 
     public interface Callback {
-        public void handle(List<Stolperstein> stolpersteine);
+        public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine);
     }
 
     private class ReadJSONFeedTask extends AsyncTask<URI, Void, List<Stolperstein>> {
@@ -196,7 +196,7 @@ public class NetworkService {
         @Override
         protected void onPostExecute(List<Stolperstein> stolpersteine) {
             if (callback != null) {
-                callback.handle(stolpersteine);
+                callback.onStolpersteineRetrieved(stolpersteine);
             }
         }
     }

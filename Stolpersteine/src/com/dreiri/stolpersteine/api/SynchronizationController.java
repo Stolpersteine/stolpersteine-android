@@ -20,8 +20,8 @@ public class SynchronizationController {
     private void retrieveStolpersteine(final int offset, final int limit, final Callback callback) {
         networkService.retrieveStolpersteine(null, offset, limit, new Callback() {
         	@Override
-            public void handle(List<Stolperstein> stolpersteine) {
-        	    callback.handle(stolpersteine);
+            public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine) {
+        	    callback.onStolpersteineRetrieved(stolpersteine);
             	if (stolpersteine.size() == NETWORK_BATCH_SIZE) {
             		retrieveStolpersteine(offset + NETWORK_BATCH_SIZE, NETWORK_BATCH_SIZE, callback);
             	}

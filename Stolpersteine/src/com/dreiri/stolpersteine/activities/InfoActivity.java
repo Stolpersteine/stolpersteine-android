@@ -2,6 +2,7 @@ package com.dreiri.stolpersteine.activities;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -23,7 +24,7 @@ import com.dreiri.stolpersteine.api.model.Stolperstein;
 
 public class InfoActivity extends Activity {
 
-    Stolperstein stolperstein;
+    ArrayList<Stolperstein> stolpersteine;
     Person person;
     Location location;
     String bioUrl;
@@ -36,9 +37,9 @@ public class InfoActivity extends Activity {
         setContentView(R.layout.fragment_info);
         
         Intent intent = getIntent();
-        if (intent.hasExtra("stolperstein")) {
-            stolperstein = intent.getParcelableExtra("stolperstein");
-            readProperties(stolperstein);
+        if (intent.hasExtra("stolpersteine")) {
+            stolpersteine = intent.getParcelableArrayListExtra("stolpersteine");
+            readProperties(stolpersteine.get(0));
         }
         
         TextView textViewName = (TextView) findViewById(R.id.textViewName);
@@ -85,15 +86,15 @@ public class InfoActivity extends Activity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable("stolperstein", stolperstein);
+        outState.putParcelableArrayList("stolpersteine", stolpersteine);
     }
     
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState != null && savedInstanceState.containsKey("stolperstein")) {
-            stolperstein = savedInstanceState.getParcelable("stolperstein");
-            readProperties(stolperstein);
+            stolpersteine = savedInstanceState.getParcelableArrayList("stolpersteine");
+            readProperties(stolpersteine.get(0));
         }
     }
     
