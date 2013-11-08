@@ -1,46 +1,26 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
-    
+
     <fragment
         android:id="@+id/fragmentMap"
         android:name="com.google.android.gms.maps.MapFragment"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-        
-        <EditText
-	        android:id="@+id/editTextQuery"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_alignParentTop="true"
-	        android:layout_toLeftOf="@+id/buttonSearch"
-	        android:ems="10"
-	        android:hint="@string/hint_query"
-	        android:inputType="textPersonName"
-	        android:minHeight="48dp"
-	        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-	        android:layout_marginTop="@dimen/activity_vertical_margin"
-	        android:layout_marginRight="@dimen/activity_horizontal_margin"
-	        android:textSize="24sp" >
-            <requestFocus />
-        </EditText>
-        
-        <Button
-			android:id="@+id/buttonSearch"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_alignParentRight="true"
-			android:layout_alignParentTop="true"
-			android:minHeight="48dp"
-			android:layout_marginTop="@dimen/activity_vertical_margin"
-			android:layout_marginRight="@dimen/activity_horizontal_margin"
-			android:text="@string/search"
-			android:textSize="24sp" />
-        
-    </RelativeLayout>
-    
+    <AutoCompleteTextView
+        android:id="@+id/autoCompleteTextViewQuery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:ems="10"
+        android:hint="@string/hint_query"
+        android:inputType="text"
+        android:minHeight="48dp"
+        android:textSize="24sp" >
+        <requestFocus />
+    </AutoCompleteTextView>
+
 </FrameLayout>

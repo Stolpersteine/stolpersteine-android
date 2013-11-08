@@ -2,6 +2,7 @@ package com.dreiri.stolpersteine.activities;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,8 +11,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 
 import com.dreiri.stolpersteine.R;
 import com.dreiri.stolpersteine.api.NetworkService;
@@ -35,6 +36,8 @@ public class MapActivity extends Activity implements OnInfoWindowClickListener {
     
 	private LatLng berlinLatLng;
 	private int berlinZoom;
+	private final int autoCompleteDropDownListSize = 10;
+	private final int autoCompleteActivationMinLength = 3;
 	private NetworkService networkService = new NetworkService();
 	private SynchronizationController synchronizationController = new SynchronizationController(networkService);
 	private MapClusterController<Stolperstein> mapClusterController;
@@ -69,8 +72,8 @@ public class MapActivity extends Activity implements OnInfoWindowClickListener {
 			}
 		});
 
-		EditText editTextQuery = (EditText) findViewById(R.id.editTextQuery);
-		editTextQuery.addTextChangedListener(new TextWatcher() {
+		final AutoCompleteTextView autoCompleteTextViewQuery = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextViewQuery);
+		autoCompleteTextViewQuery.addTextChangedListener(new TextWatcher() {
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -84,14 +87,21 @@ public class MapActivity extends Activity implements OnInfoWindowClickListener {
 			public void afterTextChanged(Editable s) {
 				SearchData searchData = new SearchData();
 				searchData.setKeyword(s.toString());
-				networkService.retrieveStolpersteine(searchData, 0, 10, new Callback() {
-
+				networkService.retrieveStolpersteine(searchData, 0, autoCompleteDropDownListSize, new Callback() {
 					@Override
 					public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine) {
-						for (Stolperstein stolperstein : stolpersteine) {
-							String firstName = stolperstein.getPerson().getFirstName();
-							Toast.makeText(MapActivity.this, firstName, Toast.LENGTH_SHORT).show();
-						}
+					    String[] suggestions = new String[stolpersteine.size()];
+					    ListIterator<Stolperstein> stolpersteineIterator = stolpersteine.listIterator();
+					    while (stolpersteineIterator.hasNext()) {
+					        int idx = stolpersteineIterator.nextIndex();
+					        Stolperstein stolpersteineSuggestion = stolpersteineIterator.next();
+					        String name = stolpersteineSuggestion.getPerson().getNameAsString();
+					        String street = stolpersteineSuggestion.getLocation().getStreet();
+					        suggestions[idx] = name + ", " + street;
+                        }
+					    ArrayAdapter<String> adapter = new ArrayAdapter<String>(MapActivity.this, android.R.layout.simple_dropdown_item_1line, suggestions);
+					    autoCompleteTextViewQuery.setThreshold(autoCompleteActivationMinLength);
+					    autoCompleteTextViewQuery.setAdapter(adapter);
 					}
 				});
 			}
