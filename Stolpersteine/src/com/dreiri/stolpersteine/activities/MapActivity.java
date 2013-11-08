@@ -32,9 +32,9 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapActivity extends Activity implements OnInfoWindowClickListener {
-	private static LatLng BERLIN_LAT_LNG = new LatLng(52.5191710, 13.40609120);
-	private static int BERLIN_ZOOM = 12;
-
+    
+	private LatLng berlinLatLng;
+	private int berlinZoom;
 	private NetworkService networkService = new NetworkService();
 	private SynchronizationController synchronizationController = new SynchronizationController(networkService);
 	private MapClusterController<Stolperstein> mapClusterController;
@@ -43,10 +43,12 @@ public class MapActivity extends Activity implements OnInfoWindowClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		setContentView(R.layout.activity_map);
+		
 		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.fragmentMap)).getMap();
-		CameraUpdate region = CameraUpdateFactory.newLatLngZoom(BERLIN_LAT_LNG, BERLIN_ZOOM);
+		berlinLatLng = getLocationLatLng(R.array.Berlin);
+        berlinZoom = 12;
+		CameraUpdate region = CameraUpdateFactory.newLatLngZoom(berlinLatLng, berlinZoom);
 		map.moveCamera(region);
 		map.setOnInfoWindowClickListener(this);
 		mapClusterController = new MapClusterController<Stolperstein>(map);
@@ -126,5 +128,12 @@ public class MapActivity extends Activity implements OnInfoWindowClickListener {
 			intent.putParcelableArrayListExtra("stolpersteine", stolpersteine);
 			startActivity(intent);
 		}
+	}
+	
+	private LatLng getLocationLatLng(int location) {
+	    String[] locationCoordinates = getResources().getStringArray(location);
+	    double lat = Double.valueOf(locationCoordinates[0]);
+	    double lng = Double.valueOf(locationCoordinates[1]);
+	    return new LatLng(lat, lng);
 	}
 }
