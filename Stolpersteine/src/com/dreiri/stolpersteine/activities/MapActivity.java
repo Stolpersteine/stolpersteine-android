@@ -91,12 +91,12 @@ public class MapActivity extends Activity implements OnInfoWindowClickListener {
 					@Override
 					public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine) {
 					    String[] suggestions = new String[stolpersteine.size()];
-					    ListIterator<Stolperstein> stolpersteineIterator = stolpersteine.listIterator();
-					    while (stolpersteineIterator.hasNext()) {
-					        int idx = stolpersteineIterator.nextIndex();
-					        Stolperstein stolpersteineSuggestion = stolpersteineIterator.next();
-					        String name = stolpersteineSuggestion.getPerson().getNameAsString();
-					        String street = stolpersteineSuggestion.getLocation().getStreet();
+					    ListIterator<Stolperstein> iterator = stolpersteine.listIterator();
+					    while (iterator.hasNext()) {
+					        int idx = iterator.nextIndex();
+					        Stolperstein matchedStolperstein = iterator.next();
+					        String name = matchedStolperstein.getPerson().getNameAsString();
+					        String street = matchedStolperstein.getLocation().getStreet();
 					        suggestions[idx] = name + ", " + street;
                         }
 					    ArrayAdapter<String> adapter = new ArrayAdapter<String>(MapActivity.this, android.R.layout.simple_dropdown_item_1line, suggestions);
