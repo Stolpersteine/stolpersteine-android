@@ -6,6 +6,9 @@ import java.util.ListIterator;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -21,6 +24,7 @@ import com.dreiri.stolpersteine.api.SearchData;
 import com.dreiri.stolpersteine.api.SynchronizationController;
 import com.dreiri.stolpersteine.api.model.Stolperstein;
 import com.dreiri.stolpersteine.clustering.MapClusterController;
+import com.dreiri.stolpersteine.utils.AndroidVersionsUnification;
 import com.dreiri.stolpersteine.utils.LocationFinder;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -73,6 +77,11 @@ public class MapActivity extends Activity implements OnInfoWindowClickListener {
 		});
 
 		final AutoCompleteTextView autoCompleteTextViewQuery = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextViewQuery);
+		
+		Drawable background = new ColorDrawable(Color.GRAY);
+		background.setAlpha(128);
+		AndroidVersionsUnification.setBackgroundForView(autoCompleteTextViewQuery, background);
+		
 		autoCompleteTextViewQuery.addTextChangedListener(new TextWatcher() {
 
 			@Override
