@@ -92,7 +92,7 @@ public class InfoActivity extends Activity {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        if (savedInstanceState != null && savedInstanceState.containsKey("stolperstein")) {
+        if (savedInstanceState != null && savedInstanceState.containsKey("stolpersteine")) {
             stolpersteine = savedInstanceState.getParcelableArrayList("stolpersteine");
             readProperties(stolpersteine.get(0));
         }
