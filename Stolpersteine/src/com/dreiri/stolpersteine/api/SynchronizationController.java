@@ -8,24 +8,40 @@ import com.dreiri.stolpersteine.api.model.Stolperstein;
 public class SynchronizationController {
 	final static int NETWORK_BATCH_SIZE = 500;
     private NetworkService networkService;
+    private Listener listener;
     
     public SynchronizationController(NetworkService networkService) {
         this.networkService = networkService;
     }
     
-    public void retrieveStolpersteine(Callback callback) {
-    	retrieveStolpersteine(0, NETWORK_BATCH_SIZE, callback);
+    public Listener getListener() {
+	    return listener;
     }
 
-    private void retrieveStolpersteine(final int offset, final int limit, final Callback callback) {
+	public void setListener(Listener listener) {
+	    this.listener = listener;
+    }
+
+	public void synchronize() {
+    	retrieveStolpersteine(0, NETWORK_BATCH_SIZE);
+    }
+
+    private void retrieveStolpersteine(final int offset, final int limit) {
         networkService.retrieveStolpersteine(null, offset, limit, new Callback() {
         	@Override
             public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine) {
-        	    callback.onStolpersteineRetrieved(stolpersteine);
+        		if (listener != null) {
+        			listener.onStolpersteineAdded(stolpersteine);
+        		}
+        		
             	if (stolpersteine.size() == NETWORK_BATCH_SIZE) {
-            		retrieveStolpersteine(offset + NETWORK_BATCH_SIZE, NETWORK_BATCH_SIZE, callback);
+            		retrieveStolpersteine(offset + NETWORK_BATCH_SIZE, NETWORK_BATCH_SIZE);
             	}
             }
         });
-    }   
+    }
+    
+    public interface Listener {
+    	public void onStolpersteineAdded(List<Stolperstein> stolpersteine);
+    }
 }

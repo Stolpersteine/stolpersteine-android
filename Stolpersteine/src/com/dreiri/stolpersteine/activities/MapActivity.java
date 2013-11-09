@@ -36,7 +36,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapActivity extends Activity implements OnInfoWindowClickListener {
+public class MapActivity extends Activity implements OnInfoWindowClickListener, SynchronizationController.Listener {
     
 	private LatLng berlinLatLng;
 	private int berlinZoom;
@@ -52,6 +52,7 @@ public class MapActivity extends Activity implements OnInfoWindowClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map);
 		
+		// Set up map and clustering
 		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.fragmentMap)).getMap();
 		berlinLatLng = getLocationLatLng(R.array.Berlin);
         berlinZoom = 12;
@@ -60,28 +61,15 @@ public class MapActivity extends Activity implements OnInfoWindowClickListener {
 		map.setOnInfoWindowClickListener(this);
 		mapClusterController = new MapClusterController<Stolperstein>(map);
 
-		synchronizationController.retrieveStolpersteine(new Callback() {
+		// Start synchronizing data
+		synchronizationController.setListener(this);
+		synchronizationController.synchronize();
 
-			@Override
-			public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine) {
-				ArrayList<MarkerOptions> optionsList = new ArrayList<MarkerOptions>(stolpersteine.size());
-				for (Stolperstein stolperstein : stolpersteine) {
-					MarkerOptions markerOptions = new MarkerOptions().position(stolperstein.getLocation().getCoordinates())
-					        .title(stolperstein.getPerson().getNameAsString())
-					        .snippet(stolperstein.getLocation().getAddressAsString())
-					        .icon(BitmapDescriptorFactory.fromResource(R.drawable.stolpersteine_tile));
-					optionsList.add(markerOptions);
-				}
-				mapClusterController.addMarkers(optionsList, stolpersteine);
-			}
-		});
-
+		// Search interface
 		final AutoCompleteTextView autoCompleteTextViewQuery = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextViewQuery);
-		
 		Drawable background = new ColorDrawable(Color.GRAY);
 		background.setAlpha(128);
 		AndroidVersionsUnification.setBackgroundForView(autoCompleteTextViewQuery, background);
-		
 		autoCompleteTextViewQuery.addTextChangedListener(new TextWatcher() {
 
 			@Override
@@ -148,6 +136,19 @@ public class MapActivity extends Activity implements OnInfoWindowClickListener {
 			startActivity(intent);
 		}
 	}
+	
+	@Override
+    public void onStolpersteineAdded(List<Stolperstein> stolpersteine) {
+		ArrayList<MarkerOptions> optionsList = new ArrayList<MarkerOptions>(stolpersteine.size());
+		for (Stolperstein stolperstein : stolpersteine) {
+			MarkerOptions markerOptions = new MarkerOptions().position(stolperstein.getLocation().getCoordinates())
+			        .title(stolperstein.getPerson().getNameAsString())
+			        .snippet(stolperstein.getLocation().getAddressAsString())
+			        .icon(BitmapDescriptorFactory.fromResource(R.drawable.stolpersteine_tile));
+			optionsList.add(markerOptions);
+		}
+		mapClusterController.addMarkers(optionsList, stolpersteine);
+    }
 	
 	private LatLng getLocationLatLng(int location) {
 	    String[] locationCoordinates = getResources().getStringArray(location);
