@@ -63,7 +63,10 @@ public class BioActivity extends Activity {
                     loadUrlInBrowser(browser, bioUrl);
                 }
                 break;
-            default:
+            case android.R.id.home:
+                finish();
+                break;
+        	default:
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -77,5 +80,4 @@ public class BioActivity extends Activity {
     protected void loadUrlInBrowser(WebView browser, String url) {
         browser.loadUrl(url);
     }
-
 }
