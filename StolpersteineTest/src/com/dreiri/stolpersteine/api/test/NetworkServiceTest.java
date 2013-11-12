@@ -1,4 +1,4 @@
-package com.dreiri.stolpersteine.client.test;
+package com.dreiri.stolpersteine.api.test;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;

@@ -1,4 +1,4 @@
-package com.dreiri.stolpersteine.client.test;
+package com.dreiri.stolpersteine.clustering.test;
 
 import java.util.List;
 
