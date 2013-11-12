@@ -41,18 +41,10 @@
         <activity
             android:name="com.dreiri.stolpersteine.activities.InfoActivity"
             android:label="Info" >
-            <intent-filter>
-                <action android:name="com.dreiri.stolpersteine.InfoActivity" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
         </activity>
         <activity
             android:name="com.dreiri.stolpersteine.activities.BioActivity"
             android:label="Biography" >
-            <intent-filter>
-                <action android:name="com.dreiri.stolpersteine.BioActivity" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
         </activity>
         <meta-data 
             android:name="com.google.android.maps.v2.API_KEY" 

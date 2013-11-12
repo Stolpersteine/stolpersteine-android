@@ -93,23 +93,6 @@ public class InfoActivity extends Activity {
         return true;
     }
     
-//    @Override
-//    protected void onSaveInstanceState(Bundle outState) {
-//        super.onSaveInstanceState(outState);
-//        Log.i("Stolpersteine", "onSaveInstanceState Info");
-//        outState.putParcelableArrayList("stolpersteine", stolpersteine);
-//    }
-//    
-//    @Override
-//    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-//        super.onRestoreInstanceState(savedInstanceState);
-//        Log.i("Stolpersteine", "onRestoreInstanceState Info");
-//        if (savedInstanceState != null && savedInstanceState.containsKey("stolpersteine")) {
-//            stolpersteine = savedInstanceState.getParcelableArrayList("stolpersteine");
-//            readProperties(stolpersteine.get(0));
-//        }
-//    }
-    
     private void readProperties(Stolperstein stolperstein) {
         person = stolperstein.getPerson();
         location = stolperstein.getLocation();
