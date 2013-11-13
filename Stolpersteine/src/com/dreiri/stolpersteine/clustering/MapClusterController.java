@@ -45,8 +45,7 @@ public class MapClusterController<T> {
 		double[] topRight = new double[] { 52.52, 13.41 };
 		List<ClusterMarker<T>> clusterMarkers = allMarkersTree.getRange(bottomLeft, topRight);
 		for (ClusterMarker<T> clusterMarker : clusterMarkers) {
-			Marker marker = map.addMarker(clusterMarker.options);
-			markerMap.put(marker, clusterMarker);
+			addMarker(clusterMarker);
 		}
 
 		if (debug) {
@@ -77,6 +76,11 @@ public class MapClusterController<T> {
 		if (callback != null) {
 			callback.onUpdateComplete();
 		}
+	}
+	
+	private void addMarker(ClusterMarker<T> clusterMarker) {
+		Marker marker = map.addMarker(clusterMarker.options);
+		markerMap.put(marker, clusterMarker);
 	}
 
 	public ArrayList<T> getItems(Marker marker) {
