@@ -32,7 +32,7 @@ import com.dreiri.stolpersteine.api.model.Stolperstein;
 import com.google.android.gms.maps.model.LatLng;
 
 public class NetworkService {
-    private final String baseUri = "https://stolpersteine-api.eu01.aws.af.cm/v1";
+    private static final String baseUri = "https://stolpersteine-api.eu01.aws.af.cm/v1";
     private SearchData defaultSearchData = new SearchData();
 
     public SearchData getDefaultSearchData() {
