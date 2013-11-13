@@ -22,12 +22,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
 import com.dreiri.stolpersteine.api.model.Location;
 import com.dreiri.stolpersteine.api.model.Person;
 import com.dreiri.stolpersteine.api.model.Source;
@@ -35,13 +32,8 @@ import com.dreiri.stolpersteine.api.model.Stolperstein;
 import com.google.android.gms.maps.model.LatLng;
 
 public class NetworkService {
-    private static final String BASE_URL = "https://stolpersteine-api.eu01.aws.af.cm/v1";
+    private static final String baseUri = "https://stolpersteine-api.eu01.aws.af.cm/v1";
     private SearchData defaultSearchData = new SearchData();
-    RequestQueue queue;
-    
-    public NetworkService(Context context) {
-    	this.queue = Volley.newRequestQueue(context);
-    }
 
     public SearchData getDefaultSearchData() {
         return defaultSearchData;
@@ -51,15 +43,6 @@ public class NetworkService {
         this.defaultSearchData = defaultSearchData;
     }
 
-    public void retrieveStolpersteine2(SearchData searchData, int offset, int limit, RetrieveStolpersteineRequest.Callback callback) {
-		RetrieveStolpersteineRequest request = new RetrieveStolpersteineRequest.Builder(BASE_URL, callback)
-			.setSearchData(searchData)
-			.setDefaultSearchData(defaultSearchData)
-			.setRange(offset, limit)
-			.build();
-		queue.add(request);
-    }
-    
     public void retrieveStolpersteine(SearchData searchData, int offset, int limit, Callback callback) {
         String query = buildQuery(searchData, offset, limit);
         ReadJSONFeedTask task = new ReadJSONFeedTask(callback);
@@ -67,7 +50,7 @@ public class NetworkService {
     }
 
     String buildQuery(SearchData searchData, int offset, int limit) {
-        StringBuilder queryBuilder = new StringBuilder(BASE_URL)
+        StringBuilder queryBuilder = new StringBuilder(baseUri)
                 .append("/stolpersteine?offset=")
                 .append(offset)
                 .append("&limit=")

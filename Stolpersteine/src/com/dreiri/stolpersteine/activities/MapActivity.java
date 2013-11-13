@@ -42,7 +42,7 @@ public class MapActivity extends Activity implements OnInfoWindowClickListener, 
 	private int berlinZoom;
 	private final int autoCompleteDropDownListSize = 10;
 	private final int autoCompleteActivationMinLength = 3;
-	private NetworkService networkService = new NetworkService(this);
+	private NetworkService networkService = new NetworkService();
 	private SynchronizationController synchronizationController = new SynchronizationController(networkService);
 	private MapClusterController<Stolperstein> mapClusterController;
 	private GoogleMap map;
