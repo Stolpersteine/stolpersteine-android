@@ -2,7 +2,6 @@ package com.dreiri.stolpersteine.activities;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -14,13 +13,10 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 
 import com.dreiri.stolpersteine.R;
 import com.dreiri.stolpersteine.api.NetworkService;
-import com.dreiri.stolpersteine.api.NetworkService.Callback;
-import com.dreiri.stolpersteine.api.SearchData;
 import com.dreiri.stolpersteine.api.SynchronizationController;
 import com.dreiri.stolpersteine.api.model.Stolperstein;
 import com.dreiri.stolpersteine.clustering.MapClusterController;

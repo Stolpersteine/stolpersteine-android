@@ -4,7 +4,6 @@ import java.util.List;
 
 import android.util.Log;
 
-import com.dreiri.stolpersteine.api.RetrieveStolpersteineRequest.Callback;
 import com.dreiri.stolpersteine.api.model.Stolperstein;
 
 public class SynchronizationController {
@@ -30,7 +29,7 @@ public class SynchronizationController {
 
     private void retrieveStolpersteine(final int offset, final int limit) {
         Log.i("Stolpersteine", "Started request " + offset + " " + limit);
-        networkService.retrieveStolpersteine(null, offset, limit, new Callback() {
+        networkService.retrieveStolpersteine(null, offset, limit, new RetrieveStolpersteineRequest2.Callback() {
 
             @Override
             public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine) {

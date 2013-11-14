@@ -1,14 +1,15 @@
 package com.dreiri.stolpersteine.api;
 
 import java.io.BufferedReader;
-import java.io.File;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.ResponseCache;
+import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -24,68 +25,36 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
 import com.dreiri.stolpersteine.api.model.Location;
 import com.dreiri.stolpersteine.api.model.Person;
 import com.dreiri.stolpersteine.api.model.Source;
 import com.dreiri.stolpersteine.api.model.Stolperstein;
 import com.google.android.gms.maps.model.LatLng;
-import com.squareup.okhttp.HttpResponseCache;
 import com.squareup.okhttp.OkHttpClient;
 
-public class NetworkService {
+// BufferedInputStream
+// Request 2.0
+// Etag
+
+public class RetrieveStolpersteineRequest2 extends AsyncTask<URI, Void, List<Stolperstein>> {
+
     private static final String BASE_URL = "https://stolpersteine-api.eu01.aws.af.cm/v1";
-    private SearchData defaultSearchData = new SearchData();
-    RequestQueue queue;
-    OkHttpClient httpClient = new OkHttpClient();
-    
-    public NetworkService(Context context) {
-    	this.queue = Volley.newRequestQueue(context);
-        try {
-            File cacheDir = new File(context.getCacheDir(), "http.cache");
-            ResponseCache responseCache = new HttpResponseCache(cacheDir, 1024 * 1024);
-            httpClient.setResponseCache(responseCache);
-        } catch (IOException e) {
-            Log.e("Stolpersteine", "Error creating disk cache", e);
-        }
-    }
+    private Callback callback;
+    private SearchData defaultSearchData;
+    private OkHttpClient httpClient;
 
-    public SearchData getDefaultSearchData() {
-        return defaultSearchData;
-    }
-
-    public void setDefaultSearchData(SearchData defaultSearchData) {
-        this.defaultSearchData = defaultSearchData;
-    }
-
-    public void retrieveStolpersteine3(SearchData searchData, int offset, int limit, RetrieveStolpersteineRequest.Callback callback) {
-		RetrieveStolpersteineRequest request = new RetrieveStolpersteineRequest.Builder(BASE_URL, callback)
-			.setSearchData(searchData)
-			.setDefaultSearchData(defaultSearchData)
-			.setRange(offset, limit)
-			.build();
-		request.setRetryPolicy(new DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS, 1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-		queue.add(request);
+    public RetrieveStolpersteineRequest2(OkHttpClient httpClient, Callback callback) {
+        this.callback = callback;
+        this.httpClient = httpClient;
     }
     
-    public void retrieveStolpersteine2(SearchData searchData, int offset, int limit, Callback callback) {
-        String query = buildQuery(searchData, offset, limit);
-        ReadJSONFeedTask task = new ReadJSONFeedTask(callback);
-        task.execute(URI.create(query));
+    static public interface Callback {
+        public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine);
     }
-
-    public void retrieveStolpersteine(SearchData searchData, int offset, int limit, RetrieveStolpersteineRequest2.Callback callback) {
-        String query = buildQuery(searchData, offset, limit);
-        RetrieveStolpersteineRequest2 task = new RetrieveStolpersteineRequest2(httpClient, callback);
-        task.execute(URI.create(query));
-    }
-
+    
     String buildQuery(SearchData searchData, int offset, int limit) {
         StringBuilder queryBuilder = new StringBuilder(BASE_URL)
                 .append("/stolpersteine?offset=")
@@ -182,59 +151,52 @@ public class NetworkService {
 
         return stolpersteine;
     }
+    
+    String get(URL url) throws IOException {
+        HttpURLConnection connection = httpClient.open(url);
+        String modified = connection.getRequestProperty("If-Modified-Since");
+        String tag = connection.getRequestProperty("If-None-Match");
+        InputStream in = null;
+        try {
+          // Read the response.
+          in = connection.getInputStream();
+          byte[] response = readFully(in);
+          return new String(response, "UTF-8");
+        } finally {
+          if (in != null) in.close();
+        }
+      }
 
-    private String readJSONFeed(URI uri) throws ClientProtocolException, IOException {
-        StringBuilder sb = new StringBuilder();
+      byte[] readFully(InputStream in) throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        for (int count; (count = in.read(buffer)) != -1; ) {
+          out.write(buffer, 0, count);
+        }
+        return out.toByteArray();
+      }
 
-        HttpClient httpClient = new DefaultHttpClient();
-        HttpGet httpGet = new HttpGet(uri);
-        HttpResponse httpResponse = httpClient.execute(httpGet);
-        int statusCode = httpResponse.getStatusLine().getStatusCode();
-        if (statusCode == 200) {
-            HttpEntity httpEntity = httpResponse.getEntity();
-            InputStream inputStream = httpEntity.getContent();
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-            for (String line; (line = bufferedReader.readLine()) != null;) {
-                sb.append(line);
-            }
-        } else {
-            throw new IOException("HTTP status code: " + statusCode);
+    @Override
+    protected List<Stolperstein> doInBackground(URI... uris) {
+        List<Stolperstein> stolpersteine = null;
+
+        try {
+            
+            String response = get(uris[0].toURL());
+            JSONArray jsonArray = new JSONArray(response);
+            stolpersteine = parseStolpersteine(jsonArray);
+        } catch (Exception e) {
+            Log.e("Stolpersteine", "Error retrieving JSON response", e);
         }
 
-        return sb.toString();
+        return stolpersteine;
     }
 
-    public interface Callback {
-        public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine);
-    }
-
-    private class ReadJSONFeedTask extends AsyncTask<URI, Void, List<Stolperstein>> {
-        private Callback callback;
-
-        private ReadJSONFeedTask(Callback callback) {
-            this.callback = callback;
-        }
-
-        @Override
-        protected List<Stolperstein> doInBackground(URI... uris) {
-            List<Stolperstein> stolpersteine = null;
-
-            try {
-                String response = readJSONFeed(uris[0]);
-                JSONArray jsonArray = new JSONArray(response);
-                stolpersteine = parseStolpersteine(jsonArray);
-            } catch (Exception e) {
-                Log.e("Stolpersteine", "Error retrieving JSON response", e);
-            }
-
-            return stolpersteine;
-        }
-
-        @Override
-        protected void onPostExecute(List<Stolperstein> stolpersteine) {
-            if (callback != null) {
-                callback.onStolpersteineRetrieved(stolpersteine);
-            }
+    @Override
+    protected void onPostExecute(List<Stolperstein> stolpersteine) {
+        if (callback != null) {
+            callback.onStolpersteineRetrieved(stolpersteine);
         }
     }
+
 }
