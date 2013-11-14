@@ -1,9 +1,5 @@
 package com.dreiri.stolpersteine.api;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -12,62 +8,50 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.Context;
-import android.os.AsyncTask;
 import android.util.Log;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
+import com.android.volley.NetworkResponse;
+import com.android.volley.ParseError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.Response.ErrorListener;
+import com.android.volley.Response.Listener;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.JsonRequest;
 import com.dreiri.stolpersteine.api.model.Location;
 import com.dreiri.stolpersteine.api.model.Person;
 import com.dreiri.stolpersteine.api.model.Source;
 import com.dreiri.stolpersteine.api.model.Stolperstein;
 import com.google.android.gms.maps.model.LatLng;
 
-public class NetworkService {
-    private static final String BASE_URL = "https://stolpersteine-api.eu01.aws.af.cm/v1";
-    private SearchData defaultSearchData = new SearchData();
-    RequestQueue queue;
-    
-    public NetworkService(Context context) {
-    	this.queue = Volley.newRequestQueue(context);
+public class RetrieveStolpersteineRequest extends JsonRequest<List<Stolperstein>> {
+
+	public RetrieveStolpersteineRequest(String url, Listener<List<Stolperstein>> listener, ErrorListener errorListener) {
+	    super(Request.Method.GET, url, null, listener, errorListener);
+    }
+	
+	@Override
+    protected Response<List<Stolperstein>> parseNetworkResponse(NetworkResponse networkResponse) {
+		Response<List<Stolperstein>> response;
+		try {
+			String jsonString = new String(networkResponse.data, HttpHeaderParser.parseCharset(networkResponse.headers));
+            JSONArray jsonArray = new JSONArray(jsonString);
+    		List<Stolperstein> stolpersteine = parseStolpersteine(jsonArray);
+    		response = Response.success(stolpersteine, HttpHeaderParser.parseCacheHeaders(networkResponse));
+        } catch (Exception e) {
+            response = Response.error(new ParseError(e));
+        }
+		
+	    return response;
     }
 
-    public SearchData getDefaultSearchData() {
-        return defaultSearchData;
-    }
-
-    public void setDefaultSearchData(SearchData defaultSearchData) {
-        this.defaultSearchData = defaultSearchData;
-    }
-
-    public void retrieveStolpersteine2(SearchData searchData, int offset, int limit, RetrieveStolpersteineRequest.Callback callback) {
-		RetrieveStolpersteineRequest request = new RetrieveStolpersteineRequest.Builder(BASE_URL, callback)
-			.setSearchData(searchData)
-			.setDefaultSearchData(defaultSearchData)
-			.setRange(offset, limit)
-			.build();
-		queue.add(request);
-    }
-    
-    public void retrieveStolpersteine(SearchData searchData, int offset, int limit, Callback callback) {
-        String query = buildQuery(searchData, offset, limit);
-        ReadJSONFeedTask task = new ReadJSONFeedTask(callback);
-        task.execute(URI.create(query));
-    }
-
-    String buildQuery(SearchData searchData, int offset, int limit) {
-        StringBuilder queryBuilder = new StringBuilder(BASE_URL)
+    static String buildUrl(String baseUrl, SearchData searchData, SearchData defaultSearchData, int offset, int limit) {
+        StringBuilder queryBuilder = new StringBuilder(baseUrl)
                 .append("/stolpersteine?offset=")
                 .append(offset)
                 .append("&limit=")
@@ -105,8 +89,8 @@ public class NetworkService {
 
         return queryBuilder.toString();
     }
-
-    Stolperstein parseStolperstein(JSONObject jsonObject) throws JSONException, URISyntaxException {
+    
+    private static Stolperstein parseStolperstein(JSONObject jsonObject) throws JSONException, URISyntaxException {
         Stolperstein stolperstein = new Stolperstein();
         stolperstein.setId(jsonObject.getString("id"));
         String type = jsonObject.optString("type");
@@ -152,7 +136,7 @@ public class NetworkService {
         return stolperstein;
     }
 
-    List<Stolperstein> parseStolpersteine(JSONArray jsonArray) throws JSONException, URISyntaxException {
+    private static List<Stolperstein> parseStolpersteine(JSONArray jsonArray) throws JSONException, URISyntaxException {
         List<Stolperstein> stolpersteine = new ArrayList<Stolperstein>(jsonArray.length());
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -162,59 +146,62 @@ public class NetworkService {
 
         return stolpersteine;
     }
-
-    private String readJSONFeed(URI uri) throws ClientProtocolException, IOException {
-        StringBuilder sb = new StringBuilder();
-
-        HttpClient httpClient = new DefaultHttpClient();
-        HttpGet httpGet = new HttpGet(uri);
-        HttpResponse httpResponse = httpClient.execute(httpGet);
-        int statusCode = httpResponse.getStatusLine().getStatusCode();
-        if (statusCode == 200) {
-            HttpEntity httpEntity = httpResponse.getEntity();
-            InputStream inputStream = httpEntity.getContent();
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-            for (String line; (line = bufferedReader.readLine()) != null;) {
-                sb.append(line);
-            }
-        } else {
-            throw new IOException("HTTP status code: " + statusCode);
-        }
-
-        return sb.toString();
-    }
-
+    
     public interface Callback {
         public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine);
     }
+    
+    public static class Builder {
+    	private String baseUrl;
+    	private Listener<List<Stolperstein>> listener;
+    	private ErrorListener errorListener;
+    	private SearchData searchData;
+    	private SearchData defaultSearchData;
+    	private int offset;
+    	private int limit;
+    	
+    	public Builder(String baseUrl, final Callback callback) {
+    		this.baseUrl = baseUrl;
+    		this.listener = new Response.Listener<List<Stolperstein>>() {
 
-    private class ReadJSONFeedTask extends AsyncTask<URI, Void, List<Stolperstein>> {
-        private Callback callback;
+		        @Override
+		        public void onResponse(List<Stolperstein> stolpersteine) {
+		        	if (callback != null) {
+		        		callback.onStolpersteineRetrieved(stolpersteine);
+		        	}
+		        }
+	        };
+    		this.errorListener = new Response.ErrorListener() {
 
-        private ReadJSONFeedTask(Callback callback) {
-            this.callback = callback;
-        }
+		        @Override
+		        public void onErrorResponse(VolleyError error) {
+		        	if (callback != null) {
+		        		callback.onStolpersteineRetrieved(null);
+		        	}
+		        }
+	        };
+    	}
 
-        @Override
-        protected List<Stolperstein> doInBackground(URI... uris) {
-            List<Stolperstein> stolpersteine = null;
+    	public Builder setSearchData(SearchData searchData) {
+    		this.searchData = searchData;
+    		return this;
+    	}
 
-            try {
-                String response = readJSONFeed(uris[0]);
-                JSONArray jsonArray = new JSONArray(response);
-                stolpersteine = parseStolpersteine(jsonArray);
-            } catch (Exception e) {
-                Log.e("Stolpersteine", "Error retrieving JSON response", e);
-            }
+    	public Builder setDefaultSearchData(SearchData defaultSearchData) {
+    		this.defaultSearchData = defaultSearchData;
+    		return this;
+    	}
+    	
+    	public Builder setRange(int offset, int limit) {
+    		this.offset = offset;
+    		this.limit = limit;
+    		return this;
+    	}
 
-            return stolpersteine;
-        }
-
-        @Override
-        protected void onPostExecute(List<Stolperstein> stolpersteine) {
-            if (callback != null) {
-                callback.onStolpersteineRetrieved(stolpersteine);
-            }
-        }
+    	public RetrieveStolpersteineRequest build() {
+    		String url = buildUrl(baseUrl, searchData, defaultSearchData, offset, limit);
+    		return new RetrieveStolpersteineRequest(url, listener, errorListener);
+    	}
     }
+
 }

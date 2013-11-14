@@ -5,8 +5,10 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import android.test.AndroidTestCase;
+import android.util.Log;
 
 import com.dreiri.stolpersteine.api.NetworkService;
+import com.dreiri.stolpersteine.api.RetrieveStolpersteineRequest;
 import com.dreiri.stolpersteine.api.NetworkService.Callback;
 import com.dreiri.stolpersteine.api.SearchData;
 import com.dreiri.stolpersteine.api.model.Stolperstein;
@@ -18,7 +20,17 @@ public class NetworkServiceTest extends AndroidTestCase {
 
 	public void setUp() {
 		doneLatch = new CountDownLatch(1);
-		networkService = new NetworkService();
+		networkService = new NetworkService(getContext());
+	}
+	
+	public void testRetrieveStolpersteine2() throws InterruptedException {
+		networkService.retrieveStolpersteine2(null, 0, 5, new RetrieveStolpersteineRequest.Callback() {
+			public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine) {
+				Log.i("Stolpersteine", "onStolpersteineRetrieved " + stolpersteine);
+				doneLatch.countDown();
+			}
+		});
+		assertTrue(doneLatch.await(TIME_OUT, TimeUnit.SECONDS));
 	}
 
 	public void testRetrieveStolpersteine() throws InterruptedException {
