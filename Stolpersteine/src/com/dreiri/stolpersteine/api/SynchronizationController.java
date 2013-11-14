@@ -2,7 +2,9 @@ package com.dreiri.stolpersteine.api;
 
 import java.util.List;
 
-import com.dreiri.stolpersteine.api.NetworkService.Callback;
+import android.util.Log;
+
+import com.dreiri.stolpersteine.api.RetrieveStolpersteineRequest.Callback;
 import com.dreiri.stolpersteine.api.model.Stolperstein;
 
 public class SynchronizationController {
@@ -27,16 +29,20 @@ public class SynchronizationController {
     }
 
     private void retrieveStolpersteine(final int offset, final int limit) {
+        Log.i("Stolpersteine", "Started request " + offset + " " + limit);
         networkService.retrieveStolpersteine(null, offset, limit, new Callback() {
-        	@Override
+
+            @Override
             public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine) {
-        		if (listener != null) {
-        			listener.onStolpersteineAdded(stolpersteine);
-        		}
-        		
-            	if (stolpersteine.size() == NETWORK_BATCH_SIZE) {
-            		retrieveStolpersteine(offset + NETWORK_BATCH_SIZE, NETWORK_BATCH_SIZE);
-            	}
+                if (listener != null) {
+                    listener.onStolpersteineAdded(stolpersteine);
+                }
+                
+//                Log.i("Stolpersteine", "Received " + stolpersteine);
+
+                if (stolpersteine != null && stolpersteine.size() == NETWORK_BATCH_SIZE) {
+                    retrieveStolpersteine(offset + NETWORK_BATCH_SIZE, NETWORK_BATCH_SIZE);
+                }
             }
         });
     }

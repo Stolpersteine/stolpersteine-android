@@ -26,6 +26,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.dreiri.stolpersteine.api.model.Location;
@@ -51,16 +52,17 @@ public class NetworkService {
         this.defaultSearchData = defaultSearchData;
     }
 
-    public void retrieveStolpersteine2(SearchData searchData, int offset, int limit, RetrieveStolpersteineRequest.Callback callback) {
+    public void retrieveStolpersteine(SearchData searchData, int offset, int limit, RetrieveStolpersteineRequest.Callback callback) {
 		RetrieveStolpersteineRequest request = new RetrieveStolpersteineRequest.Builder(BASE_URL, callback)
 			.setSearchData(searchData)
 			.setDefaultSearchData(defaultSearchData)
 			.setRange(offset, limit)
 			.build();
+		request.setRetryPolicy(new DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS, 1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 		queue.add(request);
     }
     
-    public void retrieveStolpersteine(SearchData searchData, int offset, int limit, Callback callback) {
+    public void retrieveStolpersteine2(SearchData searchData, int offset, int limit, Callback callback) {
         String query = buildQuery(searchData, offset, limit);
         ReadJSONFeedTask task = new ReadJSONFeedTask(callback);
         task.execute(URI.create(query));

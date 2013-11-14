@@ -44,6 +44,7 @@ public class RetrieveStolpersteineRequest extends JsonRequest<List<Stolperstein>
     		List<Stolperstein> stolpersteine = parseStolpersteine(jsonArray);
     		response = Response.success(stolpersteine, HttpHeaderParser.parseCacheHeaders(networkResponse));
         } catch (Exception e) {
+            Log.i("Stolpersteine", "onError parse " + e);
             response = Response.error(new ParseError(e));
         }
 		
@@ -166,6 +167,7 @@ public class RetrieveStolpersteineRequest extends JsonRequest<List<Stolperstein>
 
 		        @Override
 		        public void onResponse(List<Stolperstein> stolpersteine) {
+		            Log.i("Stolpersteine", "onResponse");
 		        	if (callback != null) {
 		        		callback.onStolpersteineRetrieved(stolpersteine);
 		        	}
@@ -175,9 +177,10 @@ public class RetrieveStolpersteineRequest extends JsonRequest<List<Stolperstein>
 
 		        @Override
 		        public void onErrorResponse(VolleyError error) {
-		        	if (callback != null) {
-		        		callback.onStolpersteineRetrieved(null);
-		        	}
+                    Log.i("Stolpersteine", "onError " + error);
+//		        	if (callback != null) {
+//		        		callback.onStolpersteineRetrieved(null);
+//		        	}
 		        }
 	        };
     	}
