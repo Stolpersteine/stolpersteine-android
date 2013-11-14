@@ -42,8 +42,8 @@ public class MapActivity extends Activity implements OnInfoWindowClickListener, 
 	private int berlinZoom;
 	private final int autoCompleteDropDownListSize = 10;
 	private final int autoCompleteActivationMinLength = 3;
-	private NetworkService networkService = new NetworkService(this);
-	private SynchronizationController synchronizationController = new SynchronizationController(networkService);
+	private NetworkService networkService;
+	private SynchronizationController synchronizationController;
 	private MapClusterController<Stolperstein> mapClusterController;
 	private GoogleMap map;
 
@@ -62,6 +62,8 @@ public class MapActivity extends Activity implements OnInfoWindowClickListener, 
 		mapClusterController = new MapClusterController<Stolperstein>(map);
 
 		// Start synchronizing data
+		networkService = new NetworkService(this);
+		synchronizationController = new SynchronizationController(networkService);
 		synchronizationController.setListener(this);
 		synchronizationController.synchronize();
 
