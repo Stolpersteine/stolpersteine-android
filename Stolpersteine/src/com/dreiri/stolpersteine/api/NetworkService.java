@@ -6,6 +6,7 @@ import java.net.ResponseCache;
 import java.net.URL;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.squareup.okhttp.HttpResponseCache;
@@ -38,7 +39,7 @@ public class NetworkService {
     public void retrieveStolpersteine(SearchData searchData, int offset, int limit, RetrieveStolpersteineRequest.Callback callback) {
         URL url = RetrieveStolpersteineRequest.buildQuery(BASE_URL, searchData, defaultSearchData, offset, limit);
         RetrieveStolpersteineRequest task = new RetrieveStolpersteineRequest(httpClient, callback);
-        task.execute(url);
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, url);
     }
 
 }
