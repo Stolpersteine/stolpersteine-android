@@ -29,7 +29,7 @@ public class SynchronizationController {
 
     private void retrieveStolpersteine(final int offset, final int limit) {
         Log.i("Stolpersteine", "Started request " + offset + " " + limit);
-        networkService.retrieveStolpersteine(null, offset, limit, new RetrieveStolpersteineRequest2.Callback() {
+        networkService.retrieveStolpersteine(null, offset, limit, new RetrieveStolpersteineRequest.Callback() {
 
             @Override
             public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine) {
