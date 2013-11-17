@@ -1,6 +1,13 @@
 package com.dreiri.stolpersteine.activities;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -8,21 +15,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.dreiri.stolpersteine.R;
-import com.dreiri.stolpersteine.api.model.Location;
-import com.dreiri.stolpersteine.api.model.Person;
 import com.dreiri.stolpersteine.api.model.Stolperstein;
 import com.dreiri.stolpersteine.utils.StolpersteinAdapter;
 
 public class InfoActivity extends Activity {
 
     ArrayList<Stolperstein> stolpersteine;
-    Person person;
-    Location location;
     String bioUrl;
     String bioData;
+    ListView listView;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +37,7 @@ public class InfoActivity extends Activity {
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_info);
-        ListView listView = (ListView) findViewById(R.id.list);
+        listView = (ListView) findViewById(R.id.list);
         Intent intent = getIntent();
         if (intent.hasExtra("stolpersteine")) {
             stolpersteine = intent.getParcelableArrayListExtra("stolpersteine");
@@ -42,6 +49,32 @@ public class InfoActivity extends Activity {
             }
             StolpersteinAdapter stolpersteinAdapter = new StolpersteinAdapter(this, stolpersteine);
             listView.setAdapter(stolpersteinAdapter);
+            listView.setOnItemClickListener(new OnItemClickListener() {
+
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Stolperstein stolperstein = (Stolperstein) listView.getItemAtPosition(position);
+                    bioUrl = stolperstein.getPerson().getBiographyUri().toString();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                Document document = Jsoup.parse(new URL(bioUrl).openStream(), "utf-8", bioUrl);
+                                Elements elements = document.select("div#biografie_seite");
+                                bioData = elements.toString();
+                                Intent intent = new Intent(InfoActivity.this, BioActivity.class);
+                                intent.putExtra("bioData", bioData);
+                                intent.putExtra("bioUrl", bioUrl);
+                                startActivity(intent);
+                            } catch (MalformedURLException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }).start();
+                }
+            });
         }
     }
     
@@ -61,10 +94,4 @@ public class InfoActivity extends Activity {
         return true;
     }
     
-    private void readProperties(Stolperstein stolperstein) {
-        person = stolperstein.getPerson();
-        location = stolperstein.getLocation();
-        bioUrl = person.getBiographyUri().toString();
-    }
-
 }
