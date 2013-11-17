@@ -1,27 +1,20 @@
 package com.dreiri.stolpersteine.activities;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
-
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.TextView;
+import android.widget.ListView;
 
 import com.dreiri.stolpersteine.R;
 import com.dreiri.stolpersteine.api.model.Location;
 import com.dreiri.stolpersteine.api.model.Person;
 import com.dreiri.stolpersteine.api.model.Stolperstein;
+import com.dreiri.stolpersteine.utils.StolpersteinAdapter;
 
 public class InfoActivity extends Activity {
 
@@ -34,47 +27,22 @@ public class InfoActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        setContentView(R.layout.fragment_info);
-        
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        setContentView(R.layout.activity_info);
+        ListView listView = (ListView) findViewById(R.id.list);
         Intent intent = getIntent();
         if (intent.hasExtra("stolpersteine")) {
             stolpersteine = intent.getParcelableArrayListExtra("stolpersteine");
-            readProperties(stolpersteine.get(0));
-        }
-        
-        TextView textViewName = (TextView) findViewById(R.id.textViewName);
-        TextView textViewAddress = (TextView) findViewById(R.id.textViewAddress);
-        final Button btnBio = (Button) findViewById(R.id.btnBio);
-        
-        textViewName.setText(person.getNameAsString());
-        textViewAddress.setText(location.getAddressAsString());
-//        UIEnhancer.insertImageIntoTextView(this, R.drawable.img_doughface, R.id.textViewBio);
-        
-        // pre-caching
-        Thread downloadThread = new Thread() {
-            @Override
-            public void run() {
-                super.run();
-                try {
-                    Document document = Jsoup.parse(new URL(bioUrl).openStream(), "utf-8", bioUrl);
-                    Elements elements = document.select("div#biografie_seite");
-                    bioData = elements.toString();
-                    btnBio.setOnClickListener(new OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(InfoActivity.this, BioActivity.class);
-                            intent.putExtra("bioData", bioData);
-                            intent.putExtra("bioUrl", bioUrl);
-                            startActivity(intent);
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            Integer number_found = stolpersteine.size();
+            if (number_found > 1) {
+                actionBar.setTitle(Integer.toString(number_found) + " Stolpersteine");
+            } else {
+                actionBar.setTitle(Integer.toString(number_found) + " Stolperstein");
             }
-        };
-        downloadThread.start();
+            StolpersteinAdapter stolpersteinAdapter = new StolpersteinAdapter(this, stolpersteine);
+            listView.setAdapter(stolpersteinAdapter);
+        }
     }
     
     @Override

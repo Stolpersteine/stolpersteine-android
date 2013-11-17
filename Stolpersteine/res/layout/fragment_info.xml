@@ -1,15 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@layout/fragment_info"
+    android:layout_width="fill_parent"
+    android:layout_height="?android:attr/listPreferredItemHeight"
     android:orientation="vertical" >
 
     <TextView
         android:id="@+id/textViewName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="32dp"
-        android:paddingTop="32dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:paddingLeft="@dimen/list_row_padding_to_border"
+        android:paddingTop="@dimen/list_row_padding_to_border"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textStyle="bold" />
 
@@ -17,23 +19,11 @@
         android:id="@+id/textViewAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="32dp"
-        android:paddingTop="16dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textViewName"
+        android:paddingLeft="@dimen/list_row_padding_to_border"
+        android:paddingTop="@dimen/list_row_padding_between_contents"
+        android:paddingBottom="@dimen/list_row_padding_to_border"
         android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <Button
-        android:id="@+id/btnBio"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:drawableLeft="@drawable/img_doughface"
-        android:drawableRight="@drawable/img_next"
-        android:gravity="center_vertical"
-        android:minHeight="64dp"
-        android:paddingLeft="32dp"
-        android:paddingRight="16dp"
-        android:drawablePadding="16dp"
-        android:text="@string/text_bio"
-        android:textSize="32dp" />
-
-</LinearLayout>
+    
+</RelativeLayout>
