@@ -1,29 +1,36 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@layout/fragment_info"
     android:layout_width="fill_parent"
-    android:layout_height="?android:attr/listPreferredItemHeight"
-    android:orientation="vertical" >
+    android:layout_height="?android:attr/listPreferredItemHeight" >
 
-    <TextView
-        android:id="@+id/textViewName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:paddingLeft="@dimen/list_row_padding_to_border"
-        android:paddingTop="@dimen/list_row_padding_to_border"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textStyle="bold" />
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginTop="4dp"
+        android:orientation="vertical"
+        android:background="@drawable/bg_card" >
 
-    <TextView
-        android:id="@+id/textViewAddress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textViewName"
-        android:paddingLeft="@dimen/list_row_padding_to_border"
-        android:paddingTop="@dimen/list_row_padding_between_contents"
-        android:paddingBottom="@dimen/list_row_padding_to_border"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-    
-</RelativeLayout>
+        <TextView
+            android:id="@+id/textViewName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/list_row_padding_to_border"
+            android:paddingTop="@dimen/list_row_padding_to_border"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textViewAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/list_row_padding_to_border"
+            android:paddingLeft="@dimen/list_row_padding_to_border"
+            android:paddingTop="@dimen/list_row_padding_between_contents"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+        
+    </LinearLayout>
+
+</FrameLayout>
