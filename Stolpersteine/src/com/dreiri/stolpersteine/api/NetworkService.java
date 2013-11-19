@@ -12,6 +12,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.squareup.okhttp.HttpResponseCache;
+import com.squareup.okhttp.OkAuthenticator;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.internal.http.HttpAuthenticator;
 
