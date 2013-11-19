@@ -10,7 +10,7 @@
         </shape>
     </item>
     
-    <item android:bottom="2dp">
+    <item android:bottom="2dp" android:right="2dp">
         <shape
             android:dither="true"
             android:shape="rectangle" >
