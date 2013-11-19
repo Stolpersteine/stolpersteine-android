@@ -1,5 +1,9 @@
 package com.dreiri.stolpersteine.clustering.test;
 
+//import static org.mockito.Matchers.any;
+//import static org.mockito.Mockito.spy;
+//import static org.mockito.Mockito.doAnswer;
+
 import org.mockito.MockitoAnnotations;
 
 import android.test.AndroidTestCase;
@@ -12,6 +16,17 @@ public class MapClusterControllerTest extends AndroidTestCase {
 	}
 
 	public void testGetItems() {
+//        MapClusterController<Object> clusterController = spy(new MapClusterController<Object>(null));
+//        doAnswer(new Answer<Void>() {
+//            public Void answer(InvocationOnMock invocation) {
+//                Object[] args = invocation.getArguments();
+//
+//                return null;
+//            }
+//        }).when(clusterController).addMarker(any(MapClusterController.ClusterMarker.class));
+//        
+//        clusterController.addMarker(new MapClusterController.ClusterMarker<Object>(null, null));
+	    
 //		MapFragment mapFragment = new MapFragment();
 //		GoogleMap map1 = mapFragment.getMap();
 //		MapView mapView = new MapView(getActivity());

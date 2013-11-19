@@ -78,7 +78,7 @@ public class MapClusterController<T> {
 		}
 	}
 	
-	private void addMarker(ClusterMarker<T> clusterMarker) {
+	public void addMarker(ClusterMarker<T> clusterMarker) {
 		Marker marker = map.addMarker(clusterMarker.options);
 		markerMap.put(marker, clusterMarker);
 	}
@@ -93,7 +93,7 @@ public class MapClusterController<T> {
 		public void onUpdateComplete();
 	}
 
-	private class ClusterMarker<Item> {
+	public static class ClusterMarker<Item> {
 		public final MarkerOptions options;
 		public final ArrayList<Item> items = new ArrayList<Item>(1);
 
