@@ -17,7 +17,7 @@ import org.json.JSONObject;
 
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.util.Log;
+//import android.util.Log;
 
 import com.dreiri.stolpersteine.api.model.Location;
 import com.dreiri.stolpersteine.api.model.Person;
@@ -30,13 +30,22 @@ public class RetrieveStolpersteineRequest extends AsyncTask<URL, Void, List<Stol
 
     private OkHttpClient httpClient;
     private Callback callback;
+    private String encodedClientCredentials;
 
     public RetrieveStolpersteineRequest(OkHttpClient httpClient, Callback callback) {
         this.callback = callback;
         this.httpClient = httpClient;
     }
     
-    static public interface Callback {
+    public String getEncodedClientCredentials() {
+	    return encodedClientCredentials;
+    }
+
+	public void setEncodedClientCredentials(String encodedClientCredentials) {
+	    this.encodedClientCredentials = encodedClientCredentials;
+    }
+
+	static public interface Callback {
         public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine);
     }
     
@@ -135,6 +144,8 @@ public class RetrieveStolpersteineRequest extends AsyncTask<URL, Void, List<Stol
     private String retrieveData(URL url) throws IOException {
         String result;
         HttpURLConnection connection = httpClient.open(url);
+//        Log.i("Stolpersteine", "" + connection.getRequestProperties());
+//        connection.addRequestProperty("Authorization", "Basic " + encodedClientCredentials);
         InputStream in = null;
         try {
             result = readFully(connection.getInputStream());
