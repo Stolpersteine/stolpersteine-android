@@ -17,7 +17,7 @@ import org.json.JSONObject;
 
 import android.net.Uri;
 import android.os.AsyncTask;
-//import android.util.Log;
+import android.util.Log;
 
 import com.dreiri.stolpersteine.api.model.Location;
 import com.dreiri.stolpersteine.api.model.Person;
