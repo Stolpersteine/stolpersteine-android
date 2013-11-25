@@ -40,7 +40,7 @@ API Level 11+
 
 Android 3.0.x(HONEYCOMB) or above
 
-## License
+## License (MIT)
 
 Copyright (C) 2013 Option-U Software
 
