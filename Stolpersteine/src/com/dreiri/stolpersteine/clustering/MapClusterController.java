@@ -18,6 +18,7 @@ import com.google.android.gms.maps.model.PolygonOptions;
 
 public class MapClusterController<T> {
 	private GoogleMap map;
+	private MapClusterAnimator mapClusterAnimator;
 	private KDTree<ClusterMarker<T>> allMarkersTree = new KDTree<ClusterMarker<T>>(2);
 	private HashMap<Marker, ClusterMarker<T>> markerMap = new HashMap<Marker, ClusterMarker<T>>();
 	public boolean debug;
@@ -26,7 +27,11 @@ public class MapClusterController<T> {
 		this.map = map;
 	}
 
-	public void addMarkers(List<MarkerOptions> optionsList, List<T> items) {
+	public MapClusterAnimator getMapClusterAnimator() {
+        return mapClusterAnimator;
+    }
+
+    public void addMarkers(List<MarkerOptions> optionsList, List<T> items) {
 		assert (optionsList.size() == items.size());
 
 		for (int i = 0; i < optionsList.size(); i++) {
@@ -45,7 +50,8 @@ public class MapClusterController<T> {
 		double[] topRight = new double[] { 52.52, 13.41 };
 		List<ClusterMarker<T>> clusterMarkers = allMarkersTree.getRange(bottomLeft, topRight);
 		for (ClusterMarker<T> clusterMarker : clusterMarkers) {
-			addMarker(clusterMarker);
+            Marker marker = map.addMarker(clusterMarker.options);
+            markerMap.put(marker, clusterMarker);
 		}
 
 		if (debug) {
@@ -78,11 +84,6 @@ public class MapClusterController<T> {
 		}
 	}
 	
-	public void addMarker(ClusterMarker<T> clusterMarker) {
-		Marker marker = map.addMarker(clusterMarker.options);
-		markerMap.put(marker, clusterMarker);
-	}
-
 	public ArrayList<T> getItems(Marker marker) {
 		ClusterMarker<T> clusterMarker = markerMap.get(marker);
 		ArrayList<T> items = (clusterMarker != null) ? clusterMarker.items : new ArrayList<T>();

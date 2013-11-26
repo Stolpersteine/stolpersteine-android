@@ -1,19 +1,8 @@
 package com.dreiri.stolpersteine.clustering.test;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.spy;
-
-import java.util.ArrayList;
-
 import org.mockito.MockitoAnnotations;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 import android.test.AndroidTestCase;
-
-import com.dreiri.stolpersteine.clustering.MapClusterController;
-import com.dreiri.stolpersteine.clustering.MapClusterController.ClusterMarker;
 
 public class MapClusterControllerTest extends AndroidTestCase {
 
@@ -22,20 +11,20 @@ public class MapClusterControllerTest extends AndroidTestCase {
 		MockitoAnnotations.initMocks(this);
 	}
 
-	@SuppressWarnings("unchecked")
+//	@SuppressWarnings("unchecked")
     public void testGetItems() {
-	    final ArrayList<MapClusterController.ClusterMarker<Object>> clusterMarkerList = new ArrayList<MapClusterController.ClusterMarker<Object>>();
-        MapClusterController<Object> clusterController = spy(new MapClusterController<Object>(null));
-        doAnswer(new Answer<Void>() {
-            public Void answer(InvocationOnMock invocation) {
-                Object[] args = invocation.getArguments();
-                MapClusterController.ClusterMarker<Object> clusterMarker = (ClusterMarker<Object>)args[0];
-                clusterMarkerList.add(clusterMarker);
-
-                return null;
-            }
-        }).when(clusterController).addMarker(any(MapClusterController.ClusterMarker.class));
-        clusterController.addMarker(new MapClusterController.ClusterMarker<Object>(null, null));
+//	    final ArrayList<MapClusterController.ClusterMarker<Object>> clusterMarkerList = new ArrayList<MapClusterController.ClusterMarker<Object>>();
+//        MapClusterController<Object> clusterController = spy(new MapClusterController<Object>(null));
+//        doAnswer(new Answer<Void>() {
+//            public Void answer(InvocationOnMock invocation) {
+//                Object[] args = invocation.getArguments();
+//                MapClusterController.ClusterMarker<Object> clusterMarker = (ClusterMarker<Object>)args[0];
+//                clusterMarkerList.add(clusterMarker);
+//
+//                return null;
+//            }
+//        }).when(clusterController).addMarker(any(MapClusterController.ClusterMarker.class));
+//        clusterController.addMarker(new MapClusterController.ClusterMarker<Object>(null, null));
 	    
 //		MapFragment mapFragment = new MapFragment();
 //		GoogleMap map1 = mapFragment.getMap();
