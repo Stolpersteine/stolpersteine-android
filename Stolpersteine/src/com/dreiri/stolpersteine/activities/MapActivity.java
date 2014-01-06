@@ -26,11 +26,13 @@ import com.dreiri.stolpersteine.api.model.Stolperstein;
 import com.dreiri.stolpersteine.clustering.MapClusterController;
 import com.dreiri.stolpersteine.utils.AndroidVersionsUnification;
 import com.dreiri.stolpersteine.utils.LocationFinder;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -54,12 +56,14 @@ public class MapActivity extends Activity implements OnInfoWindowClickListener, 
 		
 		// Set up map and clustering
 		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.fragmentMap)).getMap();
-		berlinLatLng = getLocationLatLng(R.array.Berlin);
-        berlinZoom = 12;
-		CameraUpdate region = CameraUpdateFactory.newLatLngZoom(berlinLatLng, berlinZoom);
-		map.moveCamera(region);
-		map.setOnInfoWindowClickListener(this);
-		mapClusterController = new MapClusterController<Stolperstein>(map);
+		if (map != null) {
+		    berlinLatLng = getLocationLatLng(R.array.Berlin);
+		    berlinZoom = 12;
+		    CameraUpdate region = CameraUpdateFactory.newLatLngZoom(berlinLatLng, berlinZoom);
+		    map.moveCamera(region);
+		    map.setOnInfoWindowClickListener(this);
+		    mapClusterController = new MapClusterController<Stolperstein>(map);
+		}
 
 		// Start synchronizing data
 		networkService = new NetworkService(this);
