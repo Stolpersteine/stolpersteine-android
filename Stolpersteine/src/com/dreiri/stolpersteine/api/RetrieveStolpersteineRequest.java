@@ -3,11 +3,13 @@ package com.dreiri.stolpersteine.api;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,25 +38,25 @@ public class RetrieveStolpersteineRequest extends AsyncTask<URL, Void, List<Stol
         this.callback = callback;
         this.httpClient = httpClient;
     }
-    
+
     public String getEncodedClientCredentials() {
-	    return encodedClientCredentials;
+        return encodedClientCredentials;
     }
 
-	public void setEncodedClientCredentials(String encodedClientCredentials) {
-	    this.encodedClientCredentials = encodedClientCredentials;
+    public void setEncodedClientCredentials(String encodedClientCredentials) {
+        this.encodedClientCredentials = encodedClientCredentials;
     }
 
-	static public interface Callback {
+    static public interface Callback {
         public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine);
     }
-    
+
     public static URL buildQuery(String baseUrl, SearchData searchData, SearchData defaultSearchData, int offset, int limit) {
         Uri.Builder uriBuilder = new Uri.Builder()
-            .encodedPath(baseUrl)
-            .appendEncodedPath("stolpersteine")
-            .appendQueryParameter("offset", Integer.toString(offset))
-            .appendQueryParameter("limit", Integer.toString(limit));
+                .encodedPath(baseUrl)
+                .appendEncodedPath("stolpersteine")
+                .appendQueryParameter("offset", Integer.toString(offset))
+                .appendQueryParameter("limit", Integer.toString(limit));
 
         if (searchData != null) {
             String keyword = searchData.getKeyword() != null ? searchData.getKeyword() : defaultSearchData.getKeyword();
@@ -80,11 +82,11 @@ public class RetrieveStolpersteineRequest extends AsyncTask<URL, Void, List<Stol
         } catch (MalformedURLException e) {
             throw new IllegalArgumentException(e);
         }
-            
+
         return url;
     }
 
-    private Stolperstein parseStolperstein(JSONObject jsonObject) throws JSONException, URISyntaxException {
+    private Stolperstein parseStolperstein(JSONObject jsonObject) throws JSONException, URISyntaxException, UnsupportedEncodingException {
         Stolperstein stolperstein = new Stolperstein();
         stolperstein.setId(jsonObject.getString("id"));
         String type = jsonObject.optString("type");
@@ -99,7 +101,8 @@ public class RetrieveStolpersteineRequest extends AsyncTask<URL, Void, List<Stol
         JSONObject jsonSource = jsonObject.optJSONObject("source");
         if (jsonSource != null) {
             source.setName(jsonSource.optString("name"));
-            source.setUri(new URI(jsonSource.optString("url")));
+            String uri = URLEncoder.encode(jsonSource.optString("url"), "utf-8");
+            source.setUri(new URI(uri));
         }
 
         Person person = new Person();
@@ -108,7 +111,8 @@ public class RetrieveStolpersteineRequest extends AsyncTask<URL, Void, List<Stol
         if (jsonPerson != null) {
             person.setFirstName(jsonPerson.optString("firstName"));
             person.setLastName(jsonPerson.optString("lastName"));
-            person.setBiography(new URI(jsonPerson.optString("biographyUrl")));
+            String uri = URLEncoder.encode(jsonPerson.optString("biographyUrl"), "utf-8");
+            person.setBiography(new URI(uri));
         }
 
         Location location = new Location();
@@ -130,22 +134,26 @@ public class RetrieveStolpersteineRequest extends AsyncTask<URL, Void, List<Stol
         return stolperstein;
     }
 
-    private List<Stolperstein> parseStolpersteine(JSONArray jsonArray) throws JSONException, URISyntaxException {
+    private List<Stolperstein> parseStolpersteine(JSONArray jsonArray) {
         List<Stolperstein> stolpersteine = new ArrayList<Stolperstein>(jsonArray.length());
         for (int i = 0; i < jsonArray.length(); i++) {
-            JSONObject jsonObject = jsonArray.getJSONObject(i);
-            Stolperstein stolperstein = parseStolperstein(jsonObject);
-            stolpersteine.add(stolperstein);
+            try {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                Stolperstein stolperstein = parseStolperstein(jsonObject);
+                stolpersteine.add(stolperstein);
+            } catch (Exception e) {
+                Log.e("Stolpersteine", "Error parsing JSON", e);
+            }
         }
 
         return stolpersteine;
     }
-    
+
     private String retrieveData(URL url) throws IOException {
         String result;
         HttpURLConnection connection = httpClient.open(url);
-//        Log.i("Stolpersteine", "" + connection.getRequestProperties());
-//        connection.addRequestProperty("Authorization", "Basic " + encodedClientCredentials);
+        // Log.i("Stolpersteine", "" + connection.getRequestProperties());
+        // connection.addRequestProperty("Authorization", "Basic " + encodedClientCredentials);
         InputStream in = null;
         try {
             result = readFully(connection.getInputStream());
@@ -154,7 +162,7 @@ public class RetrieveStolpersteineRequest extends AsyncTask<URL, Void, List<Stol
                 in.close();
             }
         }
-        
+
         return result;
     }
 
