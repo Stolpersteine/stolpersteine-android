@@ -3,7 +3,10 @@ package com.dreiri.stolpersteine.api.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Stolperstein implements Parcelable {
+import com.google.android.gms.maps.model.LatLng;
+import com.google.maps.android.clustering.ClusterItem;
+
+public class Stolperstein implements Parcelable, ClusterItem {
 	
 	public enum Type {
 		STOLPERSTEIN, STOLPERSCHWELLE;
@@ -61,6 +64,11 @@ public class Stolperstein implements Parcelable {
 
     public void setLocation(Location location) {
         this.location = location;
+    }
+    
+    @Override
+    public LatLng getPosition() {
+        return location.getCoordinates();
     }
     
     @Override

@@ -1,11 +1,9 @@
 package com.dreiri.stolpersteine.activities;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -23,7 +21,6 @@ import com.dreiri.stolpersteine.api.RetrieveStolpersteineRequest.Callback;
 import com.dreiri.stolpersteine.api.SearchData;
 import com.dreiri.stolpersteine.api.SynchronizationController;
 import com.dreiri.stolpersteine.api.model.Stolperstein;
-import com.dreiri.stolpersteine.clustering.MapClusterController;
 import com.dreiri.stolpersteine.utils.AndroidVersionsUnification;
 import com.dreiri.stolpersteine.utils.LocationFinder;
 import com.google.android.gms.maps.CameraUpdate;
@@ -31,10 +28,9 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.clustering.ClusterManager;
 
 public class MapActivity extends Activity implements OnInfoWindowClickListener, SynchronizationController.Listener {
     
@@ -44,8 +40,9 @@ public class MapActivity extends Activity implements OnInfoWindowClickListener, 
 	private final int autoCompleteActivationMinLength = 3;
 	private NetworkService networkService;
 	private SynchronizationController synchronizationController;
-	private MapClusterController<Stolperstein> mapClusterController;
+//	private MapClusterController<Stolperstein> mapClusterController;
 	private GoogleMap map;
+	private ClusterManager<Stolperstein> clusterManager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +56,12 @@ public class MapActivity extends Activity implements OnInfoWindowClickListener, 
 		    berlinZoom = 12;
 		    CameraUpdate region = CameraUpdateFactory.newLatLngZoom(berlinLatLng, berlinZoom);
 		    map.moveCamera(region);
-		    map.setOnInfoWindowClickListener(this);
-		    mapClusterController = new MapClusterController<Stolperstein>(map);
+//		    map.setOnInfoWindowClickListener(this);
+		    //mapClusterController = new MapClusterController<Stolperstein>(map);
+		    
+		    clusterManager = new ClusterManager<Stolperstein>(this, map);
+		    map.setOnCameraChangeListener(clusterManager);
+//		    map.setOnMarkerClickListener(clusterManager);
 		}
 
 		// Start synchronizing data
@@ -133,26 +134,29 @@ public class MapActivity extends Activity implements OnInfoWindowClickListener, 
 
 	@Override
 	public void onInfoWindowClick(Marker marker) {
-		ArrayList<Stolperstein> stolpersteine = mapClusterController.getItems(marker);
-		if (!stolpersteine.isEmpty()) {
-			Intent intent = new Intent(MapActivity.this, InfoActivity.class);
-			intent.putParcelableArrayListExtra("stolpersteine", stolpersteine);
-			startActivity(intent);
-		}
+//		ArrayList<Stolperstein> stolpersteine = mapClusterController.getItems(marker);
+//		if (!stolpersteine.isEmpty()) {
+//			Intent intent = new Intent(MapActivity.this, InfoActivity.class);
+//			intent.putParcelableArrayListExtra("stolpersteine", stolpersteine);
+//			startActivity(intent);
+//		}
 	}
 	
 	@Override
     public void onStolpersteineAdded(List<Stolperstein> stolpersteine) {
 	    if (stolpersteine != null) {
-            ArrayList<MarkerOptions> optionsList = new ArrayList<MarkerOptions>(stolpersteine.size());
-            for (Stolperstein stolperstein : stolpersteine) {
-                MarkerOptions markerOptions = new MarkerOptions().position(stolperstein.getLocation().getCoordinates())
-                        .title(stolperstein.getPerson().getNameAsString())
-                        .snippet(stolperstein.getLocation().getAddressAsString())
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.stolpersteine_tile));
-                optionsList.add(markerOptions);
-            }
-            mapClusterController.addMarkers(optionsList, stolpersteine);
+//            ArrayList<MarkerOptions> optionsList = new ArrayList<MarkerOptions>(stolpersteine.size());
+//            for (Stolperstein stolperstein : stolpersteine) {
+//                MarkerOptions markerOptions = new MarkerOptions().position(stolperstein.getLocation().getCoordinates())
+//                        .title(stolperstein.getPerson().getNameAsString())
+//                        .snippet(stolperstein.getLocation().getAddressAsString())
+//                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.stolpersteine_tile));
+//                optionsList.add(markerOptions);
+//            }
+//            mapClusterController.addMarkers(optionsList, stolpersteine);
+	    	
+	    	clusterManager.addItems(stolpersteine);
+	    	clusterManager.cluster();
 	    }
     }
 	
