@@ -13,19 +13,30 @@ Andoid app to display the locations of [Stolpersteine](http://en.wikipedia.org/w
 
 1. Install Google Play Services in Extras through the Android SDK Manager
 2. File > Import > Android/Existing Android Code into Workspace and choose <android-sdk>/extras/google/google_play_services/libproject/google-play-services_lib/ (for R19, use the one from google_play_services_froyo)
+3. Check "Is Library" in Properties > Android
 
 See http://developer.android.com/google/play-services/setup.html
+
+### Android Maps Utils
+
+1. Make sure to also pull submodules (`git submodule init`)
+2. File > Import > Android/Existing Android Code into Workspace and choose android-maps-utils
+3. Check "Is Library" in Properties > Android
+4. Add Google Play Services as dependency in Properties > Android
+5. Add Stolpersteine/libs/android-support-v4.jar as dependency in Java Build Path > Libraries
+
+See http://googlemaps.github.io/android-maps-utils/#start
 
 ### Run App
 
 1. File > Import... > Android/Existing Android Code Into Workspace
 2. Choose Stolpersteine folder and import
-3. Add dependency to Google Play Services in Properties > Android > Library
-4. Use your own API key in AndroidManifest.xml or have the SHA1 of your keystore registered with an existing API key.
+3. Add dependency to Google Play Services and Android Maps Utils in Properties > Android > Library
+4. Use your own API key in AndroidManifest.xml or have the SHA1 of your keystore registered with an existing API key
 
     keytool -list -v -keystore ~/.android/debug.keystore
     
-5. Configure a virtual device with Android 4.2.2 or higher using the Google APIs. Alternatively, use a hardware device.
+5. Configure a virtual device with Android 4.2.2 or higher using the Google APIs. Alternatively, use a hardware device
 6. Run as Android Application
 
 ### Run Tests
@@ -38,7 +49,7 @@ See http://developer.android.com/google/play-services/setup.html
 ### Requires Android Version
 API Level 11+
 
-Android 3.0.x(HONEYCOMB) or above
+Android 3.0.x (HONEYCOMB) or above
 
 ## License (MIT)
 
