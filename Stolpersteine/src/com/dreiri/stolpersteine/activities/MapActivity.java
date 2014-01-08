@@ -31,6 +31,7 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.maps.android.clustering.ClusterManager;
+import com.google.maps.android.clustering.algo.GridBasedAlgorithm;
 
 public class MapActivity extends Activity implements OnInfoWindowClickListener, SynchronizationController.Listener {
     
@@ -58,6 +59,7 @@ public class MapActivity extends Activity implements OnInfoWindowClickListener, 
 //		    map.setOnInfoWindowClickListener(this);
 		    
 		    clusterManager = new ClusterManager<Stolperstein>(this, map);
+		    clusterManager.setAlgorithm(new GridBasedAlgorithm<Stolperstein>());
 		    map.setOnCameraChangeListener(clusterManager);
 //		    map.setOnMarkerClickListener(clusterManager);
 		}
