@@ -66,6 +66,9 @@ public class MapActivity extends Activity implements OnInfoWindowClickListener, 
 
 		// Start synchronizing data
 		networkService = new NetworkService(this);
+		SearchData defaultSearchData = new SearchData();
+		defaultSearchData.setCity("Berlin");
+		networkService.setDefaultSearchData(defaultSearchData);
 		synchronizationController = new SynchronizationController(networkService);
 		synchronizationController.setListener(this);
 		synchronizationController.synchronize();

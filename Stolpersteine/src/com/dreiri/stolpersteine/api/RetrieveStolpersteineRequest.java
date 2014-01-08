@@ -58,21 +58,27 @@ public class RetrieveStolpersteineRequest extends AsyncTask<URL, Void, List<Stol
                 .appendQueryParameter("offset", Integer.toString(offset))
                 .appendQueryParameter("limit", Integer.toString(limit));
 
-        if (searchData != null) {
-            String keyword = searchData.getKeyword() != null ? searchData.getKeyword() : defaultSearchData.getKeyword();
-            if (keyword != null) {
-                uriBuilder.appendQueryParameter("q", keyword);
-            }
+        if (searchData == null) {
+        	searchData = new SearchData();
+        }
+        
+        if (defaultSearchData == null) {
+        	defaultSearchData = new SearchData();
+        }
+        
+        String keyword = searchData.getKeyword() != null ? searchData.getKeyword() : defaultSearchData.getKeyword();
+        if (keyword != null) {
+        	uriBuilder.appendQueryParameter("q", keyword);
+        }
 
-            String street = searchData.getStreet() != null ? searchData.getStreet() : defaultSearchData.getStreet();
-            if (street != null) {
-                uriBuilder.appendQueryParameter("street", street);
-            }
+        String street = searchData.getStreet() != null ? searchData.getStreet() : defaultSearchData.getStreet();
+        if (street != null) {
+        	uriBuilder.appendQueryParameter("street", street);
+        }
 
-            String city = searchData.getCity() != null ? searchData.getCity() : defaultSearchData.getCity();
-            if (city != null) {
-                uriBuilder.appendQueryParameter("city", city);
-            }
+        String city = searchData.getCity() != null ? searchData.getCity() : defaultSearchData.getCity();
+        if (city != null) {
+        	uriBuilder.appendQueryParameter("city", city);
         }
 
         URL url;
