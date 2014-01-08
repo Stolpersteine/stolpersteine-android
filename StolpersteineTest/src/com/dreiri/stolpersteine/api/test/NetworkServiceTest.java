@@ -140,6 +140,21 @@ public class NetworkServiceTest extends AndroidTestCase {
 		assertTrue(doneLatch.await(TIME_OUT, TimeUnit.SECONDS));
 	}
 
+	public void testRetrieveStolpersteineCityDefaultInvalid() throws InterruptedException {
+		networkService.getDefaultSearchData().setCity("xyz"); // will be overridden by specific data
+
+		networkService.retrieveStolpersteine(null, 0, 5, new Callback() {
+			@Override
+			public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine) {
+				assertEquals(0, stolpersteine.size());
+
+				doneLatch.countDown();
+			}
+		});
+
+		assertTrue(doneLatch.await(TIME_OUT, TimeUnit.SECONDS));
+	}
+
 	public void testRetrieveStolpersteinePaging() throws InterruptedException {
 		// Load first two stolpersteine
 		networkService.retrieveStolpersteine(null, 0, 2, new Callback() {
