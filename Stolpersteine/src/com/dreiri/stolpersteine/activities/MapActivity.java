@@ -1,9 +1,11 @@
 package com.dreiri.stolpersteine.activities;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -30,10 +32,13 @@ import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.algo.GridBasedAlgorithm;
+import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 
-public class MapActivity extends Activity implements OnInfoWindowClickListener, SynchronizationController.Listener {
+public class MapActivity extends Activity implements SynchronizationController.Listener, OnInfoWindowClickListener, ClusterManager.OnClusterClickListener<Stolperstein>, ClusterManager.OnClusterItemClickListener<Stolperstein> {
     
 	private LatLng berlinLatLng;
 	private int berlinZoom;
@@ -56,12 +61,15 @@ public class MapActivity extends Activity implements OnInfoWindowClickListener, 
 		    berlinZoom = 12;
 		    CameraUpdate region = CameraUpdateFactory.newLatLngZoom(berlinLatLng, berlinZoom);
 		    map.moveCamera(region);
-//		    map.setOnInfoWindowClickListener(this);
+		    map.setOnInfoWindowClickListener(this);
 		    
 		    clusterManager = new ClusterManager<Stolperstein>(this, map);
 		    clusterManager.setAlgorithm(new GridBasedAlgorithm<Stolperstein>());
+	        clusterManager.setRenderer(new StolpersteinRenderer());
+	        clusterManager.setOnClusterClickListener(this);
+	        clusterManager.setOnClusterItemClickListener(this);
 		    map.setOnCameraChangeListener(clusterManager);
-//		    map.setOnMarkerClickListener(clusterManager);
+		    map.setOnMarkerClickListener(clusterManager);
 		}
 
 		// Start synchronizing data
@@ -142,6 +150,7 @@ public class MapActivity extends Activity implements OnInfoWindowClickListener, 
 
 	@Override
 	public void onInfoWindowClick(Marker marker) {
+//    	Log.i("Stolpersteine", "marker");
 //		ArrayList<Stolperstein> stolpersteine = mapClusterController.getItems(marker);
 //		if (!stolpersteine.isEmpty()) {
 //			Intent intent = new Intent(MapActivity.this, InfoActivity.class);
@@ -150,11 +159,52 @@ public class MapActivity extends Activity implements OnInfoWindowClickListener, 
 //		}
 	}
 	
+    @Override
+    public boolean onClusterClick(Cluster<Stolperstein> cluster) {
+//    	Log.i("Stolpersteine", "cluster");
+    	
+    	Intent intent = new Intent(MapActivity.this, InfoActivity.class);
+    	ArrayList<Stolperstein> stolpersteine = new ArrayList<Stolperstein>(cluster.getItems());
+    	intent.putParcelableArrayListExtra("stolpersteine", stolpersteine);
+    	startActivity(intent);
+
+    	return false;
+    }
+
+    @Override
+    public boolean onClusterItemClick(Stolperstein stolperstein) {
+//    	Log.i("Stolpersteine", "item");
+    	
+    	Intent intent = new Intent(MapActivity.this, InfoActivity.class);
+    	ArrayList<Stolperstein> stolpersteine = new ArrayList<Stolperstein>();
+    	stolpersteine.add(stolperstein);
+    	intent.putParcelableArrayListExtra("stolpersteine", stolpersteine);
+    	startActivity(intent);
+    	
+        return false;
+    }
+	
 	@Override
     public void onStolpersteineAdded(List<Stolperstein> stolpersteine) {
 	    if (stolpersteine != null) {
 	    	clusterManager.addItems(stolpersteine);
 	    	clusterManager.cluster();
 	    }
-    }	
+    }
+	
+    private class StolpersteinRenderer extends DefaultClusterRenderer<Stolperstein> {
+        public StolpersteinRenderer() {
+            super(getApplicationContext(), map, clusterManager);
+        }
+
+        @Override
+        protected void onBeforeClusterItemRendered(Stolperstein stolperstein, MarkerOptions markerOptions) {
+        	super.onBeforeClusterItemRendered(stolperstein, markerOptions);
+        }
+
+        @Override
+        protected void onBeforeClusterRendered(Cluster<Stolperstein> cluster, MarkerOptions markerOptions) {
+        	super.onBeforeClusterRendered(cluster, markerOptions);
+        }
+    }
 }
