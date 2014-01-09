@@ -20,7 +20,7 @@ See http://developer.android.com/google/play-services/setup.html
 ### Android Maps Utils
 
 1. Make sure to also pull submodules (`git submodule init`)
-2. File > Import > Android/Existing Android Code into Workspace and choose android-maps-utils
+2. File > Import > Android/Existing Android Code into Workspace and choose android-maps-utils/library
 3. Check "Is Library" in Properties > Android
 4. Add Google Play Services as dependency in Properties > Android
 5. Add Stolpersteine/libs/android-support-v4.jar as dependency in Java Build Path > Libraries

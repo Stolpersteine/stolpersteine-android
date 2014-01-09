@@ -64,7 +64,7 @@ public class MapActivity extends Activity implements SynchronizationController.L
 		    map.setOnInfoWindowClickListener(this);
 		    
 		    clusterManager = new ClusterManager<Stolperstein>(this, map);
-		    clusterManager.setAlgorithm(new GridBasedAlgorithm<Stolperstein>());
+//		    clusterManager.setAlgorithm(new GridBasedAlgorithm<Stolperstein>());
 	        clusterManager.setRenderer(new StolpersteinRenderer());
 	        clusterManager.setOnClusterClickListener(this);
 	        clusterManager.setOnClusterItemClickListener(this);
