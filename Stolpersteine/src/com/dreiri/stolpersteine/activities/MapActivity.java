@@ -35,7 +35,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
-import com.google.maps.android.clustering.algo.GridBasedAlgorithm;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 
 public class MapActivity extends Activity implements SynchronizationController.Listener, OnInfoWindowClickListener, ClusterManager.OnClusterClickListener<Stolperstein>, ClusterManager.OnClusterItemClickListener<Stolperstein> {
@@ -186,7 +185,7 @@ public class MapActivity extends Activity implements SynchronizationController.L
 	
 	@Override
     public void onStolpersteineAdded(List<Stolperstein> stolpersteine) {
-	    if (stolpersteine != null) {
+	    if (clusterManager != null && stolpersteine != null) {
 	    	clusterManager.addItems(stolpersteine);
 	    	clusterManager.cluster();
 	    }
