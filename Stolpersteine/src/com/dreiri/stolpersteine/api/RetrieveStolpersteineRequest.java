@@ -117,8 +117,7 @@ public class RetrieveStolpersteineRequest extends AsyncTask<URL, Void, List<Stol
         if (jsonPerson != null) {
             person.setFirstName(jsonPerson.optString("firstName"));
             person.setLastName(jsonPerson.optString("lastName"));
-            String uri = URLEncoder.encode(jsonPerson.optString("biographyUrl"), "utf-8");
-            person.setBiography(new URI(uri));
+            person.setBiography(new URI(jsonPerson.optString("biographyUrl")));
         }
 
         Location location = new Location();
