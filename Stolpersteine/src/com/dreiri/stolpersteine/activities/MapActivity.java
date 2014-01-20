@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -24,7 +25,7 @@ import com.dreiri.stolpersteine.api.SearchData;
 import com.dreiri.stolpersteine.api.SynchronizationController;
 import com.dreiri.stolpersteine.api.model.Stolperstein;
 import com.dreiri.stolpersteine.utils.AndroidVersionsUnification;
-import com.dreiri.stolpersteine.utils.LocationFinder;
+import com.dreiri.stolpersteine.utils.LocationService;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -45,6 +46,7 @@ public class MapActivity extends Activity implements SynchronizationController.L
 	private SynchronizationController synchronizationController;
 	private GoogleMap map;
 	private ClusterManager<Stolperstein> clusterManager;
+	private LocationService locationService;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +76,9 @@ public class MapActivity extends Activity implements SynchronizationController.L
 		synchronizationController = new SynchronizationController(networkService);
 		synchronizationController.setListener(this);
 		synchronizationController.synchronize();
+		
+		// User location
+		locationService = new LocationService(this);
 
 		// Search interface
 		final AutoCompleteTextView autoCompleteTextViewQuery = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextViewQuery);
@@ -115,6 +120,20 @@ public class MapActivity extends Activity implements SynchronizationController.L
 		});
 	}
 	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		
+		locationService.start();
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		
+		locationService.stop();
+	}
+	
 	private LatLng getLocationLatLng(int location) {
 	    String[] locationCoordinates = getResources().getStringArray(location);
 	    double lat = Double.valueOf(locationCoordinates[0]);
@@ -133,10 +152,11 @@ public class MapActivity extends Activity implements SynchronizationController.L
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_positioning:
-			LocationFinder locationFinder = new LocationFinder(MapActivity.this);
-			LatLng currentLocation = new LatLng(locationFinder.getLat(), locationFinder.getLng());
-			map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
-			map.animateCamera(CameraUpdateFactory.zoomTo(16), 2000, null);
+			Location location = locationService.getCurrentLocation();
+			if (location != null) {
+				LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+				map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 16));
+			}
 			break;
 		default:
 			break;
