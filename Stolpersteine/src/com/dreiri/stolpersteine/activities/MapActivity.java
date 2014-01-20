@@ -24,17 +24,20 @@ import com.dreiri.stolpersteine.api.SearchData;
 import com.dreiri.stolpersteine.api.SynchronizationController;
 import com.dreiri.stolpersteine.api.model.Stolperstein;
 import com.dreiri.stolpersteine.utils.AndroidVersionsUnification;
+import com.dreiri.stolpersteine.utils.LocationFinder;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 
-public class MapActivity extends Activity implements SynchronizationController.Listener, ClusterManager.OnClusterClickListener<Stolperstein>, ClusterManager.OnClusterItemClickListener<Stolperstein> {
+public class MapActivity extends Activity implements SynchronizationController.Listener, OnInfoWindowClickListener, ClusterManager.OnClusterClickListener<Stolperstein>, ClusterManager.OnClusterItemClickListener<Stolperstein> {
     
 	private LatLng berlinLatLng;
 	private int berlinZoom;
@@ -57,7 +60,7 @@ public class MapActivity extends Activity implements SynchronizationController.L
 		    berlinZoom = 12;
 		    CameraUpdate region = CameraUpdateFactory.newLatLngZoom(berlinLatLng, berlinZoom);
 		    map.moveCamera(region);
-		    map.setMyLocationEnabled(true);
+		    map.setOnInfoWindowClickListener(this);
 		    
 		    clusterManager = new ClusterManager<Stolperstein>(this, map);
 //		    clusterManager.setAlgorithm(new GridBasedAlgorithm<Stolperstein>());
@@ -124,17 +127,41 @@ public class MapActivity extends Activity implements SynchronizationController.L
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.map, menu);
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_positioning:
+			LocationFinder locationFinder = new LocationFinder(MapActivity.this);
+			LatLng currentLocation = new LatLng(locationFinder.getLat(), locationFinder.getLng());
+			map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
+			map.animateCamera(CameraUpdateFactory.zoomTo(16), 2000, null);
+			break;
+		default:
+			break;
+		}
 		return true;
 	}
 
+	@Override
+	public void onInfoWindowClick(Marker marker) {
+//    	Log.i("Stolpersteine", "marker");
+//		ArrayList<Stolperstein> stolpersteine = mapClusterController.getItems(marker);
+//		if (!stolpersteine.isEmpty()) {
+//			Intent intent = new Intent(MapActivity.this, InfoActivity.class);
+//			intent.putParcelableArrayListExtra("stolpersteine", stolpersteine);
+//			startActivity(intent);
+//		}
+	}
+	
     @Override
     public boolean onClusterClick(Cluster<Stolperstein> cluster) {
+//    	Log.i("Stolpersteine", "cluster");
+    	
     	Intent intent = new Intent(MapActivity.this, InfoActivity.class);
     	ArrayList<Stolperstein> stolpersteine = new ArrayList<Stolperstein>(cluster.getItems());
     	intent.putParcelableArrayListExtra("stolpersteine", stolpersteine);
@@ -145,6 +172,8 @@ public class MapActivity extends Activity implements SynchronizationController.L
 
     @Override
     public boolean onClusterItemClick(Stolperstein stolperstein) {
+//    	Log.i("Stolpersteine", "item");
+    	
     	Intent intent = new Intent(MapActivity.this, InfoActivity.class);
     	ArrayList<Stolperstein> stolpersteine = new ArrayList<Stolperstein>();
     	stolpersteine.add(stolperstein);
