@@ -10,17 +10,18 @@
 
     <AutoCompleteTextView
         android:id="@+id/autoCompleteTextViewQuery"
-        android:layout_width="fill_parent"
+        android:layout_width="246dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:popupBackground="@color/transparent_white"
         android:ems="10"
         android:hint="@string/hint_query"
         android:inputType="text"
         android:minHeight="48dp"
+        android:popupBackground="@color/transparent_white"
         android:textSize="24sp" >
+
         <requestFocus />
     </AutoCompleteTextView>
 
