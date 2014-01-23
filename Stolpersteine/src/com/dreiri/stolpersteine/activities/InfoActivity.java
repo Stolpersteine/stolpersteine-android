@@ -1,13 +1,6 @@
 package com.dreiri.stolpersteine.activities;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -28,7 +21,6 @@ public class InfoActivity extends Activity {
 
     ArrayList<Stolperstein> stolpersteine;
     String bioUrl;
-    String bioData;
     ListView listView;
     
     @Override
@@ -55,24 +47,9 @@ public class InfoActivity extends Activity {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Stolperstein stolperstein = (Stolperstein) listView.getItemAtPosition(position);
                     bioUrl = stolperstein.getPerson().getBiographyUri().toString();
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                Document document = Jsoup.parse(new URL(bioUrl).openStream(), "utf-8", bioUrl);
-                                Elements elements = document.select("div#biografie_seite");
-                                bioData = elements.toString();
-                                Intent intent = new Intent(InfoActivity.this, BioActivity.class);
-                                intent.putExtra("bioData", bioData);
-                                intent.putExtra("bioUrl", bioUrl);
-                                startActivity(intent);
-                            } catch (MalformedURLException e) {
-                                e.printStackTrace();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }).start();
+                    Intent intent = new Intent(InfoActivity.this, BioActivity.class);
+                    intent.putExtra("bioUrl", bioUrl);
+                    startActivity(intent);
                 }
             });
         }
