@@ -1,5 +1,13 @@
 package com.dreiri.stolpersteine.activities;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,7 +24,6 @@ public class BioActivity extends Activity {
     ViewFormat viewFormat;
     WebView browser;
     WebSettings settings;
-    String bioData;
     String bioUrl;
     
     @Override
@@ -25,7 +32,6 @@ public class BioActivity extends Activity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_bio);
         Intent intent = getIntent();
-        bioData = intent.getStringExtra("bioData");
         bioUrl = intent.getStringExtra("bioUrl");
         
         browser = (WebView) findViewById(R.id.webview);
@@ -34,7 +40,7 @@ public class BioActivity extends Activity {
         settings.setDisplayZoomControls(false);
         
         viewFormat = ViewFormat.TEXT;
-        loadContentInBrowser(browser, bioData);
+        loadContentInBrowser(browser, bioUrl);
     }
     
     @Override
@@ -51,7 +57,7 @@ public class BioActivity extends Activity {
                     viewFormat = ViewFormat.TEXT;
                     settings.setLoadWithOverviewMode(false);
                     settings.setUseWideViewPort(false);
-                    loadContentInBrowser(browser, bioData);
+                    loadContentInBrowser(browser, bioUrl);
                 }
                 break;
             case R.id.action_web:
@@ -71,12 +77,27 @@ public class BioActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
     
-    protected void loadContentInBrowser(WebView browser, String content) {
-        String mimeType = "text/html; charset=UTF-8";
-        browser.loadData(content, mimeType, null);
+    protected void loadContentInBrowser(final WebView browser, final String url) {
+        final String mimeType = "text/html; charset=UTF-8";
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Document document = Jsoup.parse(new URL(url).openStream(), "utf-8", url);
+                    Elements elements = document.select("div#biografie_seite");
+                    String bioData = elements.toString();
+                    browser.loadData(bioData, mimeType, null);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
     
     protected void loadUrlInBrowser(WebView browser, String url) {
         browser.loadUrl(url);
     }
+    
 }

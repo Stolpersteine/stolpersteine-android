@@ -46,10 +46,11 @@ See http://googlemaps.github.io/android-maps-utils/#start
 3. Add dependency to Stolpersteine in Properties > Java Build Path > Projects
 3. Configure to run as Android JUnit Test
 
-### Requires Android Version
-API Level 11+
+Note: set the text encoding in ADT to UTF-8 (Preferences > General > Workspace). Otherwise, test cases that use German characters will fail.
 
-Android 3.0.x (HONEYCOMB) or above
+### Requires Android Version
+
+API Level 11+, Android 3.0.x (HONEYCOMB) or higher
 
 ## License (MIT)
 
