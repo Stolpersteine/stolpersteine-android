@@ -17,6 +17,8 @@ Andoid app to display the locations of [Stolpersteine](http://en.wikipedia.org/w
 
 See http://developer.android.com/google/play-services/setup.html
 
+[Guide to install Google Play Services on Genymotion](http://stackoverflow.com/questions/17831990/how-do-you-install-google-frameworks-play-accounts-etc-on-a-genymotion-virtu)
+
 ### Android Maps Utils
 
 1. Make sure to also pull submodules (`git submodule init`)
