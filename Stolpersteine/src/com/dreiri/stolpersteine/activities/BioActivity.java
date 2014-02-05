@@ -10,11 +10,15 @@ import org.jsoup.select.Elements;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 
 import com.dreiri.stolpersteine.R;
 
@@ -24,6 +28,7 @@ public class BioActivity extends Activity {
     ViewFormat viewFormat;
     WebView browser;
     WebSettings settings;
+    ProgressBar progressBar;
     String bioUrl;
     
     @Override
@@ -34,7 +39,10 @@ public class BioActivity extends Activity {
         Intent intent = getIntent();
         bioUrl = intent.getStringExtra("bioUrl");
         
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        
         browser = (WebView) findViewById(R.id.webview);
+        browser.setWebViewClient(new SimpleWebViewClient());
         settings = browser.getSettings();
         settings.setBuiltInZoomControls(true);
         settings.setDisplayZoomControls(false);
@@ -98,6 +106,27 @@ public class BioActivity extends Activity {
     
     protected void loadUrlInBrowser(WebView browser, String url) {
         browser.loadUrl(url);
+    }
+    
+    private class SimpleWebViewClient extends WebViewClient {
+
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            super.onPageStarted(view, url, favicon);
+        }
+        
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            super.onPageFinished(view, url);
+            progressBar.setVisibility(View.GONE);
+        }
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            view.loadUrl(url);
+            return true;
+        }
+        
     }
     
 }
