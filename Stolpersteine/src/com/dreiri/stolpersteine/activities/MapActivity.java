@@ -14,7 +14,6 @@ import com.dreiri.stolpersteine.R;
 import com.dreiri.stolpersteine.api.StolpersteinNetworkService;
 import com.dreiri.stolpersteine.api.SynchronizationController;
 import com.dreiri.stolpersteine.api.model.Stolperstein;
-import com.dreiri.stolpersteine.utils.LocationService;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
