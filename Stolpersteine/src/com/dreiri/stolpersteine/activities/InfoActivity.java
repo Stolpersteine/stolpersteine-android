@@ -15,6 +15,7 @@ import android.widget.ListView;
 
 import com.dreiri.stolpersteine.R;
 import com.dreiri.stolpersteine.api.model.Stolperstein;
+import com.dreiri.stolpersteine.components.StolpersteinAdapter;
 
 public class InfoActivity extends Activity {
 
