@@ -197,6 +197,12 @@ public class MapActivity extends Activity implements SynchronizationController.L
         public StolpersteinRenderer() {
             super(getApplicationContext(), map, clusterManager);
         }
+        
+        @Override
+        @SuppressWarnings("rawtypes")
+        protected boolean shouldRenderAsCluster(Cluster cluster) {
+            return true;
+        };
 
         @Override
         protected void onBeforeClusterItemRendered(Stolperstein stolperstein, MarkerOptions markerOptions) {
