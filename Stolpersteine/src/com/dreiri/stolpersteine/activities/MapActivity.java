@@ -31,10 +31,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
-import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 
 public class MapActivity extends Activity implements SynchronizationController.Listener, ClusterManager.OnClusterClickListener<Stolperstein>, ClusterManager.OnClusterItemClickListener<Stolperstein> {
     
@@ -63,7 +61,7 @@ public class MapActivity extends Activity implements SynchronizationController.L
 		    
 		    clusterManager = new ClusterManager<Stolperstein>(this, map);
 //		    clusterManager.setAlgorithm(new GridBasedAlgorithm<Stolperstein>());
-	        clusterManager.setRenderer(new StolpersteinRenderer());
+	        clusterManager.setRenderer(new StolpersteinClusterRenderer(this, map, clusterManager));
 	        clusterManager.setOnClusterClickListener(this);
 	        clusterManager.setOnClusterItemClickListener(this);
 		    map.setOnCameraChangeListener(clusterManager);
@@ -143,7 +141,6 @@ public class MapActivity extends Activity implements SynchronizationController.L
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.map, menu);
 		return true;
 	}
@@ -191,27 +188,5 @@ public class MapActivity extends Activity implements SynchronizationController.L
 	    	clusterManager.addItems(stolpersteine);
 	    	clusterManager.cluster();
 	    }
-    }
-	
-    private class StolpersteinRenderer extends DefaultClusterRenderer<Stolperstein> {
-        public StolpersteinRenderer() {
-            super(getApplicationContext(), map, clusterManager);
-        }
-        
-        @Override
-        @SuppressWarnings("rawtypes")
-        protected boolean shouldRenderAsCluster(Cluster cluster) {
-            return true;
-        };
-
-        @Override
-        protected void onBeforeClusterItemRendered(Stolperstein stolperstein, MarkerOptions markerOptions) {
-        	super.onBeforeClusterItemRendered(stolperstein, markerOptions);
-        }
-
-        @Override
-        protected void onBeforeClusterRendered(Cluster<Stolperstein> cluster, MarkerOptions markerOptions) {
-        	super.onBeforeClusterRendered(cluster, markerOptions);
-        }
     }
 }
