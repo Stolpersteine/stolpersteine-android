@@ -6,10 +6,10 @@ import com.dreiri.stolpersteine.api.model.Stolperstein;
 
 public class SynchronizationController {
 	final static int NETWORK_BATCH_SIZE = 500;
-    private NetworkService networkService;
+    private StolpersteinNetworkService networkService;
     private Listener listener;
     
-    public SynchronizationController(NetworkService networkService) {
+    public SynchronizationController(StolpersteinNetworkService networkService) {
         this.networkService = networkService;
     }
     

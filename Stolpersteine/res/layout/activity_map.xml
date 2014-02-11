@@ -8,7 +8,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
 
-    <AutoCompleteTextView
+    <com.dreiri.stolpersteine.activities.StolpersteinAutoCompleteTextView
         android:id="@+id/autoCompleteTextViewQuery"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -22,6 +22,6 @@
         android:minHeight="48dp"
         android:textSize="24sp" >
         <requestFocus />
-    </AutoCompleteTextView>
+    </com.dreiri.stolpersteine.activities.StolpersteinAutoCompleteTextView>
 
 </FrameLayout>

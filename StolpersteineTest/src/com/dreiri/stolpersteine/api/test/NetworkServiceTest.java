@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 import android.test.AndroidTestCase;
 
-import com.dreiri.stolpersteine.api.NetworkService;
+import com.dreiri.stolpersteine.api.StolpersteinNetworkService;
 import com.dreiri.stolpersteine.api.RetrieveStolpersteineRequest.Callback;
 import com.dreiri.stolpersteine.api.SearchData;
 import com.dreiri.stolpersteine.api.model.Stolperstein;
@@ -14,11 +14,11 @@ import com.dreiri.stolpersteine.api.model.Stolperstein;
 public class NetworkServiceTest extends AndroidTestCase {
 	private static int TIME_OUT = 5;
 	private CountDownLatch doneLatch;
-	private NetworkService networkService;
+	private StolpersteinNetworkService networkService;
 
 	public void setUp() {
 		doneLatch = new CountDownLatch(1);
-		networkService = new NetworkService(getContext());
+		networkService = new StolpersteinNetworkService(getContext());
 	}
 	
 	public void testRetrieveStolpersteine() throws InterruptedException {

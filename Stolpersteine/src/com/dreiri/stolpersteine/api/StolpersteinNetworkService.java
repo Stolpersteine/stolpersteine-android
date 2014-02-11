@@ -15,7 +15,7 @@ import android.util.Log;
 import com.squareup.okhttp.HttpResponseCache;
 import com.squareup.okhttp.OkHttpClient;
 
-public class NetworkService {
+public class StolpersteinNetworkService {
     private static final String API_BASE_URL = "https://stolpersteine-api.eu01.aws.af.cm/v1";
 //  private static final String API_BASE_URL = "http://10.0.3.2:3000/v1";	// localhost genymotion
 //  private static final String API_BASE_URL = "http://localhost.:3000/v1";	// localhost genymotion via Charles
@@ -26,7 +26,7 @@ public class NetworkService {
     private OkHttpClient httpClient = new OkHttpClient();
     private String encodedClientCredentials;
     
-    public NetworkService(Context context) {
+    public StolpersteinNetworkService(Context context) {
     	// Caching
         try {
             File cacheDir = new File(context.getCacheDir(), "http.cache");
