@@ -48,7 +48,7 @@ public class BioActivity extends Activity {
         settings.setDisplayZoomControls(false);
         
         viewFormat = ViewFormat.TEXT;
-        loadContentInBrowser(browser, bioUrl);
+        loadContentInBrowser(bioUrl, new ContentLoader());
     }
     
     @Override
@@ -65,7 +65,7 @@ public class BioActivity extends Activity {
                     viewFormat = ViewFormat.TEXT;
                     settings.setLoadWithOverviewMode(false);
                     settings.setUseWideViewPort(false);
-                    loadContentInBrowser(browser, bioUrl);
+                    loadContentInBrowser(bioUrl, new ContentLoader());
                 }
                 break;
             case R.id.action_web:
@@ -85,8 +85,7 @@ public class BioActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
     
-    protected void loadContentInBrowser(final WebView browser, final String url) {
-        final String mimeType = "text/html; charset=UTF-8";
+    protected void loadContentInBrowser(final String url, final Callback callback) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -94,7 +93,7 @@ public class BioActivity extends Activity {
                     Document document = Jsoup.parse(new URL(url).openStream(), "utf-8", url);
                     Elements elements = document.select("div#biografie_seite");
                     String bioData = elements.toString();
-                    browser.loadData(bioData, mimeType, null);
+                    callback.execute(bioData);
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
@@ -102,6 +101,23 @@ public class BioActivity extends Activity {
                 }
             }
         }).start();
+    }
+    
+    private interface Callback {
+        public void execute(String content);
+    }
+    
+    private class ContentLoader implements Callback {
+        @Override
+        public void execute(final String content) {
+            BioActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    String mimeType = "text/html; charset=UTF-8";
+                    browser.loadData(content, mimeType, null);
+                }
+            });
+        }
     }
     
     protected void loadUrlInBrowser(WebView browser, String url) {
