@@ -1,4 +1,4 @@
-package com.dreiri.stolpersteine.activities;
+package com.dreiri.stolpersteine.components;
 
 import java.util.ArrayList;
 import java.util.List;
