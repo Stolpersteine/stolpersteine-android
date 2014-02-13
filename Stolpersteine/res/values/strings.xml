@@ -7,6 +7,8 @@
     <!-- Map Activity UI -->
     <string name="hint_query">Name</string>
     <string name="search">Search</string>
+    <string name="search_title">Search</string>
+    <string name="search_hint">Name or street</string>
     <string name="action_positioning">Positioning</string>
     
     <!-- Info Activity UI -->
