@@ -21,7 +21,7 @@ See http://developer.android.com/google/play-services/setup.html
 
 ### Android Maps Utils
 
-1. Make sure to also pull submodules (`git submodule init`)
+1. Make sure to also pull submodules (`git submodule init && git submodule update --recursive`)
 2. File > Import > Android/Existing Android Code into Workspace and choose android-maps-utils/library
 3. Check "Is Library" in Properties > Android
 4. Add Google Play Services as dependency in Properties > Android
