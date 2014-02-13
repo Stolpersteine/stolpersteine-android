@@ -4,7 +4,7 @@
         android:id="@+id/action_positioning"
         android:orderInCategory="100"
         android:showAsAction="always"
-        android:icon="@drawable/menu_positioning"
+        android:icon="@drawable/ic_action_location_searching"
         android:title="@string/action_positioning"/>
 
 </menu>
