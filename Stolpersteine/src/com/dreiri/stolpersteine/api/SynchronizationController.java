@@ -26,7 +26,7 @@ public class SynchronizationController {
     }
 
     private void retrieveStolpersteine(final int offset, final int limit) {
-        networkService.retrieveStolpersteine(null, offset, limit, new RetrieveStolpersteineRequest.Callback() {
+        networkService.retrieveStolpersteine(null, offset, limit, new RetrieveStolpersteine.Callback() {
 
             @Override
             public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine) {

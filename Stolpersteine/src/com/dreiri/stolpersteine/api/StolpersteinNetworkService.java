@@ -3,17 +3,15 @@ package com.dreiri.stolpersteine.api;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.ResponseCache;
-import java.net.URL;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.util.Base64;
 import android.util.Log;
 
 import com.squareup.okhttp.HttpResponseCache;
 import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.OkResponseCache;
+import com.squareup.okhttp.Request;
 
 public class StolpersteinNetworkService {
     private static final String API_BASE_URL = "https://stolpersteine-api.eu01.aws.af.cm/v1";
@@ -27,25 +25,22 @@ public class StolpersteinNetworkService {
     private String encodedClientCredentials;
     
     public StolpersteinNetworkService(Context context) {
-    	// Caching
         try {
+            // Caching
             File cacheDir = new File(context.getCacheDir(), "http.cache");
-            ResponseCache responseCache = new HttpResponseCache(cacheDir, CACHE_SIZE_BYTES);
-            httpClient.setResponseCache(responseCache);
+            OkResponseCache responseCache = new HttpResponseCache(cacheDir, CACHE_SIZE_BYTES);
+            httpClient.setOkResponseCache(responseCache);
         } catch (IOException e) {
             Log.e("Stolpersteine", "Error creating disk cache", e);
         }
         
-        // Basic auth
         try {
+            // Basic auth
             String clientCredentials = String.format("%s:%s", API_CLIENT_USER, API_CLIENT_PASSWORD, null);
 	        encodedClientCredentials = Base64.encodeToString(clientCredentials.getBytes("UTF-8"), Base64.DEFAULT);
         } catch (UnsupportedEncodingException e) {
             Log.e("Stolpersteine", "Error encoding client credentials", e);
-        }
-        
-        // HTTP configuration
-        HttpURLConnection.setFollowRedirects(true);
+        }        
     }
 
     public SearchData getDefaultSearchData() {
@@ -56,11 +51,10 @@ public class StolpersteinNetworkService {
         this.defaultSearchData = defaultSearchData;
     }
 
-    public void retrieveStolpersteine(SearchData searchData, int offset, int limit, RetrieveStolpersteineRequest.Callback callback) {
-        URL url = RetrieveStolpersteineRequest.buildQuery(API_BASE_URL, searchData, defaultSearchData, offset, limit);
-        RetrieveStolpersteineRequest request = new RetrieveStolpersteineRequest(httpClient, callback);
-        request.setEncodedClientCredentials(encodedClientCredentials);
-        request.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, url);
+    public void retrieveStolpersteine(SearchData searchData, int offset, int limit, RetrieveStolpersteine.Callback callback) {
+        Log.i("Stolpersteine", "retrieveStolpersteine");
+        Request request = RetrieveStolpersteine.request(API_BASE_URL, searchData, defaultSearchData, offset, limit, encodedClientCredentials);
+        httpClient.enqueue(request, new RetrieveStolpersteine(callback));
     }
 
 }

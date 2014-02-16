@@ -14,7 +14,7 @@ import android.util.AttributeSet;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 
-import com.dreiri.stolpersteine.api.RetrieveStolpersteineRequest.Callback;
+import com.dreiri.stolpersteine.api.RetrieveStolpersteine.Callback;
 import com.dreiri.stolpersteine.api.SearchData;
 import com.dreiri.stolpersteine.api.StolpersteinNetworkService;
 import com.dreiri.stolpersteine.api.model.Stolperstein;
