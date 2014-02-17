@@ -79,7 +79,7 @@ public class SearchSuggestionProvider extends ContentProvider {
     }
 
     @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
+    public Cursor query(final Uri uri, String[] projection, String selection, String[] selectionArgs,
             String sortOrder) {
     	String keyword = selectionArgs[0];
     	
@@ -93,6 +93,7 @@ public class SearchSuggestionProvider extends ContentProvider {
 					String street = stolperstein.getLocation().getStreet();
 					cursor.addRow(new Object[] {i, name, street});
 				}
+				getContext().getContentResolver().notifyChange(uri, null, false);
 			}
 		});
         return cursor;
