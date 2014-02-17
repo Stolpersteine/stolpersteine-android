@@ -18,7 +18,6 @@ import com.dreiri.stolpersteine.api.StolpersteinNetworkService;
 import com.dreiri.stolpersteine.api.SynchronizationController;
 import com.dreiri.stolpersteine.api.model.Stolperstein;
 import com.dreiri.stolpersteine.components.LocationService;
-import com.dreiri.stolpersteine.components.StolpersteinAutoCompleteTextView;
 import com.dreiri.stolpersteine.components.StolpersteinClusterRenderer;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -69,10 +68,6 @@ public class MapActivity extends Activity implements SynchronizationController.L
 		
 		// User location
 		locationService = new LocationService(this);
-
-		// Search interface
-		StolpersteinAutoCompleteTextView autoCompleteTextView = (StolpersteinAutoCompleteTextView)findViewById(R.id.autoCompleteTextViewQuery);
-		autoCompleteTextView.setNetworkService(networkService);
 	}
 	
 	@Override

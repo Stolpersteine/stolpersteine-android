@@ -8,20 +8,4 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
 
-    <com.dreiri.stolpersteine.components.StolpersteinAutoCompleteTextView
-        android:id="@+id/autoCompleteTextViewQuery"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:popupBackground="@color/transparent_white"
-        android:ems="10"
-        android:hint="@string/hint_query"
-        android:inputType="text"
-        android:minHeight="48dp"
-        android:textSize="24sp" >
-        <requestFocus />
-    </com.dreiri.stolpersteine.components.StolpersteinAutoCompleteTextView>
-
 </FrameLayout>
