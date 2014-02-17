@@ -9,6 +9,7 @@ import android.database.MatrixCursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
+import com.dreiri.stolpersteine.api.StolpersteinNetworkService;
 public class SearchSuggestionProvider extends ContentProvider {
     
     private static final String AUTHORITY = "com.dreiri.stolpersteine.suggestions";
@@ -36,6 +37,8 @@ public class SearchSuggestionProvider extends ContentProvider {
         URI_MATCHER.addURI(AUTHORITY, BASE_PATH, STOLPERSTEINE);
         URI_MATCHER.addURI(AUTHORITY, BASE_PATH, STOLPERSTEIN_ID);
     }
+    
+    private StolpersteinNetworkService networkService;
 
     @Override
     public String getType(Uri uri) {
@@ -50,6 +53,10 @@ public class SearchSuggestionProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
         return true;
+    }
+    
+    public void setNetworkService(StolpersteinNetworkService networkService) {
+    	this.networkService = networkService;
     }
 
     @Override
