@@ -59,28 +59,24 @@ public class BioActivity extends Activity {
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_text:
-                if (viewFormat == ViewFormat.WEB) {
-                    viewFormat = ViewFormat.TEXT;
-                    settings.setLoadWithOverviewMode(false);
-                    settings.setUseWideViewPort(false);
-                    loadContentInBrowser(browser, bioUrl, new DataLoaderRunnable());
-                }
-                break;
-            case R.id.action_web:
-                if (viewFormat == ViewFormat.TEXT) {
-                    viewFormat = ViewFormat.WEB;
-                    settings.setLoadWithOverviewMode(true);
-                    settings.setUseWideViewPort(true);
-                    loadUrlInBrowser(browser, bioUrl);
-                }
-                break;
-            case android.R.id.home:
-                finish();
-                break;
-        	default:
-                break;
+        int itemId = item.getItemId();
+        if (itemId == R.id.action_text) {
+            if (viewFormat == ViewFormat.WEB) {
+                viewFormat = ViewFormat.TEXT;
+                settings.setLoadWithOverviewMode(false);
+                settings.setUseWideViewPort(false);
+                loadContentInBrowser(browser, bioUrl, new DataLoaderRunnable());
+            }
+        } else if (itemId == R.id.action_web) {
+            if (viewFormat == ViewFormat.TEXT) {
+                viewFormat = ViewFormat.WEB;
+                settings.setLoadWithOverviewMode(true);
+                settings.setUseWideViewPort(true);
+                loadUrlInBrowser(browser, bioUrl);
+            }
+        } else if (itemId == android.R.id.home) {
+            finish();
+        } else {
         }
         return super.onOptionsItemSelected(item);
     }

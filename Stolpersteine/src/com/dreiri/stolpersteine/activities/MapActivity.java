@@ -107,17 +107,15 @@ public class MapActivity extends Activity implements SynchronizationController.L
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.action_positioning:
-			Location location = locationService.getCurrentLocation();
-			if (location != null) {
+		int itemId = item.getItemId();
+        if (itemId == R.id.action_positioning) {
+            Location location = locationService.getCurrentLocation();
+            if (location != null) {
 				LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
 				map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 16));
 			}
-			break;
-		default:
-			break;
-		}
+        } else {
+        }
 		return true;
 	}
 
