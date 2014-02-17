@@ -2,7 +2,6 @@ package com.dreiri.stolpersteine.components;
 
 import android.app.SearchManager;
 import android.content.ContentProvider;
-import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
@@ -25,8 +24,8 @@ public class SearchSuggestionProvider extends ContentProvider {
     private static final String[] SEARCH_SUGGEST_COLUMNS = {
         BaseColumns._ID,
         SearchManager.SUGGEST_COLUMN_TEXT_1,
-        SearchManager.SUGGEST_COLUMN_TEXT_2,
-        SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID
+        SearchManager.SUGGEST_COLUMN_TEXT_2
+//        SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID
     };
     private static final UriMatcher URI_MATCHER;
     
@@ -56,31 +55,11 @@ public class SearchSuggestionProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
             String sortOrder) {
-//        switch (URI_MATCHER.match(uri)) {
-//            case SEARCH_SUGGEST:
-//                MatrixCursor cursor = new MatrixCursor(SEARCH_SUGGEST_COLUMNS, 1);
-//                cursor.addRow(new String[] {
-//                        "1", "Name", "Street", "content_id"
-//                });
-//                return cursor;
-//            default:
-//                throw new IllegalArgumentException("Unknown URI: " + uri);
-//        }
-//
-        int uriType = URI_MATCHER.match(uri);
-        switch (uriType) {
-        case STOLPERSTEIN_ID:
-            // retrieve a single item
-            break;
-        case STOLPERSTEINE:
-            // no filter
-            break;
-        default:
-            throw new IllegalArgumentException("Unknown URI");
-        }
-     
+    	String keyword = selectionArgs[0];
         MatrixCursor cursor = new MatrixCursor(SEARCH_SUGGEST_COLUMNS, 1);
-        cursor.setNotificationUri(getContext().getContentResolver(), uri);
+        Object[] row0 = new Object[] {1, keyword, "test2"};
+        cursor.addRow(row0);
+    	
         return cursor;
     }
 
