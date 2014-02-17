@@ -85,16 +85,6 @@ public class MapActivity extends Activity implements SynchronizationController.L
 		locationService.stop();
 	}
 	
-	@Override
-	protected void onNewIntent(Intent intent) {
-//		Log.i("Stolpersteine", "" + intent.getAction());
-		
-//		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-//			String query = intent.getStringExtra(SearchManager.QUERY);
-//		    doMySearch(query);
-//		}
-	}
-	
 	private LatLng getLocationLatLng(int location) {
 	    String[] locationCoordinates = getResources().getStringArray(location);
 	    double lat = Double.valueOf(locationCoordinates[0]);
