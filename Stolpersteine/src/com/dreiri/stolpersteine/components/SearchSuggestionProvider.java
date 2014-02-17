@@ -18,22 +18,16 @@ public class SearchSuggestionProvider extends ContentProvider {
     
     public static final int STOLPERSTEINE = 110;
     public static final int STOLPERSTEIN_ID = 100;
-//    public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/stolpersteine";
-//    public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/stolpersteine";
-    
     private static final int SEARCH_SUGGEST = 1;
     private static final String[] SEARCH_SUGGEST_COLUMNS = {
         BaseColumns._ID,
         SearchManager.SUGGEST_COLUMN_TEXT_1,
         SearchManager.SUGGEST_COLUMN_TEXT_2
-//        SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID
     };
     private static final UriMatcher URI_MATCHER;
     
     static {
         URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
-//        URI_MATCHER.addURI(AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY, SEARCH_SUGGEST);
-//        URI_MATCHER.addURI(AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY + "/*", SEARCH_SUGGEST);
         URI_MATCHER.addURI(AUTHORITY, BASE_PATH, STOLPERSTEINE);
         URI_MATCHER.addURI(AUTHORITY, BASE_PATH, STOLPERSTEIN_ID);
     }
