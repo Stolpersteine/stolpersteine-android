@@ -1,5 +1,7 @@
 package com.dreiri.stolpersteine.components;
 
+import java.util.List;
+
 import android.app.SearchManager;
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -9,7 +11,11 @@ import android.database.MatrixCursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
+import com.dreiri.stolpersteine.api.RetrieveStolpersteine.Callback;
+import com.dreiri.stolpersteine.api.SearchData;
 import com.dreiri.stolpersteine.api.StolpersteinNetworkService;
+import com.dreiri.stolpersteine.api.model.Stolperstein;
+
 public class SearchSuggestionProvider extends ContentProvider {
     
     private static final String AUTHORITY = "com.dreiri.stolpersteine.suggestions";
@@ -18,6 +24,7 @@ public class SearchSuggestionProvider extends ContentProvider {
     
     public static final int STOLPERSTEINE = 110;
     public static final int STOLPERSTEIN_ID = 100;
+    private static final int LIST_SIZE = 10;
     private static final int SEARCH_SUGGEST = 1;
     private static final String[] SEARCH_SUGGEST_COLUMNS = {
         BaseColumns._ID,
@@ -33,6 +40,7 @@ public class SearchSuggestionProvider extends ContentProvider {
     }
     
     private StolpersteinNetworkService networkService;
+    private MatrixCursor cursor;
 
     @Override
     public String getType(Uri uri) {
@@ -52,15 +60,41 @@ public class SearchSuggestionProvider extends ContentProvider {
     public void setNetworkService(StolpersteinNetworkService networkService) {
     	this.networkService = networkService;
     }
+    
+    private static interface SuggestionsCallback {
+    	public void execute(List<Stolperstein> stolpersteine);
+    }
+    
+    private void searchForKeyword(String keyword, final SuggestionsCallback suggestionsCallback) {
+    	SearchData searchData = new SearchData();
+    	searchData.setKeyword(keyword);
+        networkService.retrieveStolpersteine(searchData, 0, LIST_SIZE, new Callback() {
+            @Override
+            public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine) {
+                if (stolpersteine != null) {
+                    suggestionsCallback.execute(stolpersteine);
+                }
+            }
+        });
+    }
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
             String sortOrder) {
     	String keyword = selectionArgs[0];
-        MatrixCursor cursor = new MatrixCursor(SEARCH_SUGGEST_COLUMNS, 1);
-        Object[] row0 = new Object[] {1, keyword, "test2"};
-        cursor.addRow(row0);
     	
+    	searchForKeyword(keyword, new SuggestionsCallback() {
+			@Override
+			public void execute(List<Stolperstein> stolpersteine) {
+				cursor = new MatrixCursor(SEARCH_SUGGEST_COLUMNS, 1);
+				for (int i = 0; i < stolpersteine.size(); i++) {
+					Stolperstein stolperstein = stolpersteine.get(i);
+					String name = stolperstein.getPerson().getNameAsString();
+					String street = stolperstein.getLocation().getStreet();
+					cursor.addRow(new Object[] {i, name, street});
+				}
+			}
+		});
         return cursor;
     }
 
