@@ -30,7 +30,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.dreiri.stolpersteine.activities.MapActivity"
+            android:name="com.dreiri.stolpersteine.activities.map.MapActivity"
             android:launchMode="singleTop"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/app_name" >
@@ -45,7 +45,7 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity
-            android:name="com.dreiri.stolpersteine.activities.InfoActivity"
+            android:name="com.dreiri.stolpersteine.activities.info.InfoActivity"
             android:label="Info" >
         </activity>
         <activity
@@ -53,7 +53,7 @@
             android:label="Biography" >
         </activity>
         <provider
-            android:name="com.dreiri.stolpersteine.components.SearchSuggestionProvider"
+            android:name="com.dreiri.stolpersteine.activities.map.SearchSuggestionProvider"
             android:authorities="com.dreiri.stolpersteine.suggestions"
             android:syncable="false" />
         <meta-data 

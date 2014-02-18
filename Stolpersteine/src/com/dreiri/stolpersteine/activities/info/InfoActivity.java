@@ -1,4 +1,4 @@
-package com.dreiri.stolpersteine.activities;
+package com.dreiri.stolpersteine.activities.info;
 
 import java.util.ArrayList;
 
@@ -14,8 +14,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.dreiri.stolpersteine.R;
+import com.dreiri.stolpersteine.activities.BioActivity;
 import com.dreiri.stolpersteine.api.model.Stolperstein;
-import com.dreiri.stolpersteine.components.StolpersteinAdapter;
 
 public class InfoActivity extends Activity {
 

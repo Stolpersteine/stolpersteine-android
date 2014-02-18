@@ -1,4 +1,4 @@
-package com.dreiri.stolpersteine.components;
+package com.dreiri.stolpersteine.activities.map;
 
 import android.content.Context;
 
@@ -9,8 +9,8 @@ import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 
-public class StolpersteinClusterRenderer extends DefaultClusterRenderer<Stolperstein> {
-    public StolpersteinClusterRenderer(Context context, GoogleMap map, ClusterManager<Stolperstein> clusterManager) {
+public class ClusterRenderer extends DefaultClusterRenderer<Stolperstein> {
+    public ClusterRenderer(Context context, GoogleMap map, ClusterManager<Stolperstein> clusterManager) {
         super(context, map, clusterManager);
     }
     

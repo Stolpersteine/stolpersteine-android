@@ -1,4 +1,4 @@
-package com.dreiri.stolpersteine.components;
+package com.dreiri.stolpersteine.activities.map;
 
 import android.content.Context;
 import android.location.Location;

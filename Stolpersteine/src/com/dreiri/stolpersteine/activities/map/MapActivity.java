@@ -1,4 +1,4 @@
-package com.dreiri.stolpersteine.activities;
+package com.dreiri.stolpersteine.activities.map;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,12 +14,10 @@ import android.view.MenuItem;
 import android.widget.SearchView;
 
 import com.dreiri.stolpersteine.R;
+import com.dreiri.stolpersteine.activities.info.InfoActivity;
 import com.dreiri.stolpersteine.api.StolpersteinNetworkService;
 import com.dreiri.stolpersteine.api.SynchronizationController;
 import com.dreiri.stolpersteine.api.model.Stolperstein;
-import com.dreiri.stolpersteine.components.LocationService;
-import com.dreiri.stolpersteine.components.SearchSuggestionProvider;
-import com.dreiri.stolpersteine.components.StolpersteinClusterRenderer;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -53,7 +51,7 @@ public class MapActivity extends Activity implements SynchronizationController.L
 		    
 		    clusterManager = new ClusterManager<Stolperstein>(this, map);
 //		    clusterManager.setAlgorithm(new GridBasedAlgorithm<Stolperstein>());
-	        clusterManager.setRenderer(new StolpersteinClusterRenderer(this, map, clusterManager));
+	        clusterManager.setRenderer(new ClusterRenderer(this, map, clusterManager));
 	        clusterManager.setOnClusterClickListener(this);
 	        clusterManager.setOnClusterItemClickListener(this);
 		    map.setOnCameraChangeListener(clusterManager);
