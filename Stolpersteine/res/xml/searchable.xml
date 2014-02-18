@@ -3,6 +3,7 @@
     android:searchSuggestAuthority="com.dreiri.stolpersteine.suggestions"
     android:voiceSearchMode="showVoiceSearchButton|launchRecognizer"
     android:searchSuggestSelection=" ?"
+    android:searchSuggestThreshold="1"
     android:label="@string/app_name"
     android:hint="@string/search_hint" >
 </searchable>
