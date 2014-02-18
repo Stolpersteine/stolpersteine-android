@@ -71,6 +71,7 @@ public class SearchSuggestionProvider extends ContentProvider {
             String sortOrder) {
     	String keyword = selectionArgs[0];
     	final MatrixCursor cursor = new MatrixCursor(SEARCH_SUGGEST_COLUMNS);
+    	cursor.setNotificationUri(getContext().getContentResolver(), uri);
     	searchForKeyword(keyword, new Callback() {
     		@Override
     		public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine) {
