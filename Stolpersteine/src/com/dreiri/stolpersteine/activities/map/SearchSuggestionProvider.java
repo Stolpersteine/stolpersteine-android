@@ -60,31 +60,20 @@ public class SearchSuggestionProvider extends ContentProvider {
     	this.networkService = networkService;
     }
     
-    private static interface SuggestionsCallback {
-    	public void execute(List<Stolperstein> stolpersteine);
-    }
-    
-    private void searchForKeyword(String keyword, final SuggestionsCallback suggestionsCallback) {
+    private void searchForKeyword(String keyword, Callback callback) {
     	SearchData searchData = new SearchData();
     	searchData.setKeyword(keyword);
-        networkService.retrieveStolpersteine(searchData, 0, LIST_SIZE, new Callback() {
-            @Override
-            public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine) {
-                if (stolpersteine != null) {
-                    suggestionsCallback.execute(stolpersteine);
-                }
-            }
-        });
+        networkService.retrieveStolpersteine(searchData, 0, LIST_SIZE, callback);
     }
 
     @Override
     public Cursor query(final Uri uri, String[] projection, String selection, String[] selectionArgs,
             String sortOrder) {
     	String keyword = selectionArgs[0];
-    	final MatrixCursor cursor = new MatrixCursor(SEARCH_SUGGEST_COLUMNS, 1);
-    	searchForKeyword(keyword, new SuggestionsCallback() {
-			@Override
-			public void execute(List<Stolperstein> stolpersteine) {
+    	final MatrixCursor cursor = new MatrixCursor(SEARCH_SUGGEST_COLUMNS);
+    	searchForKeyword(keyword, new Callback() {
+    		@Override
+    		public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine) {
 				for (int i = 0; i < stolpersteine.size(); i++) {
 					Stolperstein stolperstein = stolpersteine.get(i);
 					String name = stolperstein.getPerson().getNameAsString();
@@ -92,8 +81,9 @@ public class SearchSuggestionProvider extends ContentProvider {
 					cursor.addRow(new Object[] {i, name, street});
 				}
 				getContext().getContentResolver().notifyChange(uri, null, false);
-			}
-		});
+    		}
+    	});
+    	
         return cursor;
     }
 
