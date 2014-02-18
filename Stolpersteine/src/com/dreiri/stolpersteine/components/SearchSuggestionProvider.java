@@ -40,7 +40,6 @@ public class SearchSuggestionProvider extends ContentProvider {
     }
     
     private StolpersteinNetworkService networkService;
-    private MatrixCursor cursor;
 
     @Override
     public String getType(Uri uri) {
@@ -82,11 +81,10 @@ public class SearchSuggestionProvider extends ContentProvider {
     public Cursor query(final Uri uri, String[] projection, String selection, String[] selectionArgs,
             String sortOrder) {
     	String keyword = selectionArgs[0];
-    	
+    	final MatrixCursor cursor = new MatrixCursor(SEARCH_SUGGEST_COLUMNS, 1);
     	searchForKeyword(keyword, new SuggestionsCallback() {
 			@Override
 			public void execute(List<Stolperstein> stolpersteine) {
-				cursor = new MatrixCursor(SEARCH_SUGGEST_COLUMNS, 1);
 				for (int i = 0; i < stolpersteine.size(); i++) {
 					Stolperstein stolperstein = stolpersteine.get(i);
 					String name = stolperstein.getPerson().getNameAsString();
