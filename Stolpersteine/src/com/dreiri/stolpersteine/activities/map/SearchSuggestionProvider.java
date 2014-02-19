@@ -61,20 +61,15 @@ public class SearchSuggestionProvider extends ContentProvider {
     	this.networkService = networkService;
     }
     
-    private void searchForKeyword(String keyword, Callback callback) {
-    	SearchData searchData = new SearchData();
-    	searchData.setKeyword(keyword);
-        networkService.retrieveStolpersteine(searchData, 0, LIST_SIZE, callback);
-    }
-
     @Override
     public Cursor query(final Uri uri, String[] projection, String selection, String[] selectionArgs,
             String sortOrder) {
-    	String keyword = selectionArgs[0];
+    	SearchData searchData = new SearchData();
+        searchData.setKeyword(selectionArgs[0]);
     	final MatrixCursor cursor = new MatrixCursor(SEARCH_SUGGEST_COLUMNS);
     	final ContentResolver contentResolver = getContext().getContentResolver();
         cursor.setNotificationUri(contentResolver, uri);
-    	searchForKeyword(keyword, new Callback() {
+        networkService.retrieveStolpersteine(searchData, 0, LIST_SIZE, new Callback() {
     		@Override
     		public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine) {
 				for (int i = 0; i < stolpersteine.size(); i++) {
@@ -83,7 +78,7 @@ public class SearchSuggestionProvider extends ContentProvider {
 					String street = stolperstein.getLocation().getStreet();
 					cursor.addRow(new Object[] {i, name, street});
 				}
-				contentResolver.notifyChange(uri, null, false);
+				contentResolver.notifyChange(uri, null);
     		}
     	});
     	
