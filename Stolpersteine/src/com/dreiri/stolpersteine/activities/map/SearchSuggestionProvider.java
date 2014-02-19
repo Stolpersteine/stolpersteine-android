@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.app.SearchManager;
 import android.content.ContentProvider;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
@@ -71,7 +72,8 @@ public class SearchSuggestionProvider extends ContentProvider {
             String sortOrder) {
     	String keyword = selectionArgs[0];
     	final MatrixCursor cursor = new MatrixCursor(SEARCH_SUGGEST_COLUMNS);
-    	cursor.setNotificationUri(getContext().getContentResolver(), uri);
+    	final ContentResolver contentResolver = getContext().getContentResolver();
+        cursor.setNotificationUri(contentResolver, uri);
     	searchForKeyword(keyword, new Callback() {
     		@Override
     		public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine) {
@@ -81,7 +83,7 @@ public class SearchSuggestionProvider extends ContentProvider {
 					String street = stolperstein.getLocation().getStreet();
 					cursor.addRow(new Object[] {i, name, street});
 				}
-				getContext().getContentResolver().notifyChange(uri, null, false);
+				contentResolver.notifyChange(uri, null, false);
     		}
     	});
     	
