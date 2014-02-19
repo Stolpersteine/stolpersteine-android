@@ -72,13 +72,15 @@ public class SearchSuggestionProvider extends ContentProvider {
         networkService.retrieveStolpersteine(searchData, 0, LIST_SIZE, new Callback() {
     		@Override
     		public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine) {
-				for (int i = 0; i < stolpersteine.size(); i++) {
-					Stolperstein stolperstein = stolpersteine.get(i);
-					String name = stolperstein.getPerson().getNameAsString();
-					String street = stolperstein.getLocation().getStreet();
-					cursor.addRow(new Object[] {i, name, street});
-				}
-				contentResolver.notifyChange(uri, null);
+    		    if (stolpersteine != null) {
+    		        for (int i = 0; i < stolpersteine.size(); i++) {
+                        Stolperstein stolperstein = stolpersteine.get(i);
+                        String name = stolperstein.getPerson().getNameAsString();
+                        String street = stolperstein.getLocation().getStreet();
+                        cursor.addRow(new Object[] {i, name, street});
+                    }
+                    contentResolver.notifyChange(uri, null);
+    		    }
     		}
     	});
     	
