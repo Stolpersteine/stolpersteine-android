@@ -44,6 +44,8 @@ public class MapActivity extends Activity implements SynchronizationController.L
 		// Set up map and clustering
 		map = ((MapFragment)getFragmentManager().findFragmentById(R.id.fragmentMap)).getMap();
 		if (map != null) {
+		    map.getUiSettings().setZoomControlsEnabled(false);
+		    map.getUiSettings().setZoomGesturesEnabled(true);
 		    berlinLatLng = getLocationLatLng(R.array.Berlin);
 		    berlinZoom = 12;
 		    CameraUpdate region = CameraUpdateFactory.newLatLngZoom(berlinLatLng, berlinZoom);
