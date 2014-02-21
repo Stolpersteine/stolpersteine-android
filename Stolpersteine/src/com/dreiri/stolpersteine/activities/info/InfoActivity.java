@@ -14,7 +14,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.dreiri.stolpersteine.R;
-import com.dreiri.stolpersteine.activities.BioActivity;
+import com.dreiri.stolpersteine.activities.bio.BioActivity;
 import com.dreiri.stolpersteine.api.model.Stolperstein;
 
 public class InfoActivity extends Activity {

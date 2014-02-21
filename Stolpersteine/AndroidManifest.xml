@@ -49,7 +49,7 @@
             android:label="Info" >
         </activity>
         <activity
-            android:name="com.dreiri.stolpersteine.activities.BioActivity"
+            android:name="com.dreiri.stolpersteine.activities.bio.BioActivity"
             android:label="Biography" >
         </activity>
         <provider

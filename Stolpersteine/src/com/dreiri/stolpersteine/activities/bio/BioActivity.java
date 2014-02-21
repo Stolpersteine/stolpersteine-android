@@ -1,12 +1,4 @@
-package com.dreiri.stolpersteine.activities;
-
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
+package com.dreiri.stolpersteine.activities.bio;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -30,6 +22,7 @@ public class BioActivity extends Activity {
     WebSettings settings;
     ProgressBar progressBar;
     String bioUrl;
+    private String cssQuery = "div#biografie_seite";
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +41,7 @@ public class BioActivity extends Activity {
         settings.setDisplayZoomControls(false);
         
         viewFormat = ViewFormat.TEXT;
-        loadContentInBrowser(browser, bioUrl, new DataLoaderRunnable());
+        loadContentInBrowser(browser, bioUrl, cssQuery);
     }
     
     @Override
@@ -65,7 +58,7 @@ public class BioActivity extends Activity {
                 viewFormat = ViewFormat.TEXT;
                 settings.setLoadWithOverviewMode(false);
                 settings.setUseWideViewPort(false);
-                loadContentInBrowser(browser, bioUrl, new DataLoaderRunnable());
+                loadContentInBrowser(browser, bioUrl, cssQuery);
             }
         } else if (itemId == R.id.action_web) {
             if (viewFormat == ViewFormat.TEXT) {
@@ -81,42 +74,10 @@ public class BioActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
     
-    protected void loadContentInBrowser(final WebView browser, final String url, final DataLoaderRunnable dataLoaderRunnable) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Document document = Jsoup.parse(new URL(url).openStream(), "utf-8", url);
-                    Elements elements = document.select("div#biografie_seite");
-                    String bioData = elements.toString();
-                    dataLoaderRunnable.set(browser, bioData);
-                    BioActivity.this.runOnUiThread(dataLoaderRunnable);
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+    protected void loadContentInBrowser(WebView browser, String url, String cssQuery) {
+        new HTMLContentLoader(browser).loadContent(this, url, cssQuery);
     }
     
-    private class DataLoaderRunnable implements Runnable {
-        
-        private WebView browser;
-        private String data;
-        private String mimeType = "text/html; charset=UTF-8";
-        
-        public void set(WebView browser, String data) {
-            this.browser = browser;
-            this.data = data;
-        }
-        
-        @Override
-        public void run() {
-            browser.loadData(data, mimeType, null);
-        }
-        
-    }
     
     protected void loadUrlInBrowser(WebView browser, String url) {
         browser.loadUrl(url);
