@@ -43,7 +43,7 @@ public class SearchSuggestionProvider extends ContentProvider {
     }
     
     private StolpersteinNetworkService networkService;
-    private Object lastRequestTag = new Object();
+    private Object lastRequestTag;
     private Handler handler = new Handler(Looper.getMainLooper());
 
     @Override
@@ -87,28 +87,26 @@ public class SearchSuggestionProvider extends ContentProvider {
     }
     
     private void request(final MatrixCursor cursor, final ContentResolver contentResolver, final Uri uri, final String keyword) {
-        synchronized(lastRequestTag) {
-            // Cancel previous request
-            networkService.cancelRequest(lastRequestTag);
+        // Cancel previous request
+        networkService.cancelRequest(lastRequestTag);
 
-            // Request new data
-            SearchData searchData = new SearchData();
-            searchData.setKeyword(keyword);
-            lastRequestTag = networkService.retrieveStolpersteine(searchData, 0, LIST_SIZE, new Callback() {
-                @Override
-                public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine) {
-                    if (stolpersteine != null) {
-                        for (int i = 0; i < stolpersteine.size(); i++) {
-                            Stolperstein stolperstein = stolpersteine.get(i);
-                            String name = stolperstein.getPerson().getNameAsString();
-                            String street = stolperstein.getLocation().getStreet();
-                            cursor.addRow(new Object[] {i, name, street});
-                        }
-                        contentResolver.notifyChange(uri, null);
+        // Request new data
+        SearchData searchData = new SearchData();
+        searchData.setKeyword(keyword);
+        lastRequestTag = networkService.retrieveStolpersteine(searchData, 0, LIST_SIZE, new Callback() {
+            @Override
+            public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine) {
+                if (stolpersteine != null) {
+                    for (int i = 0; i < stolpersteine.size(); i++) {
+                        Stolperstein stolperstein = stolpersteine.get(i);
+                        String name = stolperstein.getPerson().getNameAsString();
+                        String street = stolperstein.getLocation().getStreet();
+                        cursor.addRow(new Object[] {i, name, street});
                     }
+                    contentResolver.notifyChange(uri, null);
                 }
-            });
-        }
+            }
+        });
     }
 
     @Override
