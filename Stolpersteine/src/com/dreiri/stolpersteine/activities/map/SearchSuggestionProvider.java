@@ -10,6 +10,8 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.BaseColumns;
 
 import com.dreiri.stolpersteine.api.RetrieveStolpersteineRequest.Callback;
@@ -18,6 +20,7 @@ import com.dreiri.stolpersteine.api.StolpersteinNetworkService;
 import com.dreiri.stolpersteine.api.model.Stolperstein;
 
 public class SearchSuggestionProvider extends ContentProvider {
+    private static final long REQUEST_DELAY_MS = 300;
     
     private static final String AUTHORITY = "com.dreiri.stolpersteine.suggestions";
     private static final String BASE_PATH = "search";
@@ -41,6 +44,7 @@ public class SearchSuggestionProvider extends ContentProvider {
     
     private StolpersteinNetworkService networkService;
     private Object lastRequestTag = new Object();
+    private Handler handler = new Handler(Looper.getMainLooper());
 
     @Override
     public String getType(Uri uri) {
@@ -64,13 +68,32 @@ public class SearchSuggestionProvider extends ContentProvider {
     @Override
     public Cursor query(final Uri uri, String[] projection, String selection, String[] selectionArgs,
             String sortOrder) {
-    	SearchData searchData = new SearchData();
-        searchData.setKeyword(selectionArgs[0]);
+        // New empty cursor that can be notified
     	final MatrixCursor cursor = new MatrixCursor(SEARCH_SUGGEST_COLUMNS);
     	final ContentResolver contentResolver = getContext().getContentResolver();
         cursor.setNotificationUri(contentResolver, uri);
+        
+        // Fire network request with a delay so it can be canceled when user types quickly
+        final String keyword = selectionArgs[0];
+        handler.removeCallbacksAndMessages(null);
+        handler.postDelayed(new Runnable() {
+          @Override
+          public void run() {
+              request(cursor, contentResolver, uri, keyword);
+          }
+        }, REQUEST_DELAY_MS);
+    	
+        return cursor;
+    }
+    
+    private void request(final MatrixCursor cursor, final ContentResolver contentResolver, final Uri uri, final String keyword) {
         synchronized(lastRequestTag) {
+            // Cancel previous request
             networkService.cancelRequest(lastRequestTag);
+
+            // Request new data
+            SearchData searchData = new SearchData();
+            searchData.setKeyword(keyword);
             lastRequestTag = networkService.retrieveStolpersteine(searchData, 0, LIST_SIZE, new Callback() {
                 @Override
                 public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine) {
@@ -86,8 +109,6 @@ public class SearchSuggestionProvider extends ContentProvider {
                 }
             });
         }
-    	
-        return cursor;
     }
 
     @Override
