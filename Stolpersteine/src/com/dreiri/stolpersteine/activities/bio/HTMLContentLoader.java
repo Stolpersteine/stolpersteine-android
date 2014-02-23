@@ -3,6 +3,8 @@ package com.dreiri.stolpersteine.activities.bio;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -27,6 +29,7 @@ public class HTMLContentLoader {
                     Document document = Jsoup.parse(new URL(url).openStream(), "utf-8", url);
                     Elements elements = document.select(cssQuery);
                     String content = elements.toString();
+                    content = removeHTMLTagHyperlink(content);
                     DataLoaderRunnable dataLoaderRunnable = new DataLoaderRunnable(browser, content);
                     activity.runOnUiThread(dataLoaderRunnable);
                 } catch (MalformedURLException e) {
@@ -54,6 +57,17 @@ public class HTMLContentLoader {
             browser.loadData(data, mimeType, null);
         }
         
+    }
+    
+    private String removeHTMLTagHyperlink(String content) {
+        Pattern pattern = Pattern.compile("<a\\s.+?>(.+?)</a>");
+        Matcher matcher = pattern.matcher(content);
+        StringBuffer sb = new StringBuffer();
+        while (matcher.find()) {
+            matcher.appendReplacement(sb, matcher.group(1));
+        }
+        matcher.appendTail(sb);
+        return sb.toString();
     }
 
 }
