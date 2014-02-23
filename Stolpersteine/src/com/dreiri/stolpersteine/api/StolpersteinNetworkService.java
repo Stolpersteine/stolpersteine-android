@@ -51,10 +51,18 @@ public class StolpersteinNetworkService {
         this.defaultSearchData = defaultSearchData;
     }
 
-    public void retrieveStolpersteine(SearchData searchData, int offset, int limit, RetrieveStolpersteine.Callback callback) {
+    public Object retrieveStolpersteine(SearchData searchData, int offset, int limit, RetrieveStolpersteineRequest.Callback callback) {
         Log.i("Stolpersteine", "retrieveStolpersteine");
-        Request request = RetrieveStolpersteine.request(API_BASE_URL, searchData, defaultSearchData, offset, limit, encodedClientCredentials);
-        httpClient.enqueue(request, new RetrieveStolpersteine(callback));
+        
+        Request request = RetrieveStolpersteineRequest.buildRequest(API_BASE_URL, searchData, defaultSearchData, offset, limit, encodedClientCredentials);
+        httpClient.enqueue(request, new RetrieveStolpersteineRequest(callback));
+        
+        return request;
+    }
+    
+    public void cancelRequest(Object tag) {
+        Log.i("Stolpersteine", "cancelRequest");
+        httpClient.cancel(tag);
     }
 
 }

@@ -12,7 +12,7 @@ import android.database.MatrixCursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-import com.dreiri.stolpersteine.api.RetrieveStolpersteine.Callback;
+import com.dreiri.stolpersteine.api.RetrieveStolpersteineRequest.Callback;
 import com.dreiri.stolpersteine.api.SearchData;
 import com.dreiri.stolpersteine.api.StolpersteinNetworkService;
 import com.dreiri.stolpersteine.api.model.Stolperstein;
@@ -21,10 +21,9 @@ public class SearchSuggestionProvider extends ContentProvider {
     
     private static final String AUTHORITY = "com.dreiri.stolpersteine.suggestions";
     private static final String BASE_PATH = "search";
-    public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH);
     
-    public static final int STOLPERSTEINE = 110;
-    public static final int STOLPERSTEIN_ID = 100;
+    private static final int STOLPERSTEINE = 110;
+    private static final int STOLPERSTEIN_ID = 100;
     private static final int LIST_SIZE = 10;
     private static final int SEARCH_SUGGEST = 1;
     private static final String[] SEARCH_SUGGEST_COLUMNS = {
@@ -41,6 +40,7 @@ public class SearchSuggestionProvider extends ContentProvider {
     }
     
     private StolpersteinNetworkService networkService;
+    private Object lastRequestTag = new Object();
 
     @Override
     public String getType(Uri uri) {
@@ -69,20 +69,23 @@ public class SearchSuggestionProvider extends ContentProvider {
     	final MatrixCursor cursor = new MatrixCursor(SEARCH_SUGGEST_COLUMNS);
     	final ContentResolver contentResolver = getContext().getContentResolver();
         cursor.setNotificationUri(contentResolver, uri);
-        networkService.retrieveStolpersteine(searchData, 0, LIST_SIZE, new Callback() {
-    		@Override
-    		public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine) {
-    		    if (stolpersteine != null) {
-    		        for (int i = 0; i < stolpersteine.size(); i++) {
-                        Stolperstein stolperstein = stolpersteine.get(i);
-                        String name = stolperstein.getPerson().getNameAsString();
-                        String street = stolperstein.getLocation().getStreet();
-                        cursor.addRow(new Object[] {i, name, street});
+        synchronized(lastRequestTag) {
+            networkService.cancelRequest(lastRequestTag);
+            lastRequestTag = networkService.retrieveStolpersteine(searchData, 0, LIST_SIZE, new Callback() {
+                @Override
+                public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine) {
+                    if (stolpersteine != null) {
+                        for (int i = 0; i < stolpersteine.size(); i++) {
+                            Stolperstein stolperstein = stolpersteine.get(i);
+                            String name = stolperstein.getPerson().getNameAsString();
+                            String street = stolperstein.getLocation().getStreet();
+                            cursor.addRow(new Object[] {i, name, street});
+                        }
+                        contentResolver.notifyChange(uri, null);
                     }
-                    contentResolver.notifyChange(uri, null);
-    		    }
-    		}
-    	});
+                }
+            });
+        }
     	
         return cursor;
     }

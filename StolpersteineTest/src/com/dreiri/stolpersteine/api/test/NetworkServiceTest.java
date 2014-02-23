@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 import android.test.AndroidTestCase;
 
-import com.dreiri.stolpersteine.api.RetrieveStolpersteine;
+import com.dreiri.stolpersteine.api.RetrieveStolpersteineRequest;
 import com.dreiri.stolpersteine.api.SearchData;
 import com.dreiri.stolpersteine.api.StolpersteinNetworkService;
 import com.dreiri.stolpersteine.api.model.Stolperstein;
@@ -22,7 +22,7 @@ public class NetworkServiceTest extends AndroidTestCase {
 	}
 	
 	public void testRetrieveStolpersteine() throws InterruptedException {
-		networkService.retrieveStolpersteine(null, 0, 5, new RetrieveStolpersteine.Callback() {
+		networkService.retrieveStolpersteine(null, 0, 5, new RetrieveStolpersteineRequest.Callback() {
 			@Override
 			public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine) {
 				assertEquals("Wrong number of stolpersteine", 5, stolpersteine.size());
@@ -63,7 +63,7 @@ public class NetworkServiceTest extends AndroidTestCase {
 		final SearchData searchData = new SearchData();
 		searchData.setKeyword("Ern");
 
-		networkService.retrieveStolpersteine(searchData, 0, 5, new RetrieveStolpersteine.Callback() {
+		networkService.retrieveStolpersteine(searchData, 0, 5, new RetrieveStolpersteineRequest.Callback() {
 			@Override
 			public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine) {
 				assertTrue(stolpersteine.size() > 0);
@@ -85,7 +85,7 @@ public class NetworkServiceTest extends AndroidTestCase {
 		final SearchData searchData = new SearchData();
 		searchData.setStreet("Turmstraße");
 
-		networkService.retrieveStolpersteine(searchData, 0, 5, new RetrieveStolpersteine.Callback() {
+		networkService.retrieveStolpersteine(searchData, 0, 5, new RetrieveStolpersteineRequest.Callback() {
 			@Override
 			public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine) {
 				assertTrue(stolpersteine.size() > 0);
@@ -106,7 +106,7 @@ public class NetworkServiceTest extends AndroidTestCase {
 		final SearchData searchData = new SearchData();
 		searchData.setCity("Berlin");
 
-		networkService.retrieveStolpersteine(searchData, 0, 5, new RetrieveStolpersteine.Callback() {
+		networkService.retrieveStolpersteine(searchData, 0, 5, new RetrieveStolpersteineRequest.Callback() {
 			@Override
 			public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine) {
 				assertTrue(stolpersteine.size() > 0);
@@ -128,7 +128,7 @@ public class NetworkServiceTest extends AndroidTestCase {
 		final SearchData searchData = new SearchData();
 		searchData.setCity("xyz");
 
-		networkService.retrieveStolpersteine(searchData, 0, 5, new RetrieveStolpersteine.Callback() {
+		networkService.retrieveStolpersteine(searchData, 0, 5, new RetrieveStolpersteineRequest.Callback() {
 			@Override
 			public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine) {
 				assertEquals(0, stolpersteine.size());
@@ -143,7 +143,7 @@ public class NetworkServiceTest extends AndroidTestCase {
 	public void testRetrieveStolpersteineCityDefaultInvalid() throws InterruptedException {
 		networkService.getDefaultSearchData().setCity("xyz"); // will be overridden by specific data
 
-		networkService.retrieveStolpersteine(null, 0, 5, new RetrieveStolpersteine.Callback() {
+		networkService.retrieveStolpersteine(null, 0, 5, new RetrieveStolpersteineRequest.Callback() {
 			@Override
 			public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine) {
 				assertEquals(0, stolpersteine.size());
@@ -157,7 +157,7 @@ public class NetworkServiceTest extends AndroidTestCase {
 
 	public void testRetrieveStolpersteinePaging() throws InterruptedException {
 		// Load first two stolpersteine
-		networkService.retrieveStolpersteine(null, 0, 2, new RetrieveStolpersteine.Callback() {
+		networkService.retrieveStolpersteine(null, 0, 2, new RetrieveStolpersteineRequest.Callback() {
 			@Override
 			public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine) {
 				assertEquals(2, stolpersteine.size());
@@ -165,14 +165,14 @@ public class NetworkServiceTest extends AndroidTestCase {
 				final String stolpersteinId1 = stolpersteine.get(1).getId();
 
 				// First page
-				networkService.retrieveStolpersteine(null, 0, 1, new RetrieveStolpersteine.Callback() {
+				networkService.retrieveStolpersteine(null, 0, 1, new RetrieveStolpersteineRequest.Callback() {
 					@Override
 					public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine) {
 						assertEquals(1, stolpersteine.size());
 						assertEquals(stolpersteinId0, stolpersteine.get(0).getId());
 
 						// Second page
-						networkService.retrieveStolpersteine(null, 1, 1, new RetrieveStolpersteine.Callback() {
+						networkService.retrieveStolpersteine(null, 1, 1, new RetrieveStolpersteineRequest.Callback() {
 							@Override
 							public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine) {
 								assertEquals(1, stolpersteine.size());
