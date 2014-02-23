@@ -172,7 +172,8 @@ public class RetrieveStolpersteineRequest implements Response.Receiver {
         if (jsonPerson != null) {
             person.setFirstName(jsonPerson.optString("firstName"));
             person.setLastName(jsonPerson.optString("lastName"));
-            person.setBiography(new URI(jsonPerson.optString("biographyUrl")));
+            String uri = URLEncoder.encode(jsonPerson.optString("biographyUrl"), "utf-8");
+            person.setBiography(new URI(uri));
         }
 
         Location location = new Location();
