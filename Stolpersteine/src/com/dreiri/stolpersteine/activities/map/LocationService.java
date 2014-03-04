@@ -3,13 +3,17 @@ package com.dreiri.stolpersteine.activities.map;
 import android.content.Context;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 
+import com.dreiri.stolpersteine.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
 
 public class LocationService implements GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 	
@@ -18,12 +22,25 @@ public class LocationService implements GooglePlayServicesClient.ConnectionCallb
 	private static final int REQUEST_INTERVAL = 10000;
 	private static final int REQUEST_FASTEST_INTERVAL = 5000;
 	
-	private LocationClient locationClient;
+	private GoogleMap map;
+	private CameraUpdate region;
+    private LocationClient locationClient;
 	private LocationRequest locationRequest;
 	private Location currentLocation;
 	
-	public LocationService(Context context) {
+	public LocationService(Context context, GoogleMap map) {
+        this.map = map;
 		this.locationClient = new LocationClient(context, this, this);
+		
+		LatLng location = getLocation(context, R.array.Berlin);
+        this.region = CameraUpdateFactory.newLatLngZoom(location, 12);
+	}
+	
+	private LatLng getLocation(Context context, int location) {
+	    String[] locationCoordinates = context.getResources().getStringArray(location);
+	    double lat = Double.valueOf(locationCoordinates[0]);
+	    double lng = Double.valueOf(locationCoordinates[1]);
+	    return new LatLng(lat, lng);
 	}
 	
 	public void start() {
@@ -37,6 +54,21 @@ public class LocationService implements GooglePlayServicesClient.ConnectionCallb
 	
 	public Location getCurrentLocation() {
 		return currentLocation;
+	}
+	
+	public boolean zoomToCurrentLocation(float zoom) {
+        Location location = getCurrentLocation();
+        boolean hasLocation = (location != null); 
+        if (hasLocation) {
+            LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, zoom));
+        }
+        
+        return hasLocation;
+	}
+		
+	public void zoomToRegion() {
+        map.moveCamera(region);
 	}
 
 	@Override
@@ -69,7 +101,6 @@ public class LocationService implements GooglePlayServicesClient.ConnectionCallb
 
 	@Override
 	public void onLocationChanged(Location location) {
-		Log.i("Stolpersteine", "location: " + location);
 		currentLocation = location;
 	}
 

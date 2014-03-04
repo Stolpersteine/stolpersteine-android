@@ -7,7 +7,6 @@ import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,18 +17,13 @@ import com.dreiri.stolpersteine.activities.info.InfoActivity;
 import com.dreiri.stolpersteine.api.StolpersteinNetworkService;
 import com.dreiri.stolpersteine.api.SynchronizationController;
 import com.dreiri.stolpersteine.api.model.Stolperstein;
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 
 public class MapActivity extends Activity implements SynchronizationController.Listener, ClusterManager.OnClusterClickListener<Stolperstein>, ClusterManager.OnClusterItemClickListener<Stolperstein> {
     
-	private LatLng berlinLatLng;
-	private int berlinZoom;
 	private StolpersteinNetworkService networkService;
 	private SynchronizationController synchronizationController;
 	private GoogleMap map;
@@ -46,11 +40,8 @@ public class MapActivity extends Activity implements SynchronizationController.L
 		if (map != null) {
 		    map.getUiSettings().setZoomControlsEnabled(false);
 		    map.getUiSettings().setZoomGesturesEnabled(true);
-		    berlinLatLng = getLocationLatLng(R.array.Berlin);
-		    berlinZoom = 12;
-		    CameraUpdate region = CameraUpdateFactory.newLatLngZoom(berlinLatLng, berlinZoom);
-		    map.moveCamera(region);
 		    
+		    // Clustering
 		    clusterManager = new ClusterManager<Stolperstein>(this, map);
 //		    clusterManager.setAlgorithm(new GridBasedAlgorithm<Stolperstein>());
 	        clusterManager.setRenderer(new ClusterRenderer(this, map, clusterManager));
@@ -58,6 +49,10 @@ public class MapActivity extends Activity implements SynchronizationController.L
 	        clusterManager.setOnClusterItemClickListener(this);
 		    map.setOnCameraChangeListener(clusterManager);
 		    map.setOnMarkerClickListener(clusterManager);
+		    
+		      // User location
+	        locationService = new LocationService(this, map);
+	        locationService.zoomToRegion();
 		}
 
 		// Start synchronizing data
@@ -65,10 +60,7 @@ public class MapActivity extends Activity implements SynchronizationController.L
 		networkService.getDefaultSearchData().setCity("Berlin");
 		synchronizationController = new SynchronizationController(networkService);
 		synchronizationController.setListener(this);
-		synchronizationController.synchronize();
-		
-		// User location
-		locationService = new LocationService(this);
+		synchronizationController.synchronize();		
 	}
 	
 	@Override
@@ -84,14 +76,7 @@ public class MapActivity extends Activity implements SynchronizationController.L
 		
 		locationService.stop();
 	}
-	
-	private LatLng getLocationLatLng(int location) {
-	    String[] locationCoordinates = getResources().getStringArray(location);
-	    double lat = Double.valueOf(locationCoordinates[0]);
-	    double lng = Double.valueOf(locationCoordinates[1]);
-	    return new LatLng(lat, lng);
-	}
-	
+		
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.map, menu);
@@ -108,13 +93,9 @@ public class MapActivity extends Activity implements SynchronizationController.L
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int itemId = item.getItemId();
         if (itemId == R.id.action_positioning) {
-            Location location = locationService.getCurrentLocation();
-            if (location != null) {
-				LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
-				map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 16));
-			}
-        } else {
+            locationService.zoomToCurrentLocation(16);
         }
+        
 		return true;
 	}
 
