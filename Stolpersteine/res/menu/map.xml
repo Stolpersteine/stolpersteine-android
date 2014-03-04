@@ -11,6 +11,6 @@
         android:orderInCategory="100"
         android:showAsAction="always"
         android:icon="@drawable/ic_action_location_searching"
-        android:title="@string/action_positioning"/>
+        android:title="@string/action_location"/>
 
 </menu>

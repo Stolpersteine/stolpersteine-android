@@ -9,7 +9,8 @@
     <string name="search">Search</string>
     <string name="search_title">Search</string>
     <string name="search_hint">Name or street</string>
-    <string name="action_positioning">Positioning</string>
+    <string name="action_location">Current location</string>
+    <string name="action_region">Region</string>
     
     <!-- Info Activity UI -->
     <string name="text_bio">Biography</string>

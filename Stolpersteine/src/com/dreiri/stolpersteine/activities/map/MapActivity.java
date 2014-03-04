@@ -25,9 +25,10 @@ import com.google.maps.android.clustering.ClusterManager;
 public class MapActivity extends Activity implements SynchronizationController.Listener, ClusterManager.OnClusterClickListener<Stolperstein>, ClusterManager.OnClusterItemClickListener<Stolperstein> {
     
 	private SynchronizationController synchronizationController;
-	private GoogleMap map;
 	private ClusterManager<Stolperstein> clusterManager;
 	private LocationService locationService;
+    private GoogleMap map;
+    private Menu menu;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +52,7 @@ public class MapActivity extends Activity implements SynchronizationController.L
 		    
 		    // User location
 	        locationService = new LocationService(this, map, R.array.berlin);
-	        locationService.zoomToRegion();
+	        locationService.zoomToRegion(false);
 		}
 
 		// Start synchronizing data
@@ -60,6 +61,27 @@ public class MapActivity extends Activity implements SynchronizationController.L
 		synchronizationController = new SynchronizationController(networkService);
 		synchronizationController.setListener(this);
 		synchronizationController.synchronize();		
+	}
+	
+	private boolean isLocationOption() {
+	    MenuItem menuItem = menu.findItem(R.id.action_positioning);
+	    String locationTitle = getResources().getString(R.string.action_location);
+	    return menuItem.getTitle().equals(locationTitle);
+	}
+	
+	private void toggleOption() {
+	    int title, drawable;
+	    if (isLocationOption()) {
+            title = R.string.action_region;
+            drawable = R.drawable.ic_action_location_region;
+	    } else {
+            title = R.string.action_location;
+            drawable = R.drawable.ic_action_location_searching;
+	    }
+
+	    MenuItem menuItem = menu.findItem(R.id.action_positioning);
+	    menuItem.setTitle(title);
+	    menuItem.setIcon(drawable);
 	}
 	
 	@Override
@@ -75,10 +97,12 @@ public class MapActivity extends Activity implements SynchronizationController.L
 		
 		locationService.stop();
 	}
-		
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.map, menu);
+		this.menu = menu;
+		
 		SearchManager searchManager = (SearchManager)getSystemService(Context.SEARCH_SERVICE);
 		SearchView searchView = (SearchView)menu.findItem(R.id.search).getActionView();
 		searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
@@ -92,7 +116,12 @@ public class MapActivity extends Activity implements SynchronizationController.L
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int itemId = item.getItemId();
         if (itemId == R.id.action_positioning) {
-            locationService.zoomToCurrentLocation(16);
+            if (isLocationOption()) {
+                locationService.zoomToCurrentLocation(16, true);
+            } else {
+                locationService.zoomToRegion(true);
+            }
+            toggleOption();
         }
         
 		return true;

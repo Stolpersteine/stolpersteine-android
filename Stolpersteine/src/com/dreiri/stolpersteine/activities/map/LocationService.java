@@ -56,19 +56,28 @@ public class LocationService implements GooglePlayServicesClient.ConnectionCallb
 		return currentLocation;
 	}
 	
-	public boolean zoomToCurrentLocation(float zoom) {
+	public boolean zoomToCurrentLocation(float zoom, boolean animated) {
         Location location = getCurrentLocation();
         boolean hasLocation = (location != null); 
         if (hasLocation) {
             LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
-            map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, zoom));
+            CameraUpdate region = CameraUpdateFactory.newLatLngZoom(currentLocation, zoom);
+            if (animated) {
+                map.animateCamera(region);
+            } else {
+                map.moveCamera(region);
+            }
         }
         
         return hasLocation;
 	}
 		
-	public void zoomToRegion() {
-        map.moveCamera(region);
+	public void zoomToRegion(boolean animated) {
+	    if (animated) {
+	        map.animateCamera(region);
+	    } else {
+	        map.moveCamera(region);
+	    }
 	}
 
 	@Override
