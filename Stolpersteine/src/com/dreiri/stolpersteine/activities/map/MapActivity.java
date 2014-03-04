@@ -24,7 +24,6 @@ import com.google.maps.android.clustering.ClusterManager;
 
 public class MapActivity extends Activity implements SynchronizationController.Listener, ClusterManager.OnClusterClickListener<Stolperstein>, ClusterManager.OnClusterItemClickListener<Stolperstein> {
     
-	private StolpersteinNetworkService networkService;
 	private SynchronizationController synchronizationController;
 	private GoogleMap map;
 	private ClusterManager<Stolperstein> clusterManager;
@@ -56,7 +55,7 @@ public class MapActivity extends Activity implements SynchronizationController.L
 		}
 
 		// Start synchronizing data
-		networkService = new StolpersteinNetworkService(this);
+		StolpersteinNetworkService networkService = new StolpersteinNetworkService(this);
 		networkService.getDefaultSearchData().setCity("Berlin");
 		synchronizationController = new SynchronizationController(networkService);
 		synchronizationController.setListener(this);
@@ -80,12 +79,12 @@ public class MapActivity extends Activity implements SynchronizationController.L
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.map, menu);
-		SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-		SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+		SearchManager searchManager = (SearchManager)getSystemService(Context.SEARCH_SERVICE);
+		SearchView searchView = (SearchView)menu.findItem(R.id.search).getActionView();
 		searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 		String contentProviderAuthority = "com.dreiri.stolpersteine.suggestions";
-		SearchSuggestionProvider searchSuggestionProvider = (SearchSuggestionProvider) getContentResolver().acquireContentProviderClient(contentProviderAuthority).getLocalContentProvider();
-		searchSuggestionProvider.setNetworkService(new StolpersteinNetworkService(this));
+		SearchSuggestionProvider searchSuggestionProvider = (SearchSuggestionProvider)getContentResolver().acquireContentProviderClient(contentProviderAuthority).getLocalContentProvider();
+		searchSuggestionProvider.setNetworkService(synchronizationController.getNetworkService());
 		return true;
 	}
 	

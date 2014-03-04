@@ -20,6 +20,10 @@ public class SynchronizationController {
 	public void setListener(Listener listener) {
 	    this.listener = listener;
     }
+	
+	public StolpersteinNetworkService getNetworkService() {
+	    return networkService;
+	}
 
 	public void synchronize() {
     	retrieveStolpersteine(0, NETWORK_BATCH_SIZE);
