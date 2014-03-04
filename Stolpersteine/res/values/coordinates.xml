@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="Berlin">
-        <item name="Lat">52.5191710</item>
-        <item name="Lng">13.40609120</item>
-    </string-array>
-    <string-array name="Bochum">
-        <item name="Lat">51.4818445</item>
-        <item name="Lng">7.216236299999999</item>
-    </string-array>
+    <array name="berlin">
+        <item>52.5191710</item>
+        <item>13.40609120</item>
+        <item>12</item>
+    </array>
+    <array name="bochum">
+        <item>51.4818445</item>
+        <item>7.216236299999999</item>
+        <item>12</item>
+    </array>
 </resources>

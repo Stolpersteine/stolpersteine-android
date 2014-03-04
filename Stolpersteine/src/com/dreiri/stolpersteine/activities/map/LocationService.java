@@ -1,10 +1,10 @@
 package com.dreiri.stolpersteine.activities.map;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.location.Location;
 import android.os.Bundle;
 
-import com.dreiri.stolpersteine.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;
@@ -28,19 +28,19 @@ public class LocationService implements GooglePlayServicesClient.ConnectionCallb
 	private LocationRequest locationRequest;
 	private Location currentLocation;
 	
-	public LocationService(Context context, GoogleMap map) {
+	public LocationService(Context context, GoogleMap map, int regionId) {
         this.map = map;
 		this.locationClient = new LocationClient(context, this, this);
-		
-		LatLng location = getLocation(context, R.array.Berlin);
-        this.region = CameraUpdateFactory.newLatLngZoom(location, 12);
+        this.region = parseRegion(context, regionId);
 	}
 	
-	private LatLng getLocation(Context context, int location) {
-	    String[] locationCoordinates = context.getResources().getStringArray(location);
-	    double lat = Double.valueOf(locationCoordinates[0]);
-	    double lng = Double.valueOf(locationCoordinates[1]);
-	    return new LatLng(lat, lng);
+	private static CameraUpdate parseRegion(Context context, int id) {
+	    TypedArray typedArray = context.getResources().obtainTypedArray(id);
+	    LatLng location = new LatLng(typedArray.getFloat(0, 0), typedArray.getFloat(1, 0));
+	    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(location, typedArray.getFloat(2, 0));
+	    typedArray.recycle();
+	    
+	    return cameraUpdate;
 	}
 	
 	public void start() {

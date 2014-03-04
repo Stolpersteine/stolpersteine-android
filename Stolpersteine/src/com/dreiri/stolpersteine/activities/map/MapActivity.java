@@ -50,8 +50,8 @@ public class MapActivity extends Activity implements SynchronizationController.L
 		    map.setOnCameraChangeListener(clusterManager);
 		    map.setOnMarkerClickListener(clusterManager);
 		    
-		      // User location
-	        locationService = new LocationService(this, map);
+		    // User location
+	        locationService = new LocationService(this, map, R.array.berlin);
 	        locationService.zoomToRegion();
 		}
 
