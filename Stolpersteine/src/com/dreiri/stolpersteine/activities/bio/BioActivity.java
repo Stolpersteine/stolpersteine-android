@@ -47,23 +47,24 @@ public class BioActivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
-        if (itemId == R.id.action_text) {
-            if (viewFormat == ViewFormat.WEB) {
+        if (itemId == R.id.action_view_format) {
+            if (viewFormat == ViewFormat.TEXT) {
+                viewFormat = ViewFormat.WEB;
+                item.setTitle(R.string.action_item_text);
+                item.setIcon(R.drawable.ic_action_view_as_text);
+                settings.setLoadWithOverviewMode(true);
+                settings.setUseWideViewPort(true);
+                loadUrlInBrowser(browser, bioUrl);
+            } else if (viewFormat == ViewFormat.WEB) {
                 viewFormat = ViewFormat.TEXT;
+                item.setTitle(R.string.action_item_web);
+                item.setIcon(R.drawable.ic_action_view_as_web);
                 settings.setLoadWithOverviewMode(false);
                 settings.setUseWideViewPort(false);
                 loadContentInBrowser(browser, bioUrl, cssQuery);
             }
-        } else if (itemId == R.id.action_web) {
-            if (viewFormat == ViewFormat.TEXT) {
-                viewFormat = ViewFormat.WEB;
-                settings.setLoadWithOverviewMode(true);
-                settings.setUseWideViewPort(true);
-                loadUrlInBrowser(browser, bioUrl);
-            }
         } else if (itemId == android.R.id.home) {
             finish();
-        } else {
         }
         return super.onOptionsItemSelected(item);
     }
