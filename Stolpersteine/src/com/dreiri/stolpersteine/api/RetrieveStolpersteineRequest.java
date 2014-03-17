@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -160,9 +161,10 @@ public class RetrieveStolpersteineRequest implements Response.Receiver {
         Source source = new Source();
         stolperstein.setSource(source);
         JSONObject jsonSource = jsonObject.optJSONObject("source");
+        String charsetName = "utf-8";
         if (jsonSource != null) {
             source.setName(jsonSource.optString("name"));
-            String uri = URLEncoder.encode(jsonSource.optString("url"), "utf-8");
+            String uri = URLDecoder.decode(URLEncoder.encode(jsonSource.optString("url"), charsetName), charsetName);
             source.setUri(new URI(uri));
         }
 
@@ -172,7 +174,7 @@ public class RetrieveStolpersteineRequest implements Response.Receiver {
         if (jsonPerson != null) {
             person.setFirstName(jsonPerson.optString("firstName"));
             person.setLastName(jsonPerson.optString("lastName"));
-            String uri = URLEncoder.encode(jsonPerson.optString("biographyUrl"), "utf-8");
+            String uri = URLDecoder.decode(URLEncoder.encode(jsonPerson.optString("biographyUrl"), charsetName), charsetName);
             person.setBiography(new URI(uri));
         }
 
