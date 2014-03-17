@@ -32,8 +32,8 @@
         <activity
             android:name="com.dreiri.stolpersteine.activities.map.MapActivity"
             android:launchMode="singleTop"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:configChanges="orientation|screenSize|keyboardHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -46,11 +46,13 @@
         </activity>
         <activity
             android:name="com.dreiri.stolpersteine.activities.info.InfoActivity"
-            android:label="Info" >
+            android:label="Info"
+            android:configChanges="orientation|screenSize|keyboardHidden" >
         </activity>
         <activity
             android:name="com.dreiri.stolpersteine.activities.bio.BioActivity"
-            android:label="Biography" >
+            android:label="Biography"
+            android:configChanges="orientation|screenSize|keyboardHidden" >
         </activity>
         <provider
             android:name="com.dreiri.stolpersteine.activities.map.SearchSuggestionProvider"
