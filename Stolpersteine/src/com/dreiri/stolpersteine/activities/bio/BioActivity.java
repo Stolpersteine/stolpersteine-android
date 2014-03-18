@@ -14,12 +14,12 @@ import com.dreiri.stolpersteine.R;
 
 public class BioActivity extends Activity {
     
-    protected enum ViewFormat {TEXT, WEB};
-    ViewFormat viewFormat;
-    WebView browser;
-    WebSettings settings;
-    String bioUrl;
-    private String cssQuery = "div#biografie_seite";
+    private enum ViewFormat {TEXT, WEB};
+    private ViewFormat viewFormat;
+    private WebView browser;
+    private WebSettings settings;
+    private String bioUrl;
+    private static final String CSS_QUERY = "div#biografie_seite";
     
     public static Intent createIntent(Context context, String url) {
         Intent intent = new Intent(context, BioActivity.class);
@@ -43,7 +43,7 @@ public class BioActivity extends Activity {
         settings.setDisplayZoomControls(false);
         
         viewFormat = ViewFormat.TEXT;
-        loadContentInBrowser(browser, bioUrl, cssQuery);
+        loadContentInBrowser(browser, bioUrl, CSS_QUERY);
     }
     
     @Override
@@ -69,7 +69,7 @@ public class BioActivity extends Activity {
                 item.setIcon(R.drawable.ic_action_view_as_web);
                 settings.setLoadWithOverviewMode(false);
                 settings.setUseWideViewPort(false);
-                loadContentInBrowser(browser, bioUrl, cssQuery);
+                loadContentInBrowser(browser, bioUrl, CSS_QUERY);
             }
         } else if (itemId == android.R.id.home) {
             finish();
