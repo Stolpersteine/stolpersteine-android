@@ -20,10 +20,6 @@ import com.dreiri.stolpersteine.api.model.Stolperstein;
 
 public class InfoActivity extends Activity {
 
-    ArrayList<Stolperstein> stolpersteine;
-    String bioUrl;
-    ListView listView;
-    
     public static Intent createIntent(Context context, ArrayList<Stolperstein> stolpersteine) {
         Intent intent = new Intent(context, InfoActivity.class);
         intent.putParcelableArrayListExtra("stolpersteine", stolpersteine);
@@ -37,10 +33,10 @@ public class InfoActivity extends Activity {
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_info);
-        listView = (ListView) findViewById(R.id.list);
+        final ListView listView = (ListView) findViewById(R.id.list);
         Intent intent = getIntent();
         if (intent.hasExtra("stolpersteine")) {
-            stolpersteine = intent.getParcelableArrayListExtra("stolpersteine");
+            ArrayList<Stolperstein> stolpersteine = intent.getParcelableArrayListExtra("stolpersteine");
             Integer number_found = stolpersteine.size();
             if (number_found > 1) {
                 actionBar.setTitle(Integer.toString(number_found) + " Stolpersteine");
@@ -54,7 +50,7 @@ public class InfoActivity extends Activity {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Stolperstein stolperstein = (Stolperstein)listView.getItemAtPosition(position);
-                    bioUrl = stolperstein.getPerson().getBiographyUri().toString();
+                    String bioUrl = stolperstein.getPerson().getBiographyUri().toString();
                     startActivity(BioActivity.createIntent(InfoActivity.this, bioUrl));
                 }
             });
