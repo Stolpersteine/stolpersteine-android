@@ -7,12 +7,15 @@ import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SearchView;
+import android.widget.SearchView.OnSuggestionListener;
 
 import com.dreiri.stolpersteine.R;
+import com.dreiri.stolpersteine.activities.bio.BioActivity;
 import com.dreiri.stolpersteine.activities.info.InfoActivity;
 import com.dreiri.stolpersteine.api.StolpersteinNetworkService;
 import com.dreiri.stolpersteine.api.SynchronizationController;
@@ -104,11 +107,29 @@ public class MapActivity extends Activity implements SynchronizationController.L
 		this.menu = menu;
 		
 		SearchManager searchManager = (SearchManager)getSystemService(Context.SEARCH_SERVICE);
-		SearchView searchView = (SearchView)menu.findItem(R.id.search).getActionView();
+		final SearchView searchView = (SearchView)menu.findItem(R.id.search).getActionView();
 		searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 		String contentProviderAuthority = "com.dreiri.stolpersteine.suggestions";
 		SearchSuggestionProvider searchSuggestionProvider = (SearchSuggestionProvider)getContentResolver().acquireContentProviderClient(contentProviderAuthority).getLocalContentProvider();
 		searchSuggestionProvider.setNetworkService(synchronizationController.getNetworkService());
+		searchView.setOnSuggestionListener(new OnSuggestionListener() {
+                    @Override
+                    public boolean onSuggestionSelect(int position) {
+                        return false;
+                    }
+                    
+                    @Override
+                    public boolean onSuggestionClick(int position) {
+                        searchView.clearFocus();
+                        Cursor cursor = searchView.getSuggestionsAdapter().getCursor();
+                        cursor.move(position);
+                        String bioUrl = cursor.getString(cursor.getColumnIndex(SearchSuggestionProvider.SUGGEST_COLUMN_URL));
+                        Intent intent = new Intent(MapActivity.this, BioActivity.class);
+                        intent.putExtra("bioUrl", bioUrl);
+                        startActivity(intent);
+                        return true;
+                    }
+                });
 		return true;
 	}
 	

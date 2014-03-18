@@ -17,6 +17,7 @@ import android.provider.BaseColumns;
 import com.dreiri.stolpersteine.api.RetrieveStolpersteineRequest.Callback;
 import com.dreiri.stolpersteine.api.SearchData;
 import com.dreiri.stolpersteine.api.StolpersteinNetworkService;
+import com.dreiri.stolpersteine.api.model.Person;
 import com.dreiri.stolpersteine.api.model.Stolperstein;
 
 public class SearchSuggestionProvider extends ContentProvider {
@@ -29,10 +30,12 @@ public class SearchSuggestionProvider extends ContentProvider {
     private static final int STOLPERSTEIN_ID = 100;
     private static final int LIST_SIZE = 10;
     private static final int SEARCH_SUGGEST = 1;
+    public static final String SUGGEST_COLUMN_URL = "url";
     private static final String[] SEARCH_SUGGEST_COLUMNS = {
         BaseColumns._ID,
         SearchManager.SUGGEST_COLUMN_TEXT_1,
-        SearchManager.SUGGEST_COLUMN_TEXT_2
+        SearchManager.SUGGEST_COLUMN_TEXT_2,
+        SUGGEST_COLUMN_URL
     };
     private static final UriMatcher URI_MATCHER;
     
@@ -99,9 +102,11 @@ public class SearchSuggestionProvider extends ContentProvider {
                 if (stolpersteine != null) {
                     for (int i = 0; i < stolpersteine.size(); i++) {
                         Stolperstein stolperstein = stolpersteine.get(i);
-                        String name = stolperstein.getPerson().getNameAsString();
+                        Person person = stolperstein.getPerson();
+                        String name = person.getNameAsString();
                         String street = stolperstein.getLocation().getStreet();
-                        cursor.addRow(new Object[] {i, name, street});
+                        String url = person.getBiographyUri().toString();;
+                        cursor.addRow(new Object[] {i, name, street, url});
                     }
                     contentResolver.notifyChange(uri, null);
                 }
