@@ -112,21 +112,23 @@ public class MapActivity extends Activity implements SynchronizationController.L
 		SearchSuggestionProvider searchSuggestionProvider = (SearchSuggestionProvider)getContentResolver().acquireContentProviderClient(contentProviderAuthority).getLocalContentProvider();
 		searchSuggestionProvider.setNetworkService(synchronizationController.getNetworkService());
 		searchView.setOnSuggestionListener(new OnSuggestionListener() {
-                    @Override
-                    public boolean onSuggestionSelect(int position) {
-                        return false;
-                    }
-                    
-                    @Override
-                    public boolean onSuggestionClick(int position) {
-                        searchView.clearFocus();
-                        Cursor cursor = searchView.getSuggestionsAdapter().getCursor();
-                        cursor.move(position);
-                        String bioUrl = cursor.getString(cursor.getColumnIndex(SearchSuggestionProvider.SUGGEST_COLUMN_URL));
-                        startActivity(BioActivity.createIntent(MapActivity.this, bioUrl));
-                        return true;
-                    }
-                });
+            @Override
+            public boolean onSuggestionSelect(int position) {
+                return false;
+            }
+
+            @Override
+            public boolean onSuggestionClick(int position) {
+                searchView.clearFocus();
+                Cursor cursor = searchView.getSuggestionsAdapter().getCursor();
+                cursor.move(position);
+                String bioUrl = cursor.getString(cursor
+                        .getColumnIndex(SearchSuggestionProvider.SUGGEST_COLUMN_URL));
+                startActivity(BioActivity.createIntent(MapActivity.this, bioUrl));
+                return true;
+            }
+        });
+		
 		return true;
 	}
 	

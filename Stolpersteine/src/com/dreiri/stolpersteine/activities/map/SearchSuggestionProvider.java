@@ -69,8 +69,7 @@ public class SearchSuggestionProvider extends ContentProvider {
     }
     
     @Override
-    public Cursor query(final Uri uri, String[] projection, String selection, String[] selectionArgs,
-            String sortOrder) {
+    public Cursor query(final Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         // New empty cursor that can be notified
     	final MatrixCursor cursor = new MatrixCursor(SEARCH_SUGGEST_COLUMNS);
     	final ContentResolver contentResolver = getContext().getContentResolver();
