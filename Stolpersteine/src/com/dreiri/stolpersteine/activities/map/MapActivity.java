@@ -79,7 +79,7 @@ public class MapActivity extends Activity implements SynchronizationController.L
             drawable = R.drawable.ic_action_location_region;
 	    } else {
             title = R.string.action_location;
-            drawable = R.drawable.ic_action_location_searching;
+            drawable = R.drawable.ic_action_location_current;
 	    }
 
 	    MenuItem menuItem = menu.findItem(R.id.action_positioning);

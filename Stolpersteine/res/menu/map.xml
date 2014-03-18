@@ -10,7 +10,7 @@
         android:id="@+id/action_positioning"
         android:orderInCategory="100"
         android:showAsAction="always"
-        android:icon="@drawable/ic_action_location_searching"
+        android:icon="@drawable/ic_action_location_current"
         android:title="@string/action_location"/>
 
 </menu>
