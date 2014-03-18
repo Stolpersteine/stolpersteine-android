@@ -1,6 +1,7 @@
 package com.dreiri.stolpersteine.activities.bio;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -20,13 +21,20 @@ public class BioActivity extends Activity {
     String bioUrl;
     private String cssQuery = "div#biografie_seite";
     
+    public static Intent createIntent(Context context, String url) {
+        Intent intent = new Intent(context, BioActivity.class);
+        intent.putExtra("url", url);
+        
+        return intent;
+    }
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_bio);
         Intent intent = getIntent();
-        bioUrl = intent.getStringExtra("bioUrl");
+        bioUrl = intent.getStringExtra("url");
         
         browser = (WebView) findViewById(R.id.webview);
         browser.setWebViewClient(new SimpleWebViewClient((ProgressBar) findViewById(R.id.progressBar)));

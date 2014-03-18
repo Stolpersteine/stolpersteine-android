@@ -6,7 +6,6 @@ import java.util.List;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Menu;
@@ -124,9 +123,7 @@ public class MapActivity extends Activity implements SynchronizationController.L
                         Cursor cursor = searchView.getSuggestionsAdapter().getCursor();
                         cursor.move(position);
                         String bioUrl = cursor.getString(cursor.getColumnIndex(SearchSuggestionProvider.SUGGEST_COLUMN_URL));
-                        Intent intent = new Intent(MapActivity.this, BioActivity.class);
-                        intent.putExtra("bioUrl", bioUrl);
-                        startActivity(intent);
+                        startActivity(BioActivity.createIntent(MapActivity.this, bioUrl));
                         return true;
                     }
                 });
@@ -150,21 +147,17 @@ public class MapActivity extends Activity implements SynchronizationController.L
 
     @Override
     public boolean onClusterClick(Cluster<Stolperstein> cluster) {
-    	Intent intent = new Intent(MapActivity.this, InfoActivity.class);
     	ArrayList<Stolperstein> stolpersteine = new ArrayList<Stolperstein>(cluster.getItems());
-    	intent.putParcelableArrayListExtra("stolpersteine", stolpersteine);
-    	startActivity(intent);
+    	startActivity(InfoActivity.createIntent(this, stolpersteine));
 
     	return false;
     }
 
     @Override
     public boolean onClusterItemClick(Stolperstein stolperstein) {
-    	Intent intent = new Intent(MapActivity.this, InfoActivity.class);
     	ArrayList<Stolperstein> stolpersteine = new ArrayList<Stolperstein>();
     	stolpersteine.add(stolperstein);
-    	intent.putParcelableArrayListExtra("stolpersteine", stolpersteine);
-    	startActivity(intent);
+    	startActivity(InfoActivity.createIntent(this, stolpersteine));
     	
         return false;
     }

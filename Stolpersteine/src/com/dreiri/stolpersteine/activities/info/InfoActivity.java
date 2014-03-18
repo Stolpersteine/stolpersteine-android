@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -22,6 +23,13 @@ public class InfoActivity extends Activity {
     ArrayList<Stolperstein> stolpersteine;
     String bioUrl;
     ListView listView;
+    
+    public static Intent createIntent(Context context, ArrayList<Stolperstein> stolpersteine) {
+        Intent intent = new Intent(context, InfoActivity.class);
+        intent.putParcelableArrayListExtra("stolpersteine", stolpersteine);
+        
+        return intent;
+    }
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,11 +53,9 @@ public class InfoActivity extends Activity {
 
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Stolperstein stolperstein = (Stolperstein) listView.getItemAtPosition(position);
+                    Stolperstein stolperstein = (Stolperstein)listView.getItemAtPosition(position);
                     bioUrl = stolperstein.getPerson().getBiographyUri().toString();
-                    Intent intent = new Intent(InfoActivity.this, BioActivity.class);
-                    intent.putExtra("bioUrl", bioUrl);
-                    startActivity(intent);
+                    startActivity(BioActivity.createIntent(InfoActivity.this, bioUrl));
                 }
             });
         }
