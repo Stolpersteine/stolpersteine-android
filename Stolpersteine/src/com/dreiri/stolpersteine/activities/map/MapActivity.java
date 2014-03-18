@@ -147,17 +147,21 @@ public class MapActivity extends Activity implements SynchronizationController.L
 
     @Override
     public boolean onClusterClick(Cluster<Stolperstein> cluster) {
-    	ArrayList<Stolperstein> stolpersteine = new ArrayList<Stolperstein>(cluster.getItems());
-    	startActivity(InfoActivity.createIntent(this, stolpersteine));
+        ArrayList<Stolperstein> stolpersteine = new ArrayList<Stolperstein>(cluster.getItems());
+        if (stolpersteine.size() > 1) {
+            startActivity(InfoActivity.createIntent(this, stolpersteine));
+        } else {
+            Stolperstein stolperstein = stolpersteine.get(0);
+            onClusterItemClick(stolperstein);
+        }
 
     	return false;
     }
 
     @Override
     public boolean onClusterItemClick(Stolperstein stolperstein) {
-    	ArrayList<Stolperstein> stolpersteine = new ArrayList<Stolperstein>();
-    	stolpersteine.add(stolperstein);
-    	startActivity(InfoActivity.createIntent(this, stolpersteine));
+        String bioUrl = stolperstein.getPerson().getBiographyUri().toString();
+    	startActivity(BioActivity.createIntent(this, bioUrl));
     	
         return false;
     }

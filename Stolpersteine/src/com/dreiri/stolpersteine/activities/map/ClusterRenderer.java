@@ -15,8 +15,7 @@ public class ClusterRenderer extends DefaultClusterRenderer<Stolperstein> {
     }
     
     @Override
-    @SuppressWarnings("rawtypes")
-    protected boolean shouldRenderAsCluster(Cluster cluster) {
+    protected boolean shouldRenderAsCluster(Cluster<Stolperstein> cluster) {
         return true;
     };
 
