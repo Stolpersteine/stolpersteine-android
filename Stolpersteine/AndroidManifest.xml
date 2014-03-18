@@ -57,6 +57,7 @@
         <provider
             android:name="com.dreiri.stolpersteine.activities.map.SearchSuggestionProvider"
             android:authorities="com.dreiri.stolpersteine.suggestions"
+            android:exported="false"
             android:syncable="false" />
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY" 
