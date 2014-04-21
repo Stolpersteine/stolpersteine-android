@@ -67,7 +67,12 @@ public class BioActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.bio, menu);
-        // TODO: needs to update icon
+        MenuItem itemViewFormat = menu.getItem(0);
+        if (viewFormat == ViewFormat.WEB) {
+            setViewFormatMenuItemToText(itemViewFormat);
+        } else {
+            setViewFormatMenuItemToWeb(itemViewFormat);
+        }
         return true;
     }
 
@@ -97,8 +102,7 @@ public class BioActivity extends Activity {
     private void switchToAndLoadInTextView(MenuItem selectedItem) {
         viewFormat = ViewFormat.TEXT;
         preferenceHelper.saveViewFormat(viewFormat);
-        selectedItem.setTitle(R.string.action_item_web);
-        selectedItem.setIcon(R.drawable.ic_action_view_as_web);
+        setViewFormatMenuItemToWeb(selectedItem);
         settings.setLoadWithOverviewMode(false);
         settings.setUseWideViewPort(false);
         loadContentInBrowser(browser, bioUrl, CSS_QUERY);
@@ -107,11 +111,20 @@ public class BioActivity extends Activity {
     private void switchToAndLoadInWebView(MenuItem selectedItem) {
         viewFormat = ViewFormat.WEB;
         preferenceHelper.saveViewFormat(viewFormat);
-        selectedItem.setTitle(R.string.action_item_text);
-        selectedItem.setIcon(R.drawable.ic_action_view_as_text);
+        setViewFormatMenuItemToText(selectedItem);
         settings.setLoadWithOverviewMode(true);
         settings.setUseWideViewPort(true);
         loadUrlInBrowser(browser, bioUrl);
+    }
+
+    private void setViewFormatMenuItemToText(MenuItem item) {
+        item.setTitle(R.string.action_item_text);
+        item.setIcon(R.drawable.ic_action_view_as_text);
+    }
+
+    private void setViewFormatMenuItemToWeb(MenuItem item) {
+        item.setTitle(R.string.action_item_web);
+        item.setIcon(R.drawable.ic_action_view_as_web);
     }
 
 }
