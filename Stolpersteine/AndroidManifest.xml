@@ -30,7 +30,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.dreiri.stolpersteine.activities.map.MapActivity"
+            android:name="com.option_u.stolpersteine.activities.map.MapActivity"
             android:launchMode="singleTop"
             android:label="@string/app_name"
             android:configChanges="orientation|screenSize|keyboardHidden" >
@@ -45,17 +45,17 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity
-            android:name="com.dreiri.stolpersteine.activities.info.InfoActivity"
+            android:name="com.option_u.stolpersteine.activities.info.InfoActivity"
             android:label="Info"
             android:configChanges="orientation|screenSize|keyboardHidden" >
         </activity>
         <activity
-            android:name="com.dreiri.stolpersteine.activities.bio.BioActivity"
+            android:name="com.option_u.stolpersteine.activities.bio.BioActivity"
             android:label="Biography"
             android:configChanges="orientation|screenSize|keyboardHidden" >
         </activity>
         <provider
-            android:name="com.dreiri.stolpersteine.activities.map.SearchSuggestionProvider"
+            android:name="com.option_u.stolpersteine.activities.map.SearchSuggestionProvider"
             android:authorities="com.dreiri.stolpersteine.suggestions"
             android:exported="false"
             android:syncable="false" />
