@@ -31,8 +31,8 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.option_u.stolpersteine.activities.map.MapActivity"
-            android:launchMode="singleTop"
             android:label="@string/map_label"
+            android:launchMode="singleTop"
             android:configChanges="orientation|screenSize|keyboardHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -46,12 +46,12 @@
         </activity>
         <activity
             android:name="com.option_u.stolpersteine.activities.info.InfoActivity"
-            android:label="Info"
+            android:label="@string/info_label"
             android:configChanges="orientation|screenSize|keyboardHidden" >
         </activity>
         <activity
             android:name="com.option_u.stolpersteine.activities.bio.BioActivity"
-            android:label="Biography"
+            android:label="@string/bio_label"
             android:configChanges="orientation|screenSize|keyboardHidden" >
         </activity>
         <provider

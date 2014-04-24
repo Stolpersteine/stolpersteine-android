@@ -8,17 +8,17 @@
     
     <!-- Map Activity UI -->
     <string name="map_label">Stolpersteine</string>
-    <string name="map_search_title">Search</string>
-    <string name="map_search_hint">Name or address</string>
-    <string name="map_action_location">Zoom to current location</string>
-    <string name="map_action_region">Zoom to region</string>
+    <string name="map_search_title">Suche</string>
+    <string name="map_search_hint">Name oder Adresse</string>
+    <string name="map_action_location">Aktuelle Position anzeigen</string>
+    <string name="map_action_region">Ganze Region anzeigen</string>
     
     <!-- Info Activity UI -->
     <string name="info_label">Info</string>
     
     <!-- Bio Activity Menu -->
-    <string name="bio_label">Biography</string>
-    <string name="bio_action_item_text">Text view</string>
-    <string name="bio_action_item_web">Web view</string>
+    <string name="bio_label">Biographie</string>
+    <string name="bio_action_item_text">Text Ansicht</string>
+    <string name="bio_action_item_web">Web Ansicht</string>
         
 </resources>
