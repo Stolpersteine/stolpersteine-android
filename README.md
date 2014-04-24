@@ -12,12 +12,10 @@ Andoid app to display the locations of [Stolpersteine](http://en.wikipedia.org/w
 ### Google Play Services
 
 1. Install Google Play Services in Extras through the Android SDK Manager
-2. File > Import > Android/Existing Android Code into Workspace and choose <android-sdk>/extras/google/google_play_services/libproject/google-play-services_lib/ (for R19, use the one from google_play_services_froyo)
+2. File > Import > Android/Existing Android Code into Workspace and choose <android-sdk>/extras/google/google_play_services/libproject/google-play-services_lib/
 3. Check "Is Library" in Properties > Android
 
 See http://developer.android.com/google/play-services/setup.html
-
-[Guide to install Google Play Services on Genymotion](http://stackoverflow.com/questions/17831990/how-do-you-install-google-frameworks-play-accounts-etc-on-a-genymotion-virtu)
 
 ### Android Maps Utils
 
@@ -38,7 +36,7 @@ See http://googlemaps.github.io/android-maps-utils/#start
 
     keytool -list -v -keystore ~/.android/debug.keystore
     
-5. Configure a virtual device with Android 4.2.2 or higher using the Google APIs. Alternatively, use a hardware device
+5. Configure a virtual device with Android 4.x with Google Play Services ([Guide to install Google Play Services on Genymotion](http://stackoverflow.com/questions/17831990/how-do-you-install-google-frameworks-play-accounts-etc-on-a-genymotion-virtu). Alternatively, use a hardware device
 6. Run as Android Application
 
 ### Run Tests
@@ -52,7 +50,7 @@ Note: set the text encoding in ADT to UTF-8 (Preferences > General > Workspace).
 
 ### Requires Android Version
 
-API Level 11+, Android 3.0.x (HONEYCOMB) or higher
+API Level 15+, Android 4.0.x (Ice Cream Sandwich) or higher
 
 ## License (MIT)
 
