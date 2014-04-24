@@ -13,11 +13,11 @@ import android.view.MenuItem;
 import android.widget.SearchView;
 import android.widget.SearchView.OnSuggestionListener;
 
-import com.dreiri.stolpersteine.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
+import com.option_u.stolpersteine.R;
 import com.option_u.stolpersteine.activities.bio.BioActivity;
 import com.option_u.stolpersteine.activities.info.InfoActivity;
 import com.option_u.stolpersteine.api.StolpersteinNetworkService;

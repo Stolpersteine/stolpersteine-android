@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.dreiri.stolpersteine.R;
+import com.option_u.stolpersteine.R;
 import com.option_u.stolpersteine.api.model.Stolperstein;
 
 public class StolpersteinAdapter extends BaseAdapter {

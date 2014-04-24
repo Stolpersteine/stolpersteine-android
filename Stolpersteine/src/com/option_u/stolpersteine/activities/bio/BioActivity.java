@@ -10,7 +10,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
 
-import com.dreiri.stolpersteine.R;
+import com.option_u.stolpersteine.R;
 import com.option_u.stolpersteine.helpers.PreferenceHelper;
 
 public class BioActivity extends Activity {

@@ -14,7 +14,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-import com.dreiri.stolpersteine.R;
+import com.option_u.stolpersteine.R;
 import com.option_u.stolpersteine.activities.bio.BioActivity;
 import com.option_u.stolpersteine.api.model.Stolperstein;
 
