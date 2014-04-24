@@ -35,7 +35,6 @@ public class InfoActivity extends Activity {
         setContentView(R.layout.activity_info);
         final ListView listView = (ListView) findViewById(R.id.list);
         Intent intent = getIntent();
-        if (intent.hasExtra("stolpersteine")) {
             ArrayList<Stolperstein> stolpersteine = intent.getParcelableArrayListExtra("stolpersteine");
             Integer number_found = stolpersteine.size();
             if (number_found > 1) {
@@ -43,6 +42,7 @@ public class InfoActivity extends Activity {
             } else {
                 actionBar.setTitle(Integer.toString(number_found) + " Stolperstein");
             }
+        if (intent.hasExtra(EXTRA_NAME)) {
             StolpersteinAdapter stolpersteinAdapter = new StolpersteinAdapter(this, stolpersteine);
             listView.setAdapter(stolpersteinAdapter);
             listView.setOnItemClickListener(new OnItemClickListener() {

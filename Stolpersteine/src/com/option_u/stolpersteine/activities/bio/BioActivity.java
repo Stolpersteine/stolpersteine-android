@@ -15,6 +15,8 @@ import com.option_u.stolpersteine.helpers.PreferenceHelper;
 
 public class BioActivity extends Activity {
 
+    private static final String EXTRA_NAME = "url";
+
     public enum ViewFormat {
         TEXT, WEB;
 
@@ -36,7 +38,7 @@ public class BioActivity extends Activity {
 
     public static Intent createIntent(Context context, String url) {
         Intent intent = new Intent(context, BioActivity.class);
-        intent.putExtra("url", url);
+        intent.putExtra(EXTRA_NAME, url);
 
         return intent;
     }
@@ -47,7 +49,7 @@ public class BioActivity extends Activity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_bio);
         Intent intent = getIntent();
-        bioUrl = intent.getStringExtra("url");
+        bioUrl = intent.getStringExtra(EXTRA_NAME);
 
         browser = (WebView) findViewById(R.id.webview);
         browser.setWebViewClient(new SimpleWebViewClient((ProgressBar) findViewById(R.id.progressBar)));
