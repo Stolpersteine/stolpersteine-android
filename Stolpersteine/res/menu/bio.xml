@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     <item
         android:id="@+id/action_view_format"
-        android:title="@string/action_item_web"
+        android:title="@string/bio_action_item_web"
         android:icon="@drawable/ic_action_view_as_web"
         android:showAsAction="collapseActionView|ifRoom" />
 </menu>

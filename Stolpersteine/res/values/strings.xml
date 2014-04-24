@@ -3,31 +3,22 @@
 
     <!-- General -->
     <string name="app_name">Stolpersteine</string>
+    <string name="app_stolpersteine_singular">Stolperstein</string>
+    <string name="app_stolpersteine_plural">Stolpersteine</string>
     
     <!-- Map Activity UI -->
-    <string name="hint_query">Name</string>
-    <string name="search">Search</string>
-    <string name="search_title">Search</string>
-    <string name="search_hint">Name or street</string>
-    <string name="action_location">Current location</string>
-    <string name="action_region">Region</string>
+    <string name="map_label">Stolpersteine</string>
+    <string name="map_search_title">Search</string>
+    <string name="map_search_hint">Name or street</string>
+    <string name="map_action_location">Current location</string>
+    <string name="map_action_region">Region</string>
     
     <!-- Info Activity UI -->
-    <string name="text_bio">Biography</string>
+    <string name="info_label">Info</string>
     
     <!-- Bio Activity Menu -->
-    <string name="action_item_text">Text View</string>
-    <string name="action_item_web">Web View</string>
-    
-    <!-- Alerts -->
-    <string name="alert_pos_btn">Settings</string>
-    <string name="alert_neg_btn">Cancel</string>
-    <string name="alert_title">Notification</string>
-    <string name="alert_gps_msg">GPS is disabled, do you want to go to system settings and turn it on?</string>
-    <string name="alert_mock_location_msg">Allow mock locations is disabled, do you want to go to system settings and turn it on?</string>
-    
-    <!--
-    <string name=""></string>
-    -->
-
+    <string name="bio_label">Biography</string>
+    <string name="bio_action_item_text">Text view</string>
+    <string name="bio_action_item_web">Web view</string>
+        
 </resources>

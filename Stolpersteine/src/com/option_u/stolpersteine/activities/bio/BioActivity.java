@@ -120,12 +120,12 @@ public class BioActivity extends Activity {
     }
 
     private void setViewFormatMenuItemToText(MenuItem item) {
-        item.setTitle(R.string.action_item_text);
+        item.setTitle(R.string.bio_action_item_text);
         item.setIcon(R.drawable.ic_action_view_as_text);
     }
 
     private void setViewFormatMenuItemToWeb(MenuItem item) {
-        item.setTitle(R.string.action_item_web);
+        item.setTitle(R.string.bio_action_item_web);
         item.setIcon(R.drawable.ic_action_view_as_web);
     }
 

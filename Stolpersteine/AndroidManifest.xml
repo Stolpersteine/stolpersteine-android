@@ -32,7 +32,7 @@
         <activity
             android:name="com.option_u.stolpersteine.activities.map.MapActivity"
             android:launchMode="singleTop"
-            android:label="@string/app_name"
+            android:label="@string/map_label"
             android:configChanges="orientation|screenSize|keyboardHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

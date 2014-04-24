@@ -67,17 +67,17 @@ public class MapActivity extends Activity implements SynchronizationController.L
 	
 	private boolean isLocationOption() {
 	    MenuItem menuItem = menu.findItem(R.id.action_positioning);
-	    String locationTitle = getResources().getString(R.string.action_location);
+	    String locationTitle = getResources().getString(R.string.map_action_location);
 	    return menuItem.getTitle().equals(locationTitle);
 	}
 	
 	private void toggleOption() {
 	    int title, drawable;
 	    if (isLocationOption()) {
-            title = R.string.action_region;
+            title = R.string.map_action_region;
             drawable = R.drawable.ic_action_location_region;
 	    } else {
-            title = R.string.action_location;
+            title = R.string.map_action_location;
             drawable = R.drawable.ic_action_location_current;
 	    }
 

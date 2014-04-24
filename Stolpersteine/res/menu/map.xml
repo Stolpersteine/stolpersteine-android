@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item android:id="@+id/search"
-        android:title="@string/search_title"
+        android:title="@string/map_search_title"
         android:icon="@drawable/ic_action_search"
         android:showAsAction="collapseActionView|ifRoom"
         android:actionViewClass="android.widget.SearchView" />
@@ -11,6 +11,6 @@
         android:orderInCategory="100"
         android:showAsAction="always"
         android:icon="@drawable/ic_action_location_current"
-        android:title="@string/action_location"/>
+        android:title="@string/map_action_location"/>
 
 </menu>

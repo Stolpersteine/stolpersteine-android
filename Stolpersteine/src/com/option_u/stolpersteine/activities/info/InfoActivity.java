@@ -19,10 +19,12 @@ import com.option_u.stolpersteine.activities.bio.BioActivity;
 import com.option_u.stolpersteine.api.model.Stolperstein;
 
 public class InfoActivity extends Activity {
+    
+    private static final String EXTRA_NAME = "stolpersteine";
 
     public static Intent createIntent(Context context, ArrayList<Stolperstein> stolpersteine) {
         Intent intent = new Intent(context, InfoActivity.class);
-        intent.putParcelableArrayListExtra("stolpersteine", stolpersteine);
+        intent.putParcelableArrayListExtra(EXTRA_NAME, stolpersteine);
         
         return intent;
     }
@@ -35,14 +37,13 @@ public class InfoActivity extends Activity {
         setContentView(R.layout.activity_info);
         final ListView listView = (ListView) findViewById(R.id.list);
         Intent intent = getIntent();
-            ArrayList<Stolperstein> stolpersteine = intent.getParcelableArrayListExtra("stolpersteine");
-            Integer number_found = stolpersteine.size();
-            if (number_found > 1) {
-                actionBar.setTitle(Integer.toString(number_found) + " Stolpersteine");
-            } else {
-                actionBar.setTitle(Integer.toString(number_found) + " Stolperstein");
-            }
         if (intent.hasExtra(EXTRA_NAME)) {
+            ArrayList<Stolperstein> stolpersteine = intent.getParcelableArrayListExtra(EXTRA_NAME);
+            Integer numStolpersteine = stolpersteine.size();
+            int resourceID = (numStolpersteine > 1) ? R.string.app_stolpersteine_plural : R.string.app_stolpersteine_singular; 
+            String title = getResources().getString(resourceID);
+            actionBar.setTitle(Integer.toString(numStolpersteine) + " " + title);
+
             StolpersteinAdapter stolpersteinAdapter = new StolpersteinAdapter(this, stolpersteine);
             listView.setAdapter(stolpersteinAdapter);
             listView.setOnItemClickListener(new OnItemClickListener() {
