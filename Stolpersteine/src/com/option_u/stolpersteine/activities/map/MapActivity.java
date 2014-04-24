@@ -20,7 +20,7 @@ import com.google.maps.android.clustering.ClusterManager;
 import com.option_u.stolpersteine.R;
 import com.option_u.stolpersteine.activities.bio.BioActivity;
 import com.option_u.stolpersteine.activities.info.InfoActivity;
-import com.option_u.stolpersteine.api.StolpersteinNetworkService;
+import com.option_u.stolpersteine.api.StolpersteineNetworkService;
 import com.option_u.stolpersteine.api.SynchronizationController;
 import com.option_u.stolpersteine.api.model.Stolperstein;
 
@@ -58,7 +58,7 @@ public class MapActivity extends Activity implements SynchronizationController.L
 		}
 
 		// Start synchronizing data
-		StolpersteinNetworkService networkService = new StolpersteinNetworkService(this);
+		StolpersteineNetworkService networkService = new StolpersteineNetworkService(this);
 		networkService.getDefaultSearchData().setCity("Berlin");
 		synchronizationController = new SynchronizationController(networkService);
 		synchronizationController.setListener(this);

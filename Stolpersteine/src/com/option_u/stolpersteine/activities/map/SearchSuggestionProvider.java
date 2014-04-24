@@ -15,7 +15,7 @@ import android.os.Looper;
 import android.provider.BaseColumns;
 
 import com.option_u.stolpersteine.api.SearchData;
-import com.option_u.stolpersteine.api.StolpersteinNetworkService;
+import com.option_u.stolpersteine.api.StolpersteineNetworkService;
 import com.option_u.stolpersteine.api.RetrieveStolpersteineRequest.Callback;
 import com.option_u.stolpersteine.api.model.Person;
 import com.option_u.stolpersteine.api.model.Stolperstein;
@@ -45,7 +45,7 @@ public class SearchSuggestionProvider extends ContentProvider {
         URI_MATCHER.addURI(AUTHORITY, BASE_PATH, STOLPERSTEIN_ID);
     }
     
-    private StolpersteinNetworkService networkService;
+    private StolpersteineNetworkService networkService;
     private Object lastRequestTag;
     private Handler handler = new Handler(Looper.getMainLooper());
 
@@ -64,7 +64,7 @@ public class SearchSuggestionProvider extends ContentProvider {
         return true;
     }
     
-    public void setNetworkService(StolpersteinNetworkService networkService) {
+    public void setNetworkService(StolpersteineNetworkService networkService) {
     	this.networkService = networkService;
     }
     

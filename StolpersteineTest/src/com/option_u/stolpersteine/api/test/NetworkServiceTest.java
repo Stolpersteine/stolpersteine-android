@@ -8,17 +8,17 @@ import android.test.AndroidTestCase;
 
 import com.option_u.stolpersteine.api.RetrieveStolpersteineRequest;
 import com.option_u.stolpersteine.api.SearchData;
-import com.option_u.stolpersteine.api.StolpersteinNetworkService;
+import com.option_u.stolpersteine.api.StolpersteineNetworkService;
 import com.option_u.stolpersteine.api.model.Stolperstein;
 
 public class NetworkServiceTest extends AndroidTestCase {
 	private static int TIME_OUT = 5;
 	private CountDownLatch doneLatch;
-	private StolpersteinNetworkService networkService;
+	private StolpersteineNetworkService networkService;
 
 	public void setUp() {
 		doneLatch = new CountDownLatch(1);
-		networkService = new StolpersteinNetworkService(getContext());
+		networkService = new StolpersteineNetworkService(getContext());
 	}
 	
 	public void testRetrieveStolpersteine() throws InterruptedException {

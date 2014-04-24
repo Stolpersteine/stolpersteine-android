@@ -13,7 +13,7 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.OkResponseCache;
 import com.squareup.okhttp.Request;
 
-public class StolpersteinNetworkService {
+public class StolpersteineNetworkService {
     private static final String API_BASE_URL = "https://stolpersteine-api.eu01.aws.af.cm/v1";
 //  private static final String API_BASE_URL = "http://10.0.3.2:3000/v1";	// localhost genymotion
 //  private static final String API_BASE_URL = "http://localhost.:3000/v1";	// localhost genymotion via Charles
@@ -24,7 +24,7 @@ public class StolpersteinNetworkService {
     private OkHttpClient httpClient = new OkHttpClient();
     private String encodedClientCredentials;
     
-    public StolpersteinNetworkService(Context context) {
+    public StolpersteineNetworkService(Context context) {
         try {
             // Caching
             File cacheDir = new File(context.getCacheDir(), "http.cache");
