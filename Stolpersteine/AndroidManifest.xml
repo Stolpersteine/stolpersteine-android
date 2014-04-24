@@ -56,7 +56,7 @@
         </activity>
         <provider
             android:name="com.option_u.stolpersteine.activities.map.SearchSuggestionProvider"
-            android:authorities="com.dreiri.stolpersteine.suggestions"
+            android:authorities="com.option_u.stolpersteine.suggestions"
             android:exported="false"
             android:syncable="false" />
         <meta-data

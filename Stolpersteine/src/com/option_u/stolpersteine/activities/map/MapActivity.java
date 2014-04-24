@@ -108,8 +108,9 @@ public class MapActivity extends Activity implements SynchronizationController.L
 		SearchManager searchManager = (SearchManager)getSystemService(Context.SEARCH_SERVICE);
 		final SearchView searchView = (SearchView)menu.findItem(R.id.search).getActionView();
 		searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-		String contentProviderAuthority = "com.dreiri.stolpersteine.suggestions";
-		SearchSuggestionProvider searchSuggestionProvider = (SearchSuggestionProvider)getContentResolver().acquireContentProviderClient(contentProviderAuthority).getLocalContentProvider();
+		SearchSuggestionProvider searchSuggestionProvider = (SearchSuggestionProvider)getContentResolver()
+		        .acquireContentProviderClient(SearchSuggestionProvider.AUTHORITY)
+		        .getLocalContentProvider();
 		searchSuggestionProvider.setNetworkService(synchronizationController.getNetworkService());
 		searchView.setOnSuggestionListener(new OnSuggestionListener() {
             @Override

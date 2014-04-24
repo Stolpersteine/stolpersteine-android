@@ -23,7 +23,7 @@ import com.option_u.stolpersteine.api.model.Stolperstein;
 public class SearchSuggestionProvider extends ContentProvider {
     private static final long REQUEST_DELAY_MS = 300;
     
-    private static final String AUTHORITY = "com.dreiri.stolpersteine.suggestions";
+    public static final String AUTHORITY = "com.option_u.stolpersteine.suggestions";
     private static final String BASE_PATH = "search";
     
     private static final int STOLPERSTEINE = 110;
