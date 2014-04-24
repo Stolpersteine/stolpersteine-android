@@ -61,7 +61,7 @@
             android:syncable="false" />
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY" 
-            android:value="AIzaSyCFdwcJfjb4aRiZ_sXtQ1ucvsae7H62UMk" />
+            android:value="AIzaSyDQ4qa_stzNNyn-ecZIbijiOGSzNidbWzE" />
     </application>
 
 </manifest>
