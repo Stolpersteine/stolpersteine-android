@@ -59,11 +59,6 @@ public class BioActivity extends Activity {
 
         preferenceHelper = new PreferenceHelper(this);
         viewFormat = preferenceHelper.readViewFormat();
-        if (viewFormat == ViewFormat.WEB) {
-            loadUrlInBrowser(browser, bioUrl);
-        } else {
-            loadContentInBrowser(browser, bioUrl, CSS_QUERY);
-        }
     }
 
     @Override
@@ -71,9 +66,9 @@ public class BioActivity extends Activity {
         getMenuInflater().inflate(R.menu.bio, menu);
         MenuItem itemViewFormat = menu.getItem(0);
         if (viewFormat == ViewFormat.WEB) {
-            setViewFormatMenuItemToText(itemViewFormat);
+            switchToAndLoadInWebView(itemViewFormat);
         } else {
-            setViewFormatMenuItemToWeb(itemViewFormat);
+            switchToAndLoadInTextView(itemViewFormat);
         }
         return true;
     }
