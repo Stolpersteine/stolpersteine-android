@@ -6,6 +6,7 @@ import java.util.List;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Menu;
@@ -89,15 +90,17 @@ public class MapActivity extends Activity implements SynchronizationController.L
     @Override
     protected void onStart() {
         super.onStart();
-
-        locationService.start();
+        if (locationService != null) {
+            locationService.start();
+        }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-
-        locationService.stop();
+        if (locationService != null) {
+            locationService.stop();
+        }
     }
 
     @Override
@@ -134,16 +137,17 @@ public class MapActivity extends Activity implements SynchronizationController.L
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int itemId = item.getItemId();
-        if (itemId == R.id.action_positioning) {
-            if (isLocationOption()) {
-                locationService.zoomToCurrentLocation(16, true);
-            } else {
-                locationService.zoomToRegion(true);
+        if (locationService != null) {
+            int itemId = item.getItemId();
+            if (itemId == R.id.action_positioning) {
+                if (isLocationOption()) {
+                    locationService.zoomToCurrentLocation(16, true);
+                } else {
+                    locationService.zoomToRegion(true);
+                }
+                toggleOption();
             }
-            toggleOption();
         }
-
         return true;
     }
 
@@ -173,6 +177,16 @@ public class MapActivity extends Activity implements SynchronizationController.L
         if (clusterManager != null && stolpersteine != null) {
             clusterManager.addItems(stolpersteine);
             clusterManager.cluster();
+        }
+    }
+
+    @Override
+    public void startActivityForResult(Intent intent, int requestCode) {
+        // prevent crash when trying to install Google Play Services by tapping the OK button
+        try {
+            super.startActivityForResult(intent, requestCode);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
