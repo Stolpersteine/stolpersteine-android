@@ -10,26 +10,25 @@ import com.option_u.stolpersteine.activities.bio.BioActivity.ViewFormat;
 public class PreferenceHelper {
 
     private SharedPreferences prefs;
-    private Editor editor;
 
     public PreferenceHelper(Context context) {
         this.prefs = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     private void modifyValues(Callback callback) {
-        this.editor = prefs.edit();
-        callback.execute();
+        Editor editor = prefs.edit();
+        callback.execute(editor);
         editor.apply();
     }
 
     private interface Callback {
-        void execute();
+        void execute(Editor editor);
     }
 
     public void saveViewFormat(final ViewFormat viewFormat) {
         modifyValues(new Callback() {
             @Override
-            public void execute() {
+            public void execute(Editor editor) {
                 editor.putString("ViewFormat", viewFormat.toString());
             }
         });
