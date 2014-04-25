@@ -37,27 +37,7 @@ public class MapActivity extends Activity implements SynchronizationController.L
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-
-        // Set up map and clustering
-        map = ((MapFragment) getFragmentManager().findFragmentById(R.id.fragmentMap)).getMap();
-        if (map != null) {
-            map.getUiSettings().setZoomControlsEnabled(false);
-            map.getUiSettings().setZoomGesturesEnabled(true);
-
-            // Clustering
-            clusterManager = new ClusterManager<Stolperstein>(this, map);
-            // clusterManager.setAlgorithm(new GridBasedAlgorithm<Stolperstein>());
-            clusterManager.setRenderer(new ClusterRenderer(this, map, clusterManager));
-            clusterManager.setOnClusterClickListener(this);
-            clusterManager.setOnClusterItemClickListener(this);
-            map.setOnCameraChangeListener(clusterManager);
-            map.setOnMarkerClickListener(clusterManager);
-
-            // User location
-            locationService = new LocationService(this, map, R.array.berlin);
-            locationService.zoomToRegion(false);
-        }
-
+        setupMapIfNecessary();
         // Start synchronizing data
         StolpersteineNetworkService networkService = new StolpersteineNetworkService(this);
         networkService.getDefaultSearchData().setCity("Berlin");
@@ -178,6 +158,34 @@ public class MapActivity extends Activity implements SynchronizationController.L
             clusterManager.addItems(stolpersteine);
             clusterManager.cluster();
         }
+    }
+
+    private void setupMapIfNecessary() {
+        if (map == null) {
+            map = ((MapFragment) getFragmentManager().findFragmentById(R.id.fragmentMap)).getMap();
+            if (map != null) {
+                setupMap();
+            }
+        }
+    }
+
+    private void setupMap() {
+        map.getUiSettings().setZoomControlsEnabled(false);
+        map.getUiSettings().setZoomGesturesEnabled(true);
+        // Clustering
+        clusterManager = new ClusterManager<Stolperstein>(this, map);
+        // clusterManager.setAlgorithm(new GridBasedAlgorithm<Stolperstein>());
+        clusterManager.setRenderer(new ClusterRenderer(this, map, clusterManager));
+        clusterManager.setOnClusterClickListener(this);
+        clusterManager.setOnClusterItemClickListener(this);
+        map.setOnCameraChangeListener(clusterManager);
+        map.setOnMarkerClickListener(clusterManager);
+        setupLocationService();
+    }
+
+    private void setupLocationService() {
+        locationService = new LocationService(this, map, R.array.berlin);
+        locationService.zoomToRegion(false);
     }
 
     @Override
