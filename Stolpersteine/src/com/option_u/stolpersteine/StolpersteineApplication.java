@@ -1,13 +1,13 @@
 package com.option_u.stolpersteine;
 
+import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.HashMap;
 
 import android.app.Application;
-import android.util.Log;
 
+import com.google.android.gms.analytics.ExceptionReporter;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Logger.LogLevel;
 import com.google.android.gms.analytics.Tracker;
 import com.option_u.stolpersteine.activities.bio.BioActivity;
 import com.option_u.stolpersteine.activities.info.InfoActivity;
@@ -25,6 +25,9 @@ public class StolpersteineApplication extends Application {
         GoogleAnalytics.getInstance(this).setLocalDispatchPeriod(30);
         tracker = GoogleAnalytics.getInstance(this).newTracker("UA-38166041-3");
         tracker.setAnonymizeIp(false);
+        
+        UncaughtExceptionHandler handler = new ExceptionReporter(tracker, Thread.getDefaultUncaughtExceptionHandler(), this);
+        Thread.setDefaultUncaughtExceptionHandler(handler);
         
         classToViewNameMapping = new HashMap<String, String>();
         classToViewNameMapping.put(MapActivity.class.getName(), "Map");
