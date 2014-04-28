@@ -11,6 +11,7 @@ import android.webkit.WebView;
 import android.widget.ProgressBar;
 
 import com.option_u.stolpersteine.R;
+import com.option_u.stolpersteine.StolpersteineApplication;
 import com.option_u.stolpersteine.helpers.PreferenceHelper;
 
 public class BioActivity extends Activity {
@@ -59,6 +60,14 @@ public class BioActivity extends Activity {
 
         preferenceHelper = new PreferenceHelper(this);
         viewFormat = preferenceHelper.readViewFormat();
+    }
+    
+    @Override
+    protected void onResume() {
+        super.onResume();
+        
+        StolpersteineApplication stolpersteineApplication = (StolpersteineApplication)getApplication();
+        stolpersteineApplication.trackView(this.getClass());
     }
 
     @Override

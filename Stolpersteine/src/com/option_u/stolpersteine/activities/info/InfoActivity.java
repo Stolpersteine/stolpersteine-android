@@ -15,6 +15,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.option_u.stolpersteine.R;
+import com.option_u.stolpersteine.StolpersteineApplication;
 import com.option_u.stolpersteine.activities.bio.BioActivity;
 import com.option_u.stolpersteine.api.model.Stolperstein;
 
@@ -56,6 +57,14 @@ public class InfoActivity extends Activity {
                 }
             });
         }
+    }
+    
+    @Override
+    protected void onResume() {
+        super.onResume();
+        
+        StolpersteineApplication stolpersteineApplication = (StolpersteineApplication)getApplication();
+        stolpersteineApplication.trackView(this.getClass());
     }
     
     @Override
