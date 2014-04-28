@@ -20,8 +20,8 @@ import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 import com.option_u.stolpersteine.R;
 import com.option_u.stolpersteine.StolpersteineApplication;
-import com.option_u.stolpersteine.activities.bio.BioActivity;
-import com.option_u.stolpersteine.activities.info.InfoActivity;
+import com.option_u.stolpersteine.activities.cards.CardsActivity;
+import com.option_u.stolpersteine.activities.description.DescriptionActivity;
 import com.option_u.stolpersteine.api.StolpersteineNetworkService;
 import com.option_u.stolpersteine.api.SynchronizationController;
 import com.option_u.stolpersteine.api.model.Stolperstein;
@@ -117,7 +117,7 @@ public class MapActivity extends Activity implements SynchronizationController.L
                 Cursor cursor = searchView.getSuggestionsAdapter().getCursor();
                 cursor.moveToPosition(position);
                 String bioUrl = cursor.getString(cursor.getColumnIndex(SearchSuggestionProvider.SUGGEST_COLUMN_URL));
-                startActivity(BioActivity.createIntent(MapActivity.this, bioUrl));
+                startActivity(DescriptionActivity.createIntent(MapActivity.this, bioUrl));
                 return true;
             }
         });
@@ -145,7 +145,7 @@ public class MapActivity extends Activity implements SynchronizationController.L
     public boolean onClusterClick(Cluster<Stolperstein> cluster) {
         ArrayList<Stolperstein> stolpersteine = new ArrayList<Stolperstein>(cluster.getItems());
         if (stolpersteine.size() > 1) {
-            startActivity(InfoActivity.createIntent(this, stolpersteine));
+            startActivity(CardsActivity.createIntent(this, stolpersteine));
         } else {
             Stolperstein stolperstein = stolpersteine.get(0);
             onClusterItemClick(stolperstein);
@@ -157,7 +157,7 @@ public class MapActivity extends Activity implements SynchronizationController.L
     @Override
     public boolean onClusterItemClick(Stolperstein stolperstein) {
         String bioUrl = stolperstein.getPerson().getBiographyUri().toString();
-        startActivity(BioActivity.createIntent(this, bioUrl));
+        startActivity(DescriptionActivity.createIntent(this, bioUrl));
 
         return false;
     }

@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 
-import com.option_u.stolpersteine.activities.bio.BioActivity.ViewFormat;
+import com.option_u.stolpersteine.activities.description.DescriptionActivity.ViewFormat;
 
 public class PreferenceHelper {
 

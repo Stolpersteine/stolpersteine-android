@@ -42,12 +42,12 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity
-            android:name="com.option_u.stolpersteine.activities.info.InfoActivity"
+            android:name="com.option_u.stolpersteine.activities.cards.CardsActivity"
             android:label="@string/info_label"
             android:configChanges="orientation|screenSize|keyboardHidden" >
         </activity>
         <activity
-            android:name="com.option_u.stolpersteine.activities.bio.BioActivity"
+            android:name="com.option_u.stolpersteine.activities.description.DescriptionActivity"
             android:label="@string/bio_label"
             android:configChanges="orientation|screenSize|keyboardHidden" >
         </activity>

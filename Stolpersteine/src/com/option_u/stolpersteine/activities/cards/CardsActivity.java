@@ -1,4 +1,4 @@
-package com.option_u.stolpersteine.activities.info;
+package com.option_u.stolpersteine.activities.cards;
 
 import java.util.ArrayList;
 
@@ -16,15 +16,15 @@ import android.widget.ListView;
 
 import com.option_u.stolpersteine.R;
 import com.option_u.stolpersteine.StolpersteineApplication;
-import com.option_u.stolpersteine.activities.bio.BioActivity;
+import com.option_u.stolpersteine.activities.description.DescriptionActivity;
 import com.option_u.stolpersteine.api.model.Stolperstein;
 
-public class InfoActivity extends Activity {
+public class CardsActivity extends Activity {
     
     private static final String EXTRA_NAME = "stolpersteine";
 
     public static Intent createIntent(Context context, ArrayList<Stolperstein> stolpersteine) {
-        Intent intent = new Intent(context, InfoActivity.class);
+        Intent intent = new Intent(context, CardsActivity.class);
         intent.putParcelableArrayListExtra(EXTRA_NAME, stolpersteine);
         
         return intent;
@@ -45,7 +45,7 @@ public class InfoActivity extends Activity {
             String title = getResources().getString(resourceID);
             actionBar.setTitle(Integer.toString(numStolpersteine) + " " + title);
 
-            StolpersteinAdapter stolpersteinAdapter = new StolpersteinAdapter(this, stolpersteine);
+            StolpersteineAdapter stolpersteinAdapter = new StolpersteineAdapter(this, stolpersteine);
             listView.setAdapter(stolpersteinAdapter);
             listView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -53,7 +53,7 @@ public class InfoActivity extends Activity {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Stolperstein stolperstein = (Stolperstein)listView.getItemAtPosition(position);
                     String bioUrl = stolperstein.getPerson().getBiographyUri().toString();
-                    startActivity(BioActivity.createIntent(InfoActivity.this, bioUrl));
+                    startActivity(DescriptionActivity.createIntent(CardsActivity.this, bioUrl));
                 }
             });
         }

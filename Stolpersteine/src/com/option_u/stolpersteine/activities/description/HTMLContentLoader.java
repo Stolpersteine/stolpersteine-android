@@ -1,4 +1,4 @@
-package com.option_u.stolpersteine.activities.bio;
+package com.option_u.stolpersteine.activities.description;
 
 import java.io.IOException;
 import java.net.MalformedURLException;

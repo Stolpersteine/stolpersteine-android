@@ -1,4 +1,4 @@
-package com.option_u.stolpersteine.activities.info;
+package com.option_u.stolpersteine.activities.cards;
 
 import java.util.ArrayList;
 
@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.option_u.stolpersteine.R;
 import com.option_u.stolpersteine.api.model.Stolperstein;
 
-public class StolpersteinAdapter extends BaseAdapter {
+public class StolpersteineAdapter extends BaseAdapter {
     
     private LayoutInflater inflater;
     private ArrayList<Stolperstein> stolpersteine;
@@ -23,7 +23,7 @@ public class StolpersteinAdapter extends BaseAdapter {
         TextView textViewAddress;
     }
     
-    public StolpersteinAdapter(Context context, ArrayList<Stolperstein> stolpersteine) {
+    public StolpersteineAdapter(Context context, ArrayList<Stolperstein> stolpersteine) {
         this.inflater = LayoutInflater.from(context);
         this.stolpersteine = stolpersteine;
     }

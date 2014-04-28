@@ -1,4 +1,4 @@
-package com.option_u.stolpersteine.activities.bio;
+package com.option_u.stolpersteine.activities.description;
 
 import android.app.Activity;
 import android.content.Context;
@@ -14,7 +14,7 @@ import com.option_u.stolpersteine.R;
 import com.option_u.stolpersteine.StolpersteineApplication;
 import com.option_u.stolpersteine.helpers.PreferenceHelper;
 
-public class BioActivity extends Activity {
+public class DescriptionActivity extends Activity {
 
     private static final String EXTRA_NAME = "url";
 
@@ -38,7 +38,7 @@ public class BioActivity extends Activity {
     private static final String CSS_QUERY = "div#biografie_seite";
 
     public static Intent createIntent(Context context, String url) {
-        Intent intent = new Intent(context, BioActivity.class);
+        Intent intent = new Intent(context, DescriptionActivity.class);
         intent.putExtra(EXTRA_NAME, url);
 
         return intent;
