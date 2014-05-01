@@ -21,17 +21,8 @@ import com.option_u.stolpersteine.api.model.Stolperstein;
 
 public class CardsActivity extends Activity {
 
-    private static final String EXTRA_NAME = "stolpersteine";
-
-    public static Intent createIntent(Context context, ArrayList<Stolperstein> stolpersteine) {
-        Intent intent = new Intent(context, CardsActivity.class);
-        intent.putParcelableArrayListExtra(EXTRA_NAME, stolpersteine);
-        return intent;
-    }
-
     public static Intent createIntent(Context context) {
-        Intent intent = new Intent(context, CardsActivity.class);
-        return intent;
+        return new Intent(context, CardsActivity.class);
     }
 
     @Override
@@ -42,15 +33,8 @@ public class CardsActivity extends Activity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_info);
         ListView listView = (ListView) findViewById(R.id.list);
-        Intent intent = getIntent();
-        ArrayList<Stolperstein> stolpersteine;
         StolpersteineApplication stolpersteineApplication = (StolpersteineApplication) getApplication();
-        if (intent.hasExtra(EXTRA_NAME)) {
-            stolpersteine = intent.getParcelableArrayListExtra(EXTRA_NAME);
-            if (stolpersteine != null) {
-                showStolpersteine(stolpersteine, actionBar, listView);
-            }
-        } else if (stolpersteineApplication.hasStolperstein()) {
+        if (stolpersteineApplication.hasStolperstein()) {
             showStolpersteine(stolpersteineApplication.getStolpersteine(), actionBar, listView);
             stolpersteineApplication.clearStolpersteine();
         }
