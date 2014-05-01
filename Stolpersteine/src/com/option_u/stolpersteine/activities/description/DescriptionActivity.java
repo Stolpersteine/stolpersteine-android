@@ -35,7 +35,7 @@ public class DescriptionActivity extends Activity {
     private WebView browser;
     private WebSettings settings;
     private String bioUrl;
-    private static final String CSS_QUERY = "div#biografie_seite";
+    private static final String CSS_QUERY_STOLPERSTEINE_BERLIN = "div#biografie_seite";
 
     public static Intent createIntent(Context context, String url) {
         Intent intent = new Intent(context, DescriptionActivity.class);
@@ -107,7 +107,7 @@ public class DescriptionActivity extends Activity {
         setViewFormatMenuItemToWeb(selectedItem);
         settings.setLoadWithOverviewMode(false);
         settings.setUseWideViewPort(false);
-        loadContentInBrowser(browser, bioUrl, CSS_QUERY);
+        loadContentInBrowser(browser, bioUrl, CSS_QUERY_STOLPERSTEINE_BERLIN);
     }
 
     private void switchToAndLoadInWebView(MenuItem selectedItem) {
@@ -130,14 +130,14 @@ public class DescriptionActivity extends Activity {
     }
 
     private void openUrlBasedOnDomain(MenuItem itemViewFormat) {
-        if (bioUrl.contains("wikipedia")) {
-            // load in web only, disable item option
+        if (bioUrl.contains("stolpersteine-berlin")) {
+            // load in whatever view provided by ViewFormat
+            loadViewBasedOnViewFormat(itemViewFormat);
+        } else {
+            // load in web only, and disable item option for unknown domain sources
+            // e.g.: wikipedia.org
             loadUrlInBrowser(browser, bioUrl);
             disableMenuItem(itemViewFormat);
-        } else {
-            // load in whatever provided by ViewFormat
-            // e.g.: www.stolpersteine-berlin.de
-            loadViewBasedOnViewFormat(itemViewFormat);
         }
     }
 
