@@ -21,7 +21,10 @@ import com.option_u.stolpersteine.api.model.Stolperstein;
 
 public class CardsActivity extends Activity {
 
-    public static Intent createIntent(Context context) {
+    public static Intent createIntent(Context context, ArrayList<Stolperstein> stolpersteine) {
+        Activity activity = (Activity) context;
+        StolpersteineApplication stolpersteineApplication = (StolpersteineApplication) activity.getApplication();
+        stolpersteineApplication.setStolpersteine(stolpersteine);
         return new Intent(context, CardsActivity.class);
     }
 
