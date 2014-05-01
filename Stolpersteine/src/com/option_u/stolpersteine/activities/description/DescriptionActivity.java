@@ -40,14 +40,14 @@ public class DescriptionActivity extends Activity {
     private static final String CSS_QUERY_STOLPERSTEINE_BERLIN = "div#biografie_seite";
     private static final String PREFIX_GERMAN = "http://www.stolpersteine-berlin.de/de";
     private static final String PREFIX_ENGLISH = "http://www.stolpersteine-berlin.de/en";
-    
+
     public static Intent createIntent(Context context, String url) {
         // Use English web site for Berlin biographies if not using German
         Locale locale = context.getResources().getConfiguration().locale;
         if (!locale.getLanguage().equals(Locale.GERMAN.getLanguage()) && url.startsWith(PREFIX_GERMAN)) {
             url = url.replace(PREFIX_GERMAN, PREFIX_ENGLISH);
         }
-        
+
         Intent intent = new Intent(context, DescriptionActivity.class);
         intent.putExtra(EXTRA_NAME, url);
 
@@ -57,7 +57,7 @@ public class DescriptionActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         getActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_bio);
         Intent intent = getIntent();
