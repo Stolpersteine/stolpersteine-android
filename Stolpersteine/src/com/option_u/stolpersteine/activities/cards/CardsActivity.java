@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -21,11 +20,10 @@ import com.option_u.stolpersteine.api.model.Stolperstein;
 
 public class CardsActivity extends Activity {
 
-    public static Intent createIntent(Context context, ArrayList<Stolperstein> stolpersteine) {
-        Activity activity = (Activity) context;
+    public static Intent createIntent(Activity activity, ArrayList<Stolperstein> stolpersteine) {
         StolpersteineApplication stolpersteineApplication = (StolpersteineApplication) activity.getApplication();
         stolpersteineApplication.setStolpersteine(stolpersteine);
-        return new Intent(context, CardsActivity.class);
+        return new Intent(activity, CardsActivity.class);
     }
 
     @Override
