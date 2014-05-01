@@ -51,7 +51,6 @@ public class MapActivity extends Activity implements SynchronizationController.L
     @Override
     protected void onResume() {
         super.onResume();
-
         StolpersteineApplication stolpersteineApplication = (StolpersteineApplication) getApplication();
         stolpersteineApplication.trackView(this.getClass());
     }
@@ -144,7 +143,11 @@ public class MapActivity extends Activity implements SynchronizationController.L
     @Override
     public boolean onClusterClick(Cluster<Stolperstein> cluster) {
         ArrayList<Stolperstein> stolpersteine = new ArrayList<Stolperstein>(cluster.getItems());
-        if (stolpersteine.size() > 1) {
+        if (stolpersteine.size() > 250) {
+            StolpersteineApplication stolpersteineApplication = (StolpersteineApplication) getApplication();
+            stolpersteineApplication.setStolpersteine(stolpersteine);
+            startActivity(CardsActivity.createIntent(this));
+        } else if (stolpersteine.size() > 1) {
             startActivity(CardsActivity.createIntent(this, stolpersteine));
         } else {
             Stolperstein stolperstein = stolpersteine.get(0);

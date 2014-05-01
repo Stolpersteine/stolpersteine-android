@@ -26,7 +26,11 @@ public class CardsActivity extends Activity {
     public static Intent createIntent(Context context, ArrayList<Stolperstein> stolpersteine) {
         Intent intent = new Intent(context, CardsActivity.class);
         intent.putParcelableArrayListExtra(EXTRA_NAME, stolpersteine);
+        return intent;
+    }
 
+    public static Intent createIntent(Context context) {
+        Intent intent = new Intent(context, CardsActivity.class);
         return intent;
     }
 
@@ -37,33 +41,24 @@ public class CardsActivity extends Activity {
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_info);
-        final ListView listView = (ListView) findViewById(R.id.list);
+        ListView listView = (ListView) findViewById(R.id.list);
         Intent intent = getIntent();
+        ArrayList<Stolperstein> stolpersteine;
+        StolpersteineApplication stolpersteineApplication = (StolpersteineApplication) getApplication();
         if (intent.hasExtra(EXTRA_NAME)) {
-            ArrayList<Stolperstein> stolpersteine = intent.getParcelableArrayListExtra(EXTRA_NAME);
-            Integer numStolpersteine = stolpersteine.size();
-            int resourceID = (numStolpersteine > 1) ? R.string.app_stolpersteine_plural : R.string.app_stolpersteine_singular;
-            String title = getResources().getString(resourceID);
-            actionBar.setTitle(Integer.toString(numStolpersteine) + " " + title);
-
-            StolpersteineAdapter stolpersteinAdapter = new StolpersteineAdapter(this, stolpersteine);
-            listView.setAdapter(stolpersteinAdapter);
-            listView.setOnItemClickListener(new OnItemClickListener() {
-
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Stolperstein stolperstein = (Stolperstein) listView.getItemAtPosition(position);
-                    String bioUrl = stolperstein.getPerson().getBiographyUri().toString();
-                    startActivity(DescriptionActivity.createIntent(CardsActivity.this, bioUrl));
-                }
-            });
+            stolpersteine = intent.getParcelableArrayListExtra(EXTRA_NAME);
+            if (stolpersteine != null) {
+                showStolpersteine(stolpersteine, actionBar, listView);
+            }
+        } else if (stolpersteineApplication.hasStolperstein()) {
+            showStolpersteine(stolpersteineApplication.getStolpersteine(), actionBar, listView);
+            stolpersteineApplication.clearStolpersteine();
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
         StolpersteineApplication stolpersteineApplication = (StolpersteineApplication) getApplication();
         stolpersteineApplication.trackView(this.getClass());
     }
@@ -81,6 +76,25 @@ public class CardsActivity extends Activity {
             finish();
         }
         return true;
+    }
+
+    private void showStolpersteine(ArrayList<Stolperstein> stolpersteine, ActionBar actionBar, final ListView listView) {
+        Integer numStolpersteine = stolpersteine.size();
+        int resourceID = (numStolpersteine > 1) ? R.string.app_stolpersteine_plural : R.string.app_stolpersteine_singular;
+        String title = getResources().getString(resourceID);
+        actionBar.setTitle(Integer.toString(numStolpersteine) + " " + title);
+
+        StolpersteineAdapter stolpersteinAdapter = new StolpersteineAdapter(this, stolpersteine);
+        listView.setAdapter(stolpersteinAdapter);
+        listView.setOnItemClickListener(new OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Stolperstein stolperstein = (Stolperstein) listView.getItemAtPosition(position);
+                String bioUrl = stolperstein.getPerson().getBiographyUri().toString();
+                startActivity(DescriptionActivity.createIntent(CardsActivity.this, bioUrl));
+            }
+        });
     }
 
 }

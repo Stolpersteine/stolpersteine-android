@@ -1,6 +1,7 @@
 package com.option_u.stolpersteine;
 
 import java.lang.Thread.UncaughtExceptionHandler;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.app.Application;
@@ -12,10 +13,12 @@ import com.google.android.gms.analytics.Tracker;
 import com.option_u.stolpersteine.activities.cards.CardsActivity;
 import com.option_u.stolpersteine.activities.description.DescriptionActivity;
 import com.option_u.stolpersteine.activities.map.MapActivity;
+import com.option_u.stolpersteine.api.model.Stolperstein;
 
 public class StolpersteineApplication extends Application {
     private Tracker tracker;
     private HashMap<String, String> classToViewNameMapping;
+    private ArrayList<Stolperstein> stolpersteine;
 
     @Override
     public void onCreate() {
@@ -50,5 +53,21 @@ public class StolpersteineApplication extends Application {
         tracker.setScreenName(screenName);
         tracker.send(new HitBuilders.AppViewBuilder().build());
         tracker.setScreenName(null);
+    }
+
+    public ArrayList<Stolperstein> getStolpersteine() {
+        return stolpersteine;
+    }
+
+    public void setStolpersteine(ArrayList<Stolperstein> stolpersteine) {
+        this.stolpersteine = stolpersteine;
+    }
+
+    public void clearStolpersteine() {
+        setStolpersteine(null);
+    }
+    
+    public boolean hasStolperstein() {
+        return stolpersteine != null && !stolpersteine.isEmpty();
     }
 }
