@@ -8,14 +8,14 @@ import android.os.Parcelable;
 import android.util.Log;
 
 public class Person implements Parcelable {
-	
+
     private String firstName;
     private String lastName;
     private URI biographyUri;
-    
+
     public Person() {
     }
-    
+
     public Person(Parcel orig) {
         readFromParcel(orig);
     }
@@ -43,7 +43,7 @@ public class Person implements Parcelable {
     public void setBiography(URI biography) {
         this.biographyUri = biography;
     }
-    
+
     public String getNameAsString() {
         return firstName + " " + lastName;
     }
@@ -59,18 +59,18 @@ public class Person implements Parcelable {
         dest.writeString(lastName);
         dest.writeString(biographyUri.toString());
     }
-    
+
     private void readFromParcel(Parcel orig) {
         firstName = orig.readString();
         lastName = orig.readString();
-        
+
         try {
-        	this.biographyUri = new URI(orig.readString());
+            this.biographyUri = new URI(orig.readString());
         } catch (URISyntaxException e) {
-        	Log.e("Stolpersteine", "Failed to read biography URI from parcel", e);
+            Log.e("Stolpersteine", "Failed to read biography URI from parcel", e);
         }
     }
-    
+
     public static final Parcelable.Creator<Person> CREATOR = new Parcelable.Creator<Person>() {
 
         @Override

@@ -11,7 +11,7 @@ public class Source implements Parcelable {
 
     private String name;
     private URI uri;
-    
+
     public Source() {
     }
 
@@ -34,7 +34,7 @@ public class Source implements Parcelable {
     public void setUri(URI uri) {
         this.uri = uri;
     }
-    
+
     @Override
     public int describeContents() {
         return 0;
@@ -45,17 +45,17 @@ public class Source implements Parcelable {
         dest.writeString(name);
         dest.writeString(uri.toString());
     }
-    
+
     private void readFromParcel(Parcel orig) {
         name = orig.readString();
-        
+
         try {
             uri = new URI(orig.readString());
         } catch (URISyntaxException e) {
             Log.e("Stolpersteine", "Failed to read source URI from parcel", e);
         }
     }
-    
+
     public static final Parcelable.Creator<Source> CREATOR = new Parcelable.Creator<Source>() {
 
         @Override

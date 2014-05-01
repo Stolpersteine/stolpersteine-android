@@ -16,11 +16,11 @@ import android.webkit.WebView;
 public class HTMLContentLoader {
 
     private WebView browser;
-    
+
     public HTMLContentLoader(WebView browser) {
         this.browser = browser;
     }
-    
+
     public void loadContent(final Activity activity, final String url, final String cssQuery) {
         new Thread(new Runnable() {
             @Override
@@ -40,25 +40,25 @@ public class HTMLContentLoader {
             }
         }).start();
     }
-    
+
     private class DataLoaderRunnable implements Runnable {
-        
+
         private WebView browser;
         private String data;
         private String mimeType = "text/html; charset=UTF-8";
-        
+
         public DataLoaderRunnable(WebView browser, String data) {
             this.browser = browser;
             this.data = data;
         }
-        
+
         @Override
         public void run() {
             browser.loadData(data, mimeType, null);
         }
-        
+
     }
-    
+
     private String removeHTMLTagHyperlink(String content) {
         Pattern pattern = Pattern.compile("<a\\s.+?>(.+?)</a>");
         Matcher matcher = pattern.matcher(content);

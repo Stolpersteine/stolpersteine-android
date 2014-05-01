@@ -13,7 +13,7 @@ public class ClusterRenderer extends DefaultClusterRenderer<Stolperstein> {
     public ClusterRenderer(Context context, GoogleMap map, ClusterManager<Stolperstein> clusterManager) {
         super(context, map, clusterManager);
     }
-    
+
     @Override
     protected boolean shouldRenderAsCluster(Cluster<Stolperstein> cluster) {
         return true;

@@ -13,16 +13,16 @@ import com.option_u.stolpersteine.R;
 import com.option_u.stolpersteine.api.model.Stolperstein;
 
 public class StolpersteineAdapter extends BaseAdapter {
-    
+
     private LayoutInflater inflater;
     private ArrayList<Stolperstein> stolpersteine;
     private ViewHolder viewHolder;
-    
+
     private class ViewHolder {
         TextView textViewName;
         TextView textViewAddress;
     }
-    
+
     public StolpersteineAdapter(Context context, ArrayList<Stolperstein> stolpersteine) {
         this.inflater = LayoutInflater.from(context);
         this.stolpersteine = stolpersteine;

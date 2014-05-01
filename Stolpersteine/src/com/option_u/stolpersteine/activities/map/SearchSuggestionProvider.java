@@ -22,29 +22,29 @@ import com.option_u.stolpersteine.api.model.Stolperstein;
 
 public class SearchSuggestionProvider extends ContentProvider {
     private static final long REQUEST_DELAY_MS = 300;
-    
+
     public static final String AUTHORITY = "com.option_u.stolpersteine.suggestions";
     private static final String BASE_PATH = "search";
-    
+
     private static final int STOLPERSTEINE = 110;
     private static final int STOLPERSTEIN_ID = 100;
     private static final int LIST_SIZE = 10;
     private static final int SEARCH_SUGGEST = 1;
     public static final String SUGGEST_COLUMN_URL = "url";
     private static final String[] SEARCH_SUGGEST_COLUMNS = {
-        BaseColumns._ID,
-        SearchManager.SUGGEST_COLUMN_TEXT_1,
-        SearchManager.SUGGEST_COLUMN_TEXT_2,
-        SUGGEST_COLUMN_URL
+            BaseColumns._ID,
+            SearchManager.SUGGEST_COLUMN_TEXT_1,
+            SearchManager.SUGGEST_COLUMN_TEXT_2,
+            SUGGEST_COLUMN_URL
     };
     private static final UriMatcher URI_MATCHER;
-    
+
     static {
         URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
         URI_MATCHER.addURI(AUTHORITY, BASE_PATH, STOLPERSTEINE);
         URI_MATCHER.addURI(AUTHORITY, BASE_PATH, STOLPERSTEIN_ID);
     }
-    
+
     private StolpersteineNetworkService networkService;
     private Object lastRequestTag;
     private Handler handler = new Handler(Looper.getMainLooper());
@@ -52,10 +52,10 @@ public class SearchSuggestionProvider extends ContentProvider {
     @Override
     public String getType(Uri uri) {
         switch (URI_MATCHER.match(uri)) {
-            case SEARCH_SUGGEST:
-                return SearchManager.SUGGEST_MIME_TYPE;
-            default:
-                throw new IllegalArgumentException("Unknown URI: " + uri);
+        case SEARCH_SUGGEST:
+            return SearchManager.SUGGEST_MIME_TYPE;
+        default:
+            throw new IllegalArgumentException("Unknown URI: " + uri);
         }
     }
 
@@ -63,31 +63,31 @@ public class SearchSuggestionProvider extends ContentProvider {
     public boolean onCreate() {
         return true;
     }
-    
+
     public void setNetworkService(StolpersteineNetworkService networkService) {
-    	this.networkService = networkService;
+        this.networkService = networkService;
     }
-    
+
     @Override
     public Cursor query(final Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         // New empty cursor that can be notified
-    	final MatrixCursor cursor = new MatrixCursor(SEARCH_SUGGEST_COLUMNS);
-    	final ContentResolver contentResolver = getContext().getContentResolver();
+        final MatrixCursor cursor = new MatrixCursor(SEARCH_SUGGEST_COLUMNS);
+        final ContentResolver contentResolver = getContext().getContentResolver();
         cursor.setNotificationUri(contentResolver, uri);
-        
+
         // Fire network request with a delay so it can be canceled when user types quickly
         final String keyword = selectionArgs[0];
         handler.removeCallbacksAndMessages(null);
         handler.postDelayed(new Runnable() {
-          @Override
-          public void run() {
-              request(cursor, contentResolver, uri, keyword);
-          }
+            @Override
+            public void run() {
+                request(cursor, contentResolver, uri, keyword);
+            }
         }, REQUEST_DELAY_MS);
-    	
+
         return cursor;
     }
-    
+
     private void request(final MatrixCursor cursor, final ContentResolver contentResolver, final Uri uri, final String keyword) {
         // Cancel previous request
         networkService.cancelRequest(lastRequestTag);
@@ -104,8 +104,9 @@ public class SearchSuggestionProvider extends ContentProvider {
                         Person person = stolperstein.getPerson();
                         String name = person.getNameAsString();
                         String street = stolperstein.getLocation().getStreet();
-                        String url = person.getBiographyUri().toString();;
-                        cursor.addRow(new Object[] {i, name, street, url});
+                        String url = person.getBiographyUri().toString();
+                        ;
+                        cursor.addRow(new Object[] { i, name, street, url });
                     }
                     contentResolver.notifyChange(uri, null);
                 }

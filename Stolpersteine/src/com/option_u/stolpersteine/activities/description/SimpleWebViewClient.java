@@ -9,16 +9,16 @@ import android.widget.ProgressBar;
 public class SimpleWebViewClient extends WebViewClient {
 
     private ProgressBar progressBar;
-    
+
     public SimpleWebViewClient(ProgressBar progressBar) {
         this.progressBar = progressBar;
     }
-    
+
     @Override
     public void onPageStarted(WebView view, String url, Bitmap favicon) {
         super.onPageStarted(view, url, favicon);
     }
-    
+
     @Override
     public void onPageFinished(WebView view, String url) {
         super.onPageFinished(view, url);

@@ -32,31 +32,31 @@ import com.squareup.okhttp.Response;
 public class RetrieveStolpersteineRequest implements Response.Receiver {
     private ByteArrayOutputStream data = new ByteArrayOutputStream();
     private Handler handler;
-    
+
     public RetrieveStolpersteineRequest(final Callback callback) {
         this.handler = new Handler(Looper.getMainLooper()) {
             @Override
             @SuppressWarnings("unchecked")
             public void handleMessage(Message message) {
-                List<Stolperstein> stolpersteine = (List<Stolperstein>)message.obj;
+                List<Stolperstein> stolpersteine = (List<Stolperstein>) message.obj;
                 callback.onStolpersteineRetrieved(stolpersteine);
             }
         };
     }
-    
+
     public static interface Callback {
         public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine);
     }
-    
+
     public static Request buildRequest(String baseUrl, SearchData searchData, SearchData defaultSearchData, int offset, int limit, String encodedClientCredentials) {
         Request.Builder requestBuilder = new Request.Builder();
         requestBuilder.get();
         requestBuilder.header("Authorization", "Basic " + encodedClientCredentials);
         requestBuilder.url(buildQuery(baseUrl, searchData, defaultSearchData, offset, limit));
-        
+
         return requestBuilder.build();
     }
-    
+
     private static String buildQuery(String baseUrl, SearchData searchData, SearchData defaultSearchData, int offset, int limit) {
         Uri.Builder uriBuilder = new Uri.Builder()
                 .encodedPath(baseUrl)
@@ -67,11 +67,11 @@ public class RetrieveStolpersteineRequest implements Response.Receiver {
         if (searchData == null) {
             searchData = new SearchData();
         }
-        
+
         if (defaultSearchData == null) {
             defaultSearchData = new SearchData();
         }
-        
+
         String keyword = searchData.getKeyword() != null ? searchData.getKeyword() : defaultSearchData.getKeyword();
         if (keyword != null) {
             uriBuilder.appendQueryParameter("q", keyword);
@@ -105,7 +105,7 @@ public class RetrieveStolpersteineRequest implements Response.Receiver {
             if (count == -1) {
                 List<Stolperstein> stolpersteine = parseData(data);
                 dispatchStolpersteine(stolpersteine);
-                
+
                 return true;
             }
 
@@ -114,12 +114,12 @@ public class RetrieveStolpersteineRequest implements Response.Receiver {
 
         return false;
     }
-    
+
     private void dispatchStolpersteine(List<Stolperstein> stolpersteine) {
         Message message = handler.obtainMessage(0, stolpersteine);
-        message.sendToTarget();  
+        message.sendToTarget();
     }
-    
+
     private static List<Stolperstein> parseData(ByteArrayOutputStream data) {
         List<Stolperstein> stolpersteine = null;
         try {
@@ -129,10 +129,10 @@ public class RetrieveStolpersteineRequest implements Response.Receiver {
         } catch (Exception e) {
             Log.e("Stolpersteine", "Error retrieving JSON response", e);
         }
-        
+
         return stolpersteine;
     }
-    
+
     private static List<Stolperstein> parseStolpersteine(JSONArray jsonArray) {
         List<Stolperstein> stolpersteine = new ArrayList<Stolperstein>(jsonArray.length());
         for (int i = 0; i < jsonArray.length(); i++) {
@@ -147,7 +147,7 @@ public class RetrieveStolpersteineRequest implements Response.Receiver {
 
         return stolpersteine;
     }
-    
+
     private static Stolperstein parseStolperstein(JSONObject jsonObject) throws JSONException, URISyntaxException, UnsupportedEncodingException {
         Stolperstein stolperstein = new Stolperstein();
         stolperstein.setId(jsonObject.getString("id"));
@@ -196,5 +196,5 @@ public class RetrieveStolpersteineRequest implements Response.Receiver {
 
         return stolperstein;
     }
-    
+
 }

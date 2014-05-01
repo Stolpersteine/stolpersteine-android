@@ -5,28 +5,28 @@ import java.util.List;
 import com.option_u.stolpersteine.api.model.Stolperstein;
 
 public class SynchronizationController {
-	final static int NETWORK_BATCH_SIZE = 500;
+    final static int NETWORK_BATCH_SIZE = 500;
     private StolpersteineNetworkService networkService;
     private Listener listener;
-    
+
     public SynchronizationController(StolpersteineNetworkService networkService) {
         this.networkService = networkService;
     }
-    
+
     public Listener getListener() {
-	    return listener;
+        return listener;
     }
 
-	public void setListener(Listener listener) {
-	    this.listener = listener;
+    public void setListener(Listener listener) {
+        this.listener = listener;
     }
-	
-	public StolpersteineNetworkService getNetworkService() {
-	    return networkService;
-	}
 
-	public void synchronize() {
-    	retrieveStolpersteine(0, NETWORK_BATCH_SIZE);
+    public StolpersteineNetworkService getNetworkService() {
+        return networkService;
+    }
+
+    public void synchronize() {
+        retrieveStolpersteine(0, NETWORK_BATCH_SIZE);
     }
 
     private void retrieveStolpersteine(final int offset, final int limit) {
@@ -44,8 +44,8 @@ public class SynchronizationController {
             }
         });
     }
-    
+
     public interface Listener {
-    	public void onStolpersteineAdded(List<Stolperstein> stolpersteine);
+        public void onStolpersteineAdded(List<Stolperstein> stolpersteine);
     }
 }

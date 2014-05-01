@@ -37,7 +37,7 @@ public class MapActivity extends Activity implements SynchronizationController.L
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         setContentView(R.layout.activity_map);
         setupMapIfNecessary();
         // Start synchronizing data
@@ -47,12 +47,12 @@ public class MapActivity extends Activity implements SynchronizationController.L
         synchronizationController.setListener(this);
         synchronizationController.synchronize();
     }
-    
+
     @Override
     protected void onResume() {
         super.onResume();
-        
-        StolpersteineApplication stolpersteineApplication = (StolpersteineApplication)getApplication();
+
+        StolpersteineApplication stolpersteineApplication = (StolpersteineApplication) getApplication();
         stolpersteineApplication.trackView(this.getClass());
     }
 
