@@ -61,12 +61,12 @@ public class DescriptionActivity extends Activity {
         preferenceHelper = new PreferenceHelper(this);
         viewFormat = preferenceHelper.readViewFormat();
     }
-    
+
     @Override
     protected void onResume() {
         super.onResume();
-        
-        StolpersteineApplication stolpersteineApplication = (StolpersteineApplication)getApplication();
+
+        StolpersteineApplication stolpersteineApplication = (StolpersteineApplication) getApplication();
         stolpersteineApplication.trackView(this.getClass());
     }
 
@@ -74,11 +74,7 @@ public class DescriptionActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.bio, menu);
         MenuItem itemViewFormat = menu.getItem(0);
-        if (viewFormat == ViewFormat.WEB) {
-            switchToAndLoadInWebView(itemViewFormat);
-        } else {
-            switchToAndLoadInTextView(itemViewFormat);
-        }
+        openUrlBasedOnDomain(itemViewFormat);
         return true;
     }
 
@@ -131,6 +127,31 @@ public class DescriptionActivity extends Activity {
     private void setViewFormatMenuItemToWeb(MenuItem item) {
         item.setTitle(R.string.bio_action_item_web);
         item.setIcon(R.drawable.ic_action_view_as_web);
+    }
+
+    private void openUrlBasedOnDomain(MenuItem itemViewFormat) {
+        if (bioUrl.contains("wikipedia")) {
+            // load in web only, disable item option
+            loadUrlInBrowser(browser, bioUrl);
+            disableMenuItem(itemViewFormat);
+        } else {
+            // load in whatever provided by ViewFormat
+            // e.g.: www.stolpersteine-berlin.de
+            loadViewBasedOnViewFormat(itemViewFormat);
+        }
+    }
+
+    private void loadViewBasedOnViewFormat(MenuItem itemViewFormat) {
+        if (viewFormat == ViewFormat.WEB) {
+            switchToAndLoadInWebView(itemViewFormat);
+        } else {
+            switchToAndLoadInTextView(itemViewFormat);
+        }
+    }
+
+    private void disableMenuItem(MenuItem menuItem) {
+        menuItem.setEnabled(false);
+        menuItem.setVisible(false);
     }
 
 }
