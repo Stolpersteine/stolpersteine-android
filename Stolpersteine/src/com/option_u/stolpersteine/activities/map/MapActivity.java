@@ -144,9 +144,7 @@ public class MapActivity extends Activity implements SynchronizationController.L
     public boolean onClusterClick(Cluster<Stolperstein> cluster) {
         ArrayList<Stolperstein> stolpersteine = new ArrayList<Stolperstein>(cluster.getItems());
         if (stolpersteine.size() > 1) {
-            StolpersteineApplication stolpersteineApplication = (StolpersteineApplication) getApplication();
-            stolpersteineApplication.setStolpersteine(stolpersteine);
-            startActivity(CardsActivity.createIntent(this));
+            startActivity(CardsActivity.createIntent(this, stolpersteine));
         } else {
             Stolperstein stolperstein = stolpersteine.get(0);
             onClusterItemClick(stolperstein);
