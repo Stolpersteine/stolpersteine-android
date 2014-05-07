@@ -14,7 +14,6 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 public class LocationService implements GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 
@@ -59,7 +58,7 @@ public class LocationService implements GooglePlayServicesClient.ConnectionCallb
         return currentLocation;
     }
 
-    public boolean zoomToCurrentLocationAndDropAPin(float zoom, boolean animated) {
+    public boolean zoomToCurrentLocation(float zoom, boolean animated) {
         Location location = getCurrentLocation();
         boolean hasLocation = (location != null);
         if (hasLocation) {
@@ -70,7 +69,6 @@ public class LocationService implements GooglePlayServicesClient.ConnectionCallb
             } else {
                 map.moveCamera(region);
             }
-            map.addMarker(new MarkerOptions().position(currentLocation).flat(false));
         }
 
         return hasLocation;

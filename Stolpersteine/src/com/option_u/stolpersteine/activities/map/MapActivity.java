@@ -130,7 +130,7 @@ public class MapActivity extends Activity implements SynchronizationController.L
             int itemId = item.getItemId();
             if (itemId == R.id.action_positioning) {
                 if (isLocationOption()) {
-                    locationService.zoomToCurrentLocationAndDropAPin(20, true);
+                    locationService.zoomToCurrentLocation(20, true);
                 } else {
                     locationService.zoomToRegion(true);
                 }
@@ -179,6 +179,8 @@ public class MapActivity extends Activity implements SynchronizationController.L
     }
 
     private void setupMap() {
+        map.setMyLocationEnabled(true);
+        map.getUiSettings().setMyLocationButtonEnabled(false);
         map.getUiSettings().setZoomControlsEnabled(false);
         map.getUiSettings().setZoomGesturesEnabled(true);
         // Clustering
