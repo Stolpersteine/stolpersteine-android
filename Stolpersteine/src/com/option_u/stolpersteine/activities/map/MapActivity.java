@@ -130,7 +130,7 @@ public class MapActivity extends Activity implements SynchronizationController.L
             int itemId = item.getItemId();
             if (itemId == R.id.action_positioning) {
                 if (isLocationOption()) {
-                    locationService.zoomToCurrentLocation(16, true);
+                    locationService.zoomToCurrentLocationAndDropAPin(20, true);
                 } else {
                     locationService.zoomToRegion(true);
                 }
