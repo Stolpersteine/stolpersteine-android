@@ -48,8 +48,10 @@ public class LocationService implements GooglePlayServicesClient.ConnectionCallb
     }
 
     public void stop() {
-        locationClient.removeLocationUpdates(this);
-        locationClient.disconnect();
+        if (locationClient.isConnecting() || locationClient.isConnected()) {
+            locationClient.removeLocationUpdates(this);
+            locationClient.disconnect();
+        }
     }
 
     public Location getCurrentLocation() {
