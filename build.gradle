@@ -13,3 +13,7 @@ allprojects {
         jcenter()
     }
 }
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.10'
+}
