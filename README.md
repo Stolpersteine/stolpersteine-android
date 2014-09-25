@@ -34,12 +34,13 @@ See http://googlemaps.github.io/android-maps-utils/#start
 1. File > Import... > Android/Existing Android Code Into Workspace
 2. Choose Stolpersteine folder and import
 3. Add dependency to Google Play Services and Android Maps Utils in Properties > Android > Library
-4. Use your own API key in AndroidManifest.xml or have the SHA1 of your keystore registered with an existing API key
+4. Fix the source-folders in Properties > Java Build Path > Source. You have to remove the /src-folder and add /src/main/java and /src/androidTest/java because Eclipse can't recognize standard layouts.
+5. Use your own API key in AndroidManifest.xml or have the SHA1 of your keystore registered with an existing API key
 
     keytool -list -v -keystore ~/.android/debug.keystore
     
-5. Configure a virtual device with Android 4.x with Google Play Services ([Guide to install Google Play Services on Genymotion](http://stackoverflow.com/questions/17831990/how-do-you-install-google-frameworks-play-accounts-etc-on-a-genymotion-virtu). Alternatively, use a hardware device
-6. Run as Android Application
+6. Configure a virtual device with Android 4.x with Google Play Services ([Guide to install Google Play Services on Genymotion](http://stackoverflow.com/questions/17831990/how-do-you-install-google-frameworks-play-accounts-etc-on-a-genymotion-virtu). Alternatively, use a hardware device
+7. Run as Android Application
 
 ### Run Tests
 
