@@ -19,7 +19,7 @@ android {
 
 dependencies {
     compile 'com.google.android.gms:play-services:5.0+'
-    compile files('libs/jsoup-1.7.2.jar')
+    compile 'org.jsoup:jsoup:1.8+'
     compile 'com.google.maps.android:android-maps-utils:0.3+'
     compile files('libs/okhttp-2.0.0-SNAPSHOT-jar-with-dependencies.jar')
 }
