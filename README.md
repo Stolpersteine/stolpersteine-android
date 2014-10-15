@@ -1,6 +1,6 @@
 # Stolpersteine Android App
 
-[![Build Status](https://travis-ci.org/optionu/stolpersteine-android.svg)]
+![Build Status](https://travis-ci.org/optionu/stolpersteine-android.svg)
 
 Andoid app to display the locations of [Stolpersteine](http://en.wikipedia.org/wiki/Stolperstein) on a map. 
 
