@@ -8,9 +8,8 @@ import android.content.Context;
 import android.util.Base64;
 import android.util.Log;
 
-import com.squareup.okhttp.HttpResponseCache;
+import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.OkResponseCache;
 import com.squareup.okhttp.Request;
 
 public class StolpersteineNetworkService {
@@ -28,8 +27,8 @@ public class StolpersteineNetworkService {
         try {
             // Caching
             File cacheDir = new File(context.getCacheDir(), "http.cache");
-            OkResponseCache responseCache = new HttpResponseCache(cacheDir, CACHE_SIZE_BYTES);
-            httpClient.setOkResponseCache(responseCache);
+            Cache cache = new Cache(cacheDir, CACHE_SIZE_BYTES);
+            httpClient.setCache(cache);
         } catch (IOException e) {
             Log.e("Stolpersteine", "Error creating disk cache", e);
         }
@@ -53,7 +52,7 @@ public class StolpersteineNetworkService {
 
     public Object retrieveStolpersteine(SearchData searchData, int offset, int limit, RetrieveStolpersteineRequest.Callback callback) {
         Request request = RetrieveStolpersteineRequest.buildRequest(API_BASE_URL, searchData, defaultSearchData, offset, limit, encodedClientCredentials);
-        httpClient.enqueue(request, new RetrieveStolpersteineRequest(callback));
+        httpClient.newCall(request).enqueue(new RetrieveStolpersteineRequest(callback));
 
         return request;
     }

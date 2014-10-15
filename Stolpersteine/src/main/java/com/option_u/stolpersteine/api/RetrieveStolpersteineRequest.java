@@ -25,12 +25,12 @@ import com.option_u.stolpersteine.api.model.Location;
 import com.option_u.stolpersteine.api.model.Person;
 import com.option_u.stolpersteine.api.model.Source;
 import com.option_u.stolpersteine.api.model.Stolperstein;
-import com.squareup.okhttp.Failure;
+import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
+import com.squareup.okhttp.ResponseBody;
 
-public class RetrieveStolpersteineRequest implements Response.Receiver {
-    private ByteArrayOutputStream data = new ByteArrayOutputStream();
+public class RetrieveStolpersteineRequest implements Callback {
     private Handler handler;
 
     public RetrieveStolpersteineRequest(final Callback callback) {
@@ -92,27 +92,16 @@ public class RetrieveStolpersteineRequest implements Response.Receiver {
     }
 
     @Override
-    public void onFailure(Failure failure) {
-        Log.e("Stolpersteine", "failure");
+    public void onFailure(Request request, IOException e) {
+        Log.e("Stolpersteine", e.getMessage());
+        e.printStackTrace();
     }
 
     @Override
-    public boolean onResponse(Response response) throws IOException {
-        Response.Body body = response.body();
-        byte[] buffer = new byte[1024];
-        while (body.ready()) {
-            int count = body.byteStream().read(buffer);
-            if (count == -1) {
-                List<Stolperstein> stolpersteine = parseData(data);
-                dispatchStolpersteine(stolpersteine);
-
-                return true;
-            }
-
-            data.write(buffer, 0, count);
-        }
-
-        return false;
+    public void onResponse(Response response) throws IOException {
+        String data = response.body().string();
+        List<Stolperstein> stolpersteine = parseData(data);
+        dispatchStolpersteine(stolpersteine);
     }
 
     private void dispatchStolpersteine(List<Stolperstein> stolpersteine) {
@@ -120,11 +109,10 @@ public class RetrieveStolpersteineRequest implements Response.Receiver {
         message.sendToTarget();
     }
 
-    private static List<Stolperstein> parseData(ByteArrayOutputStream data) {
+    private static List<Stolperstein> parseData(String data) {
         List<Stolperstein> stolpersteine = null;
         try {
-            String dataAsString = data.toString("UTF-8");
-            JSONArray jsonArray = new JSONArray(dataAsString);
+            JSONArray jsonArray = new JSONArray(data);
             stolpersteine = parseStolpersteine(jsonArray);
         } catch (Exception e) {
             Log.e("Stolpersteine", "Error retrieving JSON response", e);
