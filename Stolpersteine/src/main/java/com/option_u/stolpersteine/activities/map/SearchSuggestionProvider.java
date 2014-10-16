@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.provider.BaseColumns;
 
+import com.option_u.stolpersteine.BuildConfig;
 import com.option_u.stolpersteine.api.SearchData;
 import com.option_u.stolpersteine.api.StolpersteineNetworkService;
 import com.option_u.stolpersteine.api.RetrieveStolpersteineRequest.Callback;
@@ -23,7 +24,7 @@ import com.option_u.stolpersteine.api.model.Stolperstein;
 public class SearchSuggestionProvider extends ContentProvider {
     private static final long REQUEST_DELAY_MS = 300;
 
-    public static final String AUTHORITY = "com.option_u.stolpersteine.suggestions";
+    public static final String AUTHORITY = BuildConfig.PACKAGE_NAME + ".suggestions";
     private static final String BASE_PATH = "search";
 
     private static final int STOLPERSTEINE = 110;

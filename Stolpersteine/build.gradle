@@ -12,6 +12,19 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
     }
+
+    productFlavors {
+        berlin {
+            applicationId "com.option_u.stolpersteine"
+            versionCode 3
+            versionName "1.0.2"
+        }
+        bochum {
+            applicationId "de.bochum.stolpersteine"
+            versionCode 1
+            versionName "1.0"
+        }
+    }
 }
 
 dependencies {

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.option_u.stolpersteine"
-    android:versionCode="2"
-    android:versionName="1.0.1" >
+    android:versionCode="0"
+    android:versionName="0" >
 
     <uses-sdk
         android:minSdkVersion="15"
@@ -55,7 +55,7 @@
         </activity>
         <provider
             android:name="com.option_u.stolpersteine.activities.map.SearchSuggestionProvider"
-            android:authorities="com.option_u.stolpersteine.suggestions"
+            android:authorities="${applicationId}.suggestions"
             android:exported="false"
             android:syncable="false" />
         <meta-data
