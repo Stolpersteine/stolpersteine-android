@@ -14,10 +14,14 @@ import android.view.MenuItem;
 import android.widget.SearchView;
 import android.widget.SearchView.OnSuggestionListener;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
+import com.option_u.stolpersteine.BuildConfig;
 import com.option_u.stolpersteine.R;
 import com.option_u.stolpersteine.StolpersteineApplication;
 import com.option_u.stolpersteine.activities.cards.CardsActivity;
@@ -39,10 +43,19 @@ public class MapActivity extends Activity implements SynchronizationController.L
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_map);
-        setupMapIfNecessary();
+
+        // Configure map
+        if (map == null) {
+            map = ((MapFragment) getFragmentManager().findFragmentById(R.id.fragmentMap)).getMap();
+            if (map != null) {
+                setUpMap();
+                setUpLocationService();
+            }
+        }
+
         // Start synchronizing data
         StolpersteineNetworkService networkService = new StolpersteineNetworkService(this);
-        networkService.getDefaultSearchData().setCity("Berlin");
+        networkService.getDefaultSearchData().setCity(BuildConfig.APP_FILTER);
         synchronizationController = new SynchronizationController(networkService);
         synchronizationController.setListener(this);
         synchronizationController.synchronize();
@@ -169,20 +182,12 @@ public class MapActivity extends Activity implements SynchronizationController.L
         }
     }
 
-    private void setupMapIfNecessary() {
-        if (map == null) {
-            map = ((MapFragment) getFragmentManager().findFragmentById(R.id.fragmentMap)).getMap();
-            if (map != null) {
-                setupMap();
-            }
-        }
-    }
-
-    private void setupMap() {
+    private void setUpMap() {
         map.setMyLocationEnabled(true);
         map.getUiSettings().setMyLocationButtonEnabled(false);
         map.getUiSettings().setZoomControlsEnabled(false);
         map.getUiSettings().setZoomGesturesEnabled(true);
+
         // Clustering
         clusterManager = new ClusterManager<Stolperstein>(this, map);
         // clusterManager.setAlgorithm(new GridBasedAlgorithm<Stolperstein>());
@@ -191,11 +196,12 @@ public class MapActivity extends Activity implements SynchronizationController.L
         clusterManager.setOnClusterItemClickListener(this);
         map.setOnCameraChangeListener(clusterManager);
         map.setOnMarkerClickListener(clusterManager);
-        setupLocationService();
     }
 
-    private void setupLocationService() {
-        locationService = new LocationService(this, map, R.array.berlin);
+    private void setUpLocationService() {
+        LatLng location = new LatLng(BuildConfig.APP_REGION_LATITUDE, BuildConfig.APP_REGION_LONGITUDE);
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(location, BuildConfig.APP_REGION_ZOOM);
+        locationService = new LocationService(this, map, cameraUpdate);
         locationService.zoomToRegion(false);
     }
 

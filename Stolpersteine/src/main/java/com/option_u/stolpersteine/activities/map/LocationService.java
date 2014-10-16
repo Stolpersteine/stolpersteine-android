@@ -28,19 +28,11 @@ public class LocationService implements GooglePlayServicesClient.ConnectionCallb
     private LocationRequest locationRequest;
     private Location currentLocation;
 
-    public LocationService(Context context, GoogleMap map, int regionId) {
+    public LocationService(Context context, GoogleMap map, CameraUpdate region) {
         this.map = map;
         this.locationClient = new LocationClient(context, this, this);
-        this.region = parseRegion(context, regionId);
-    }
-
-    private static CameraUpdate parseRegion(Context context, int id) {
-        TypedArray typedArray = context.getResources().obtainTypedArray(id);
-        LatLng location = new LatLng(typedArray.getFloat(0, 0), typedArray.getFloat(1, 0));
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(location, typedArray.getFloat(2, 0));
-        typedArray.recycle();
-
-        return cameraUpdate;
+        this.region = region;
+        zoomToRegion(false);
     }
 
     public void start() {
