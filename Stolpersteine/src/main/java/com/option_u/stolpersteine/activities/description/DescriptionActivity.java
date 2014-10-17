@@ -40,6 +40,7 @@ public class DescriptionActivity extends Activity {
     private static final String CSS_QUERY_STOLPERSTEINE_BERLIN = "div#biografie_seite";
     private static final String PREFIX_GERMAN = "http://www.stolpersteine-berlin.de/de";
     private static final String PREFIX_ENGLISH = "http://www.stolpersteine-berlin.de/en";
+    private static final String PDF_VIEWER = "http://docs.google.com/viewer?embedded=true&url=";
 
     public static Intent createIntent(Context context, String url) {
         // Use English web site for Berlin biographies if not using German
@@ -145,9 +146,17 @@ public class DescriptionActivity extends Activity {
             // load in whatever view provided by ViewFormat
             loadViewBasedOnViewFormat(itemViewFormat);
         } else {
+            String url;
+            if (bioUrl.endsWith(".pdf")) {
+                url = PDF_VIEWER + bioUrl;
+                browser.getSettings().setJavaScriptEnabled(true);
+            } else {
+                url = bioUrl;
+            }
+
             // load in web only, and disable item option for unknown domain sources
             // e.g.: wikipedia.org
-            loadUrlInBrowser(browser, bioUrl);
+            loadUrlInBrowser(browser, url);
             disableMenuItem(itemViewFormat);
         }
     }
