@@ -26,7 +26,7 @@ public class StolpersteineApplication extends Application {
         // GoogleAnalytics.getInstance(this).setDryRun(true);
 
         GoogleAnalytics.getInstance(this).setLocalDispatchPeriod(30);
-        tracker = GoogleAnalytics.getInstance(this).newTracker("UA-38166041-3");
+        tracker = GoogleAnalytics.getInstance(this).newTracker(BuildConfig.APP_GA_ID);
         tracker.setAnonymizeIp(false);
 
         UncaughtExceptionHandler handler = new ExceptionReporter(tracker, Thread.getDefaultUncaughtExceptionHandler(), this);

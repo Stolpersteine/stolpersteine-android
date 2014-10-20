@@ -23,6 +23,7 @@ android {
             buildConfigField "double", "APP_REGION_LATITUDE", "52.5233"
             buildConfigField "double", "APP_REGION_LONGITUDE", "13.4127"
             buildConfigField "float", "APP_REGION_ZOOM", "12"
+            buildConfigField "String", "APP_GA_ID", '""'
         }
         bochum {
             applicationId "de.bochum.stolpersteine"
@@ -33,6 +34,7 @@ android {
             buildConfigField "double", "APP_REGION_LATITUDE", "51.4819"
             buildConfigField "double", "APP_REGION_LONGITUDE", "7.2158"
             buildConfigField "float", "APP_REGION_ZOOM", "13"
+            buildConfigField "String", "APP_GA_ID", '""'
         }
     }
 }
