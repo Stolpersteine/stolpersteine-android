@@ -51,7 +51,9 @@ public class RetrieveStolpersteineRequest implements Callback {
     public static Request buildRequest(String baseUrl, SearchData searchData, SearchData defaultSearchData, int offset, int limit, String encodedClientCredentials) {
         Request.Builder requestBuilder = new Request.Builder();
         requestBuilder.get();
-        requestBuilder.header("Authorization", "Basic " + encodedClientCredentials);
+        if (encodedClientCredentials != null) {
+            requestBuilder.header("Authorization", "Basic " + encodedClientCredentials);
+        }
         requestBuilder.url(buildQuery(baseUrl, searchData, defaultSearchData, offset, limit));
 
         return requestBuilder.build();

@@ -16,14 +16,12 @@ public class StolpersteineNetworkService {
     private static final String API_BASE_URL = "https://stolpersteine-api.eu01.aws.af.cm/v1";
     // private static final String API_BASE_URL = "http://10.0.3.2:3000/v1"; // localhost genymotion
     // private static final String API_BASE_URL = "http://localhost.:3000/v1"; // localhost genymotion via Charles
-    private static final String API_CLIENT_USER = "android";
-    private static final String API_CLIENT_PASSWORD = "test";
     private static final int CACHE_SIZE_BYTES = 1024 * 1024;
     private SearchData defaultSearchData = new SearchData();
     private OkHttpClient httpClient = new OkHttpClient();
     private String encodedClientCredentials;
 
-    public StolpersteineNetworkService(Context context) {
+    public StolpersteineNetworkService(Context context, String apiUser, String apiPassword) {
         try {
             // Caching
             File cacheDir = new File(context.getCacheDir(), "http.cache");
@@ -35,8 +33,10 @@ public class StolpersteineNetworkService {
 
         try {
             // Basic auth
-            String clientCredentials = String.format("%s:%s", API_CLIENT_USER, API_CLIENT_PASSWORD, null);
-            encodedClientCredentials = Base64.encodeToString(clientCredentials.getBytes("UTF-8"), Base64.DEFAULT);
+            if (apiUser != null && apiPassword != null) {
+                String clientCredentials = String.format("%s:%s", apiUser, apiPassword, null);
+                encodedClientCredentials = Base64.encodeToString(clientCredentials.getBytes("UTF-8"), Base64.DEFAULT);
+            }
         } catch (UnsupportedEncodingException e) {
             Log.e("Stolpersteine", "Error encoding client credentials", e);
         }

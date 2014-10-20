@@ -54,7 +54,7 @@ public class MapActivity extends Activity implements SynchronizationController.L
         }
 
         // Start synchronizing data
-        StolpersteineNetworkService networkService = new StolpersteineNetworkService(this);
+        StolpersteineNetworkService networkService = new StolpersteineNetworkService(this, BuildConfig.APP_API_USER, BuildConfig.APP_API_PASSWORD);
         networkService.getDefaultSearchData().setCity(BuildConfig.APP_FILTER);
         synchronizationController = new SynchronizationController(networkService);
         synchronizationController.setListener(this);
