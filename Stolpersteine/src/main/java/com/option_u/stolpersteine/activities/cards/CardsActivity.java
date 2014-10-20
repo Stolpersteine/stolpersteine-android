@@ -75,9 +75,11 @@ public class CardsActivity extends Activity {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Stolperstein stolperstein = (Stolperstein) listView.getItemAtPosition(position);
+                Stolperstein stolperstein = (Stolperstein)listView.getItemAtPosition(position);
                 String bioUrl = stolperstein.getPerson().getBiographyUri().toString();
-                startActivity(DescriptionActivity.createIntent(CardsActivity.this, bioUrl));
+                if (bioUrl.trim().length() > 0) {
+                    startActivity(DescriptionActivity.createIntent(CardsActivity.this, bioUrl));
+                }
             }
         });
     }
