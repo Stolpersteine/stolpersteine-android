@@ -18,7 +18,7 @@ public class NetworkServiceTest extends AndroidTestCase {
 
     public void setUp() {
         doneLatch = new CountDownLatch(1);
-        networkService = new StolpersteineNetworkService(getContext());
+        networkService = new StolpersteineNetworkService(getContext(), nil, nil);
     }
 
     public void testRetrieveStolpersteine() throws InterruptedException {
