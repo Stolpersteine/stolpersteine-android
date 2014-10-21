@@ -10,8 +10,9 @@ Andoid app to display the locations of [Stolpersteine](http://en.wikipedia.org/w
 
 - [Jing Li](https://github.com/thyrlian) ([@thyrlian](https://twitter.com/thyrlian))
 - [Claus Höfele](http://github.com/choefele) ([@claushoefele](https://twitter.com/claushoefele))
+- Hendrik Spree ([@drikkes](https://twitter.com/drikkes))
 - Rachel Höfele
-- Tom Reinert [@tomreinert](https://twitter.com/tomreinert))
+- Tom Reinert ([@tomreinert](https://twitter.com/tomreinert))
 - [Peter Jeschke](https://github.com/looperhacks) ([@looperhacks](https://github.com/looperhacks))
 
 ## Building the App with Android Studio
