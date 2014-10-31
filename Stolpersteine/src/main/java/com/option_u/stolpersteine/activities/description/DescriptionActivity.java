@@ -8,10 +8,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
 
+import com.joanzapata.pdfview.PDFView;
 import com.option_u.stolpersteine.R;
 import com.option_u.stolpersteine.StolpersteineApplication;
 import com.option_u.stolpersteine.helpers.PreferenceHelper;
@@ -35,7 +37,7 @@ public class DescriptionActivity extends Activity {
     private ViewFormat viewFormat;
     private PreferenceHelper preferenceHelper;
     private WebView browser;
-    private WebSettings settings;
+    private PDFView pdfView;
     private String bioUrl;
     private static final String CSS_QUERY_STOLPERSTEINE_BERLIN = "div#biografie_seite";
     private static final String PREFIX_GERMAN = "http://www.stolpersteine-berlin.de/de";
@@ -60,18 +62,32 @@ public class DescriptionActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
-        setContentView(R.layout.activity_bio);
+
         Intent intent = getIntent();
         bioUrl = intent.getStringExtra(EXTRA_NAME);
 
-        browser = (WebView) findViewById(R.id.webview);
-        browser.setWebViewClient(new SimpleWebViewClient((ProgressBar) findViewById(R.id.progressBar)));
-        settings = browser.getSettings();
-        settings.setBuiltInZoomControls(true);
-        settings.setDisplayZoomControls(false);
+        if (bioUrl.endsWith(".pdf")) {
+            setContentView(R.layout.activity_description_pdf);
 
-        preferenceHelper = new PreferenceHelper(this);
-        viewFormat = preferenceHelper.readViewFormat();
+            ProgressBar progressBar = (ProgressBar)findViewById(R.id.progressBar);
+            progressBar.setVisibility(View.GONE);
+            pdfView = (PDFView)findViewById(R.id.pdfview);
+            pdfView.fromAsset("038_040_Lewkonja.pdf")
+                   .defaultPage(1)
+                   .load();
+        } else {
+            setContentView(R.layout.activity_description_web);
+
+            ProgressBar progressBar = (ProgressBar)findViewById(R.id.progressBar);
+            browser = (WebView)findViewById(R.id.webview);
+            browser.setWebViewClient(new SimpleWebViewClient(progressBar));
+            WebSettings settings = browser.getSettings();
+            settings.setBuiltInZoomControls(true);
+            settings.setDisplayZoomControls(false);
+
+            preferenceHelper = new PreferenceHelper(this);
+            viewFormat = preferenceHelper.readViewFormat();
+        }
     }
 
     @Override
@@ -117,6 +133,8 @@ public class DescriptionActivity extends Activity {
         viewFormat = ViewFormat.TEXT;
         preferenceHelper.saveViewFormat(viewFormat);
         setViewFormatMenuItemToWeb(selectedItem);
+
+        WebSettings settings = browser.getSettings();
         settings.setLoadWithOverviewMode(false);
         settings.setUseWideViewPort(false);
         loadContentInBrowser(browser, bioUrl, CSS_QUERY_STOLPERSTEINE_BERLIN);
@@ -126,6 +144,8 @@ public class DescriptionActivity extends Activity {
         viewFormat = ViewFormat.WEB;
         preferenceHelper.saveViewFormat(viewFormat);
         setViewFormatMenuItemToText(selectedItem);
+
+        WebSettings settings = browser.getSettings();
         settings.setLoadWithOverviewMode(true);
         settings.setUseWideViewPort(true);
         loadUrlInBrowser(browser, bioUrl);
@@ -143,20 +163,14 @@ public class DescriptionActivity extends Activity {
 
     private void openUrlBasedOnDomain(MenuItem itemViewFormat) {
         if (bioUrl.contains("stolpersteine-berlin")) {
-            // load in whatever view provided by ViewFormat
+            // Load in whatever view provided by ViewFormat
             loadViewBasedOnViewFormat(itemViewFormat);
-        } else {
-            String url;
-            if (bioUrl.endsWith(".pdf")) {
-                url = PDF_VIEWER + bioUrl;
-                browser.getSettings().setJavaScriptEnabled(true);
-            } else {
-                url = bioUrl;
-            }
+        } else if (bioUrl.endsWith(".pdf")) {
 
-            // load in web only, and disable item option for unknown domain sources
+        } else {
+            // Load in web only, and disable item option for unknown domain sources
             // e.g.: wikipedia.org
-            loadUrlInBrowser(browser, url);
+            loadUrlInBrowser(browser, bioUrl);
             disableMenuItem(itemViewFormat);
         }
     }
