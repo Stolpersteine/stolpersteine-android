@@ -1,11 +1,20 @@
 package com.option_u.stolpersteine.activities.description;
 
+import java.io.File;
 import java.util.Locale;
 
 import android.app.Activity;
+import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,11 +47,49 @@ public class DescriptionActivity extends Activity {
     private PreferenceHelper preferenceHelper;
     private WebView browser;
     private PDFView pdfView;
+    private long downloadReference;
     private String bioUrl;
     private static final String CSS_QUERY_STOLPERSTEINE_BERLIN = "div#biografie_seite";
     private static final String PREFIX_GERMAN = "http://www.stolpersteine-berlin.de/de";
     private static final String PREFIX_ENGLISH = "http://www.stolpersteine-berlin.de/en";
     private static final String PDF_VIEWER = "http://docs.google.com/viewer?embedded=true&url=";
+
+    private BroadcastReceiver downloadReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            long referenceId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
+            if (downloadReference == referenceId) {
+                ProgressBar progressBar = (ProgressBar)findViewById(R.id.progressBar);
+                progressBar.setVisibility(View.GONE);
+
+                DownloadManager downloadManager = (DownloadManager)context.getSystemService(Context.DOWNLOAD_SERVICE);
+                DownloadManager.Query query = new DownloadManager.Query();
+                query.setFilterById(referenceId);
+                Cursor cursor = downloadManager.query(query);
+
+                // it shouldn't be empty, but just in case
+                if (!cursor.moveToFirst()) {
+                    Log.e("Stolpersteine", "Empty row");
+                    return;
+                }
+
+                int statusIndex = cursor.getColumnIndex(DownloadManager.COLUMN_STATUS);
+                if (DownloadManager.STATUS_SUCCESSFUL != cursor.getInt(statusIndex)) {
+                    Log.w("Stolpersteine", "Download Failed");
+                    return;
+                }
+
+                int uriIndex = cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI);
+                String downloadedPackageUriString = cursor.getString(uriIndex);
+                File file = new File(getFilePathFromUri(DescriptionActivity.this, Uri.parse(downloadedPackageUriString)));
+                PDFView pdfView = (PDFView)findViewById(R.id.pdfview);
+                pdfView.fromFile(file)
+                       .defaultPage(1)
+                       .load();
+            }
+        }
+    };
 
     public static Intent createIntent(Context context, String url) {
         // Use English web site for Berlin biographies if not using German
@@ -57,6 +104,26 @@ public class DescriptionActivity extends Activity {
         return intent;
     }
 
+    private static String getFilePathFromUri(Context c, Uri uri) {
+        String filePath = null;
+        if ("content".equals(uri.getScheme())) {
+            String[] filePathColumn = { MediaStore.MediaColumns.DATA };
+            ContentResolver contentResolver = c.getContentResolver();
+
+            Cursor cursor = contentResolver.query(uri, filePathColumn, null,
+                    null, null);
+
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            filePath = cursor.getString(columnIndex);
+            cursor.close();
+        } else if ("file".equals(uri.getScheme())) {
+            filePath = new File(uri.getPath()).getAbsolutePath();
+        }
+        return filePath;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,12 +136,20 @@ public class DescriptionActivity extends Activity {
         if (bioUrl.endsWith(".pdf")) {
             setContentView(R.layout.activity_description_pdf);
 
-            ProgressBar progressBar = (ProgressBar)findViewById(R.id.progressBar);
-            progressBar.setVisibility(View.GONE);
-            pdfView = (PDFView)findViewById(R.id.pdfview);
-            pdfView.fromAsset("038_040_Lewkonja.pdf")
-                   .defaultPage(1)
-                   .load();
+            IntentFilter filter = new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
+            registerReceiver(downloadReceiver, filter);
+
+            Uri Download_Uri = Uri.parse(bioUrl);
+            DownloadManager.Request request = new DownloadManager.Request(Download_Uri);
+            DownloadManager downloadManager = (DownloadManager)getSystemService(DOWNLOAD_SERVICE);
+            downloadReference = downloadManager.enqueue(request);
+
+//            ProgressBar progressBar = (ProgressBar)findViewById(R.id.progressBar);
+//            progressBar.setVisibility(View.GONE);
+//            pdfView = (PDFView)findViewById(R.id.pdfview);
+//            pdfView.fromAsset("038_040_Lewkonja.pdf")
+//                   .defaultPage(1)
+//                   .load();
         } else {
             setContentView(R.layout.activity_description_web);
 
