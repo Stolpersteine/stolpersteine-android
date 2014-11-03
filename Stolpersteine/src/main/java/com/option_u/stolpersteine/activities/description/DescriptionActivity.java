@@ -30,6 +30,9 @@ import com.option_u.stolpersteine.helpers.PreferenceHelper;
 public class DescriptionActivity extends Activity {
 
     private static final String EXTRA_NAME = "url";
+    private static final String CSS_QUERY_STOLPERSTEINE_BERLIN = "div#biografie_seite";
+    private static final String PREFIX_GERMAN = "http://www.stolpersteine-berlin.de/de";
+    private static final String PREFIX_ENGLISH = "http://www.stolpersteine-berlin.de/en";
 
     public enum ViewFormat {
         TEXT, WEB;
@@ -45,14 +48,8 @@ public class DescriptionActivity extends Activity {
 
     private ViewFormat viewFormat;
     private PreferenceHelper preferenceHelper;
-    private WebView browser;
-    private PDFView pdfView;
     private long downloadReference;
     private String bioUrl;
-    private static final String CSS_QUERY_STOLPERSTEINE_BERLIN = "div#biografie_seite";
-    private static final String PREFIX_GERMAN = "http://www.stolpersteine-berlin.de/de";
-    private static final String PREFIX_ENGLISH = "http://www.stolpersteine-berlin.de/en";
-    private static final String PDF_VIEWER = "http://docs.google.com/viewer?embedded=true&url=";
 
     private BroadcastReceiver downloadReceiver = new BroadcastReceiver() {
 
@@ -60,15 +57,14 @@ public class DescriptionActivity extends Activity {
         public void onReceive(Context context, Intent intent) {
             long referenceId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
             if (downloadReference == referenceId) {
-                ProgressBar progressBar = (ProgressBar)findViewById(R.id.progressBar);
+                ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
                 progressBar.setVisibility(View.GONE);
 
-                DownloadManager downloadManager = (DownloadManager)context.getSystemService(Context.DOWNLOAD_SERVICE);
+                DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
                 DownloadManager.Query query = new DownloadManager.Query();
                 query.setFilterById(referenceId);
                 Cursor cursor = downloadManager.query(query);
 
-                // it shouldn't be empty, but just in case
                 if (!cursor.moveToFirst()) {
                     Log.e("Stolpersteine", "Empty row");
                     return;
@@ -76,17 +72,17 @@ public class DescriptionActivity extends Activity {
 
                 int statusIndex = cursor.getColumnIndex(DownloadManager.COLUMN_STATUS);
                 if (DownloadManager.STATUS_SUCCESSFUL != cursor.getInt(statusIndex)) {
-                    Log.w("Stolpersteine", "Download Failed");
+                    Log.e("Stolpersteine", "Download Failed");
                     return;
                 }
 
                 int uriIndex = cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI);
                 String downloadedPackageUriString = cursor.getString(uriIndex);
                 File file = new File(getFilePathFromUri(DescriptionActivity.this, Uri.parse(downloadedPackageUriString)));
-                PDFView pdfView = (PDFView)findViewById(R.id.pdfview);
+                PDFView pdfView = (PDFView) findViewById(R.id.pdfview);
                 pdfView.fromFile(file)
-                       .defaultPage(1)
-                       .load();
+                        .defaultPage(1)
+                        .load();
             }
         }
     };
@@ -104,26 +100,6 @@ public class DescriptionActivity extends Activity {
         return intent;
     }
 
-    private static String getFilePathFromUri(Context c, Uri uri) {
-        String filePath = null;
-        if ("content".equals(uri.getScheme())) {
-            String[] filePathColumn = { MediaStore.MediaColumns.DATA };
-            ContentResolver contentResolver = c.getContentResolver();
-
-            Cursor cursor = contentResolver.query(uri, filePathColumn, null,
-                    null, null);
-
-            cursor.moveToFirst();
-
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            filePath = cursor.getString(columnIndex);
-            cursor.close();
-        } else if ("file".equals(uri.getScheme())) {
-            filePath = new File(uri.getPath()).getAbsolutePath();
-        }
-        return filePath;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,27 +110,21 @@ public class DescriptionActivity extends Activity {
         bioUrl = intent.getStringExtra(EXTRA_NAME);
 
         if (bioUrl.endsWith(".pdf")) {
+            // PDF is displayed in a PDFView
             setContentView(R.layout.activity_description_pdf);
 
             IntentFilter filter = new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
             registerReceiver(downloadReceiver, filter);
 
-            Uri Download_Uri = Uri.parse(bioUrl);
-            DownloadManager.Request request = new DownloadManager.Request(Download_Uri);
+            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(bioUrl));
             DownloadManager downloadManager = (DownloadManager)getSystemService(DOWNLOAD_SERVICE);
             downloadReference = downloadManager.enqueue(request);
-
-//            ProgressBar progressBar = (ProgressBar)findViewById(R.id.progressBar);
-//            progressBar.setVisibility(View.GONE);
-//            pdfView = (PDFView)findViewById(R.id.pdfview);
-//            pdfView.fromAsset("038_040_Lewkonja.pdf")
-//                   .defaultPage(1)
-//                   .load();
         } else {
+            // Web content
             setContentView(R.layout.activity_description_web);
 
             ProgressBar progressBar = (ProgressBar)findViewById(R.id.progressBar);
-            browser = (WebView)findViewById(R.id.webview);
+            WebView browser = (WebView)findViewById(R.id.webview);
             browser.setWebViewClient(new SimpleWebViewClient(progressBar));
             WebSettings settings = browser.getSettings();
             settings.setBuiltInZoomControls(true);
@@ -200,15 +170,12 @@ public class DescriptionActivity extends Activity {
         new HTMLContentLoader(browser).loadContent(this, url, cssQuery);
     }
 
-    protected void loadUrlInBrowser(WebView browser, String url) {
-        browser.loadUrl(url);
-    }
-
     private void switchToAndLoadInTextView(MenuItem selectedItem) {
         viewFormat = ViewFormat.TEXT;
         preferenceHelper.saveViewFormat(viewFormat);
         setViewFormatMenuItemToWeb(selectedItem);
 
+        WebView browser = (WebView)findViewById(R.id.webview);
         WebSettings settings = browser.getSettings();
         settings.setLoadWithOverviewMode(false);
         settings.setUseWideViewPort(false);
@@ -220,10 +187,10 @@ public class DescriptionActivity extends Activity {
         preferenceHelper.saveViewFormat(viewFormat);
         setViewFormatMenuItemToText(selectedItem);
 
-        WebSettings settings = browser.getSettings();
-        settings.setLoadWithOverviewMode(true);
-        settings.setUseWideViewPort(true);
-        loadUrlInBrowser(browser, bioUrl);
+        WebView browser = (WebView)findViewById(R.id.webview);
+        browser.getSettings().setLoadWithOverviewMode(true);
+        browser.getSettings().setUseWideViewPort(true);
+        browser.loadUrl(bioUrl);
     }
 
     private void setViewFormatMenuItemToText(MenuItem item) {
@@ -237,15 +204,16 @@ public class DescriptionActivity extends Activity {
     }
 
     private void openUrlBasedOnDomain(MenuItem itemViewFormat) {
-        if (bioUrl.contains("stolpersteine-berlin")) {
+        if (bioUrl.endsWith(".pdf")) {
+            // Skip for PDF
+        } else if (bioUrl.contains("stolpersteine-berlin")) {
             // Load in whatever view provided by ViewFormat
             loadViewBasedOnViewFormat(itemViewFormat);
-        } else if (bioUrl.endsWith(".pdf")) {
-
         } else {
             // Load in web only, and disable item option for unknown domain sources
             // e.g.: wikipedia.org
-            loadUrlInBrowser(browser, bioUrl);
+            WebView browser = (WebView)findViewById(R.id.webview);
+            browser.loadUrl(bioUrl);
             disableMenuItem(itemViewFormat);
         }
     }
@@ -261,6 +229,27 @@ public class DescriptionActivity extends Activity {
     private void disableMenuItem(MenuItem menuItem) {
         menuItem.setEnabled(false);
         menuItem.setVisible(false);
+    }
+
+    private static String getFilePathFromUri(Context context, Uri uri) {
+        String filePath = null;
+
+        if ("content".equals(uri.getScheme())) {
+            String[] filePathColumn = { MediaStore.MediaColumns.DATA };
+            ContentResolver contentResolver = context.getContentResolver();
+
+            Cursor cursor = contentResolver.query(uri, filePathColumn, null, null, null);
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            filePath = cursor.getString(columnIndex);
+
+            cursor.close();
+        } else if ("file".equals(uri.getScheme())) {
+            filePath = new File(uri.getPath()).getAbsolutePath();
+        }
+
+        return filePath;
     }
 
 }
