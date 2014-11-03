@@ -148,6 +148,8 @@ public class DescriptionActivity extends Activity {
         super.onDestroy();
 
         unregisterReceiver(downloadReceiver);
+        DownloadManager downloadManager = (DownloadManager)getSystemService(DOWNLOAD_SERVICE);
+        downloadManager.remove(downloadReference);
     }
 
     @Override
