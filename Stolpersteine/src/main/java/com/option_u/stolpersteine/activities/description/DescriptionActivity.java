@@ -144,6 +144,13 @@ public class DescriptionActivity extends Activity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        unregisterReceiver(downloadReceiver);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.bio, menu);
         MenuItem itemViewFormat = menu.getItem(0);
