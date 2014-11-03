@@ -215,6 +215,7 @@ public class DescriptionActivity extends Activity {
     private void openUrlBasedOnDomain(MenuItem itemViewFormat) {
         if (bioUrl.endsWith(".pdf")) {
             // Skip for PDF
+            disableMenuItem(itemViewFormat);
         } else if (bioUrl.contains("stolpersteine-berlin")) {
             // Load in whatever view provided by ViewFormat
             loadViewBasedOnViewFormat(itemViewFormat);
