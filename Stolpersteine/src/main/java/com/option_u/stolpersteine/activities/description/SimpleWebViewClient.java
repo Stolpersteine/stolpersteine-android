@@ -6,7 +6,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
-public class SimpleWebViewClient extends WebViewClient {
+class SimpleWebViewClient extends WebViewClient {
 
     private ProgressBar progressBar;
 

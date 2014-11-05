@@ -5,7 +5,8 @@ import java.util.List;
 import com.option_u.stolpersteine.api.model.Stolperstein;
 
 public class SynchronizationController {
-    final static int NETWORK_BATCH_SIZE = 500;
+    private final static int NETWORK_BATCH_SIZE = 500;
+
     private StolpersteineNetworkService networkService;
     private Listener listener;
 

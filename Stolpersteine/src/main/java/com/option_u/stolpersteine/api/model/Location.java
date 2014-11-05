@@ -88,7 +88,7 @@ public class Location implements Parcelable {
 
     private abstract class AddressFormatter {
 
-        protected Location location;
+        Location location;
 
         abstract String formatAddress();
 

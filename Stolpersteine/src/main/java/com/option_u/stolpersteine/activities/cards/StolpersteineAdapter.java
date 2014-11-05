@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.option_u.stolpersteine.R;
 import com.option_u.stolpersteine.api.model.Stolperstein;
 
-public class StolpersteineAdapter extends BaseAdapter {
+class StolpersteineAdapter extends BaseAdapter {
 
     private LayoutInflater inflater;
     private ArrayList<Stolperstein> stolpersteine;

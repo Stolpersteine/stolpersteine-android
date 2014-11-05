@@ -13,7 +13,7 @@ import org.jsoup.select.Elements;
 import android.app.Activity;
 import android.webkit.WebView;
 
-public class HTMLContentLoader {
+class HTMLContentLoader {
 
     private WebView browser;
 

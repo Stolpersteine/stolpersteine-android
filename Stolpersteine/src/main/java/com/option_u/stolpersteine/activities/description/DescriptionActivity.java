@@ -175,7 +175,7 @@ public class DescriptionActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    protected void loadContentInBrowser(WebView browser, String url) {
+    private void loadContentInBrowser(WebView browser, String url) {
         new HTMLContentLoader(browser).loadContent(this, url, CSS_QUERY_STOLPERSTEINE_BERLIN);
     }
 

@@ -40,7 +40,7 @@ public class StolpersteineApplication extends Application {
         super.onCreate();
     }
 
-    public <T> String getString(Class<T> clazz) {
+    private <T> String getString(Class<T> clazz) {
         String className = clazz.getName();
         String string = classToViewNameMapping.get(className);
         assert (string != null);

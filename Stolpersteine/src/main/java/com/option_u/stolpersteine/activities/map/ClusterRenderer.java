@@ -9,7 +9,7 @@ import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 import com.option_u.stolpersteine.api.model.Stolperstein;
 
-public class ClusterRenderer extends DefaultClusterRenderer<Stolperstein> {
+class ClusterRenderer extends DefaultClusterRenderer<Stolperstein> {
     public ClusterRenderer(Context context, GoogleMap map, ClusterManager<Stolperstein> clusterManager) {
         super(context, map, clusterManager);
     }
