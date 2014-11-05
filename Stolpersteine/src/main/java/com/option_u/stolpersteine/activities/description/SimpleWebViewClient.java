@@ -1,6 +1,5 @@
 package com.option_u.stolpersteine.activities.description;
 
-import android.graphics.Bitmap;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
