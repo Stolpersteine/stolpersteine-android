@@ -16,7 +16,6 @@ public class StolpersteineAdapter extends BaseAdapter {
 
     private LayoutInflater inflater;
     private ArrayList<Stolperstein> stolpersteine;
-    private ViewHolder viewHolder;
 
     private class ViewHolder {
         TextView textViewName;
@@ -45,6 +44,8 @@ public class StolpersteineAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder viewHolder;
+
         if (convertView == null) {
             viewHolder = new ViewHolder();
             convertView = inflater.inflate(R.layout.fragment_info, null);
@@ -52,11 +53,12 @@ public class StolpersteineAdapter extends BaseAdapter {
             viewHolder.textViewAddress = (TextView) convertView.findViewById(R.id.textViewAddress);
             convertView.setTag(viewHolder);
         } else {
-            viewHolder = (ViewHolder) convertView.getTag();
+            viewHolder = (ViewHolder)convertView.getTag();
         }
         Stolperstein stolperstein = stolpersteine.get(position);
         viewHolder.textViewName.setText(stolperstein.getPerson().getNameAsString());
         viewHolder.textViewAddress.setText(stolperstein.getLocation().getAddressAsString());
+
         return convertView;
     }
 

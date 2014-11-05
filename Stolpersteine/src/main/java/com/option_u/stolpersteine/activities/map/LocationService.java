@@ -25,7 +25,6 @@ public class LocationService implements GooglePlayServicesClient.ConnectionCallb
     private GoogleMap map;
     private CameraUpdate region;
     private LocationClient locationClient;
-    private LocationRequest locationRequest;
     private Location currentLocation;
 
     public LocationService(Context context, GoogleMap map, CameraUpdate region) {
@@ -91,7 +90,7 @@ public class LocationService implements GooglePlayServicesClient.ConnectionCallb
 
     @Override
     public void onConnected(Bundle connectionHint) {
-        locationRequest = LocationRequest.create();
+        LocationRequest locationRequest = LocationRequest.create();
         locationRequest.setPriority(REQUEST_PRIORITY);
         locationRequest.setInterval(REQUEST_INTERVAL);
         locationRequest.setFastestInterval(REQUEST_FASTEST_INTERVAL);
