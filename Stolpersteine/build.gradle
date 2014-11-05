@@ -1,11 +1,11 @@
-apply plugin: 'android'
+apply plugin: 'com.android.application'
 
 android {
     buildToolsVersion "20.0.0"
     compileSdkVersion 20
 
     lintOptions {
-        abortOnError  false
+        abortOnError false
     }
 
     compileOptions {
