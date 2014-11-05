@@ -49,6 +49,7 @@ public class LocationService implements GooglePlayServicesClient.ConnectionCallb
         return currentLocation;
     }
 
+    @SuppressWarnings("SameParameterValue")
     public boolean zoomToCurrentLocation(float zoom, boolean animated) {
         Location location = getCurrentLocation();
         boolean hasLocation = (location != null);

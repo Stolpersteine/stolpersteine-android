@@ -26,11 +26,11 @@ public class SynchronizationController {
     }
 
     public void synchronize() {
-        retrieveStolpersteine(0, NETWORK_BATCH_SIZE);
+        retrieveStolpersteine(0);
     }
 
-    private void retrieveStolpersteine(final int offset, final int limit) {
-        networkService.retrieveStolpersteine(null, offset, limit, new RetrieveStolpersteineRequest.Callback() {
+    private void retrieveStolpersteine(final int offset) {
+        networkService.retrieveStolpersteine(null, offset, NETWORK_BATCH_SIZE, new RetrieveStolpersteineRequest.Callback() {
 
             @Override
             public void onStolpersteineRetrieved(List<Stolperstein> stolpersteine) {
@@ -39,7 +39,7 @@ public class SynchronizationController {
                 }
 
                 if (stolpersteine != null && stolpersteine.size() == NETWORK_BATCH_SIZE) {
-                    retrieveStolpersteine(offset + NETWORK_BATCH_SIZE, NETWORK_BATCH_SIZE);
+                    retrieveStolpersteine(offset + NETWORK_BATCH_SIZE);
                 }
             }
         });

@@ -175,8 +175,8 @@ public class DescriptionActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    protected void loadContentInBrowser(WebView browser, String url, String cssQuery) {
-        new HTMLContentLoader(browser).loadContent(this, url, cssQuery);
+    protected void loadContentInBrowser(WebView browser, String url) {
+        new HTMLContentLoader(browser).loadContent(this, url, CSS_QUERY_STOLPERSTEINE_BERLIN);
     }
 
     private void switchToAndLoadInTextView(MenuItem selectedItem) {
@@ -188,7 +188,7 @@ public class DescriptionActivity extends Activity {
         WebSettings settings = browser.getSettings();
         settings.setLoadWithOverviewMode(false);
         settings.setUseWideViewPort(false);
-        loadContentInBrowser(browser, bioUrl, CSS_QUERY_STOLPERSTEINE_BERLIN);
+        loadContentInBrowser(browser, bioUrl);
     }
 
     private void switchToAndLoadInWebView(MenuItem selectedItem) {
