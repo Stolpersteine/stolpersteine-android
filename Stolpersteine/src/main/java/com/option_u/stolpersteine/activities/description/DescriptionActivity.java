@@ -44,7 +44,7 @@ public class DescriptionActivity extends Activity {
                 return TEXT;
             }
         }
-    };
+    }
 
     private ViewFormat viewFormat;
     private PreferenceHelper preferenceHelper;

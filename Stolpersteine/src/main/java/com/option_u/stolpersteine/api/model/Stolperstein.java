@@ -9,7 +9,7 @@ import com.google.maps.android.clustering.ClusterItem;
 public class Stolperstein implements Parcelable, ClusterItem {
 
     public enum Type {
-        STOLPERSTEIN, STOLPERSCHWELLE;
+        STOLPERSTEIN, STOLPERSCHWELLE
     }
 
     private String id;

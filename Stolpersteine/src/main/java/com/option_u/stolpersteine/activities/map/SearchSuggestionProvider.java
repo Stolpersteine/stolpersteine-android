@@ -106,7 +106,7 @@ public class SearchSuggestionProvider extends ContentProvider {
                         String name = person.getNameAsString();
                         String street = stolperstein.getLocation().getStreet();
                         String url = person.getBiographyUri().toString();
-                        ;
+
                         cursor.addRow(new Object[] { i, name, street, url });
                     }
                     contentResolver.notifyChange(uri, null);

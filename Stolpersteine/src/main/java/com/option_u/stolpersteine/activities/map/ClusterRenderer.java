@@ -17,7 +17,7 @@ public class ClusterRenderer extends DefaultClusterRenderer<Stolperstein> {
     @Override
     protected boolean shouldRenderAsCluster(Cluster<Stolperstein> cluster) {
         return true;
-    };
+    }
 
     @Override
     protected void onBeforeClusterItemRendered(Stolperstein stolperstein, MarkerOptions markerOptions) {
