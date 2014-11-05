@@ -51,10 +51,6 @@ public class Location implements Parcelable {
         this.coordinates = coordinates;
     }
 
-    public boolean equals(Location location) {
-        return (this.street.equals(location.street) && this.zipCode.equals(location.zipCode)) ? true : false;
-    }
-
     public String getAddressAsString() {
         AddressContext addressContext = new AddressContext(this);
         return addressContext.getAddress();
