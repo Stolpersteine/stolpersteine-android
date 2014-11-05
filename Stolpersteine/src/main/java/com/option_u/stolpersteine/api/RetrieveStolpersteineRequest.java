@@ -89,8 +89,7 @@ public class RetrieveStolpersteineRequest implements Callback {
             uriBuilder.appendQueryParameter("city", city);
         }
 
-        String urlString = uriBuilder.build().toString();
-        return urlString;
+        return uriBuilder.build().toString();
     }
 
     @Override
