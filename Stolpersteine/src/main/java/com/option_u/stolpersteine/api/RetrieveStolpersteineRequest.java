@@ -1,6 +1,5 @@
 package com.option_u.stolpersteine.api;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -28,7 +27,6 @@ import com.option_u.stolpersteine.api.model.Stolperstein;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
-import com.squareup.okhttp.ResponseBody;
 
 public class RetrieveStolpersteineRequest implements Callback {
     private Handler handler;

@@ -1,7 +1,6 @@
 package com.option_u.stolpersteine.activities.map;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.location.Location;
 import android.os.Bundle;
 
