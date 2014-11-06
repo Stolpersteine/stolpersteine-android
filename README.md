@@ -19,12 +19,10 @@ Andoid app to display the locations of [Stolpersteine](http://en.wikipedia.org/w
 
 1. Make sure you have [Java SE 7](http://www.oracle.com/technetwork/articles/javase/index-jsp-138363.html) or higher installed
 2. Install [Android Studio](https://developer.android.com/sdk/installing/studio.html)
-3. From within Android Studio's SDK Manage, install Android SDK (API 20) and SDK Tools (20)
+3. From within Android Studio's SDK Manager, install Android SDK (API 20) and SDK Tools (20)
 4. Import the project from the folder where you checked out this repo
-5. Use your own API key in AndroidManifest.xml or have the SHA1 of your keystore registered with an existing API key
-
-    `keytool -list -v -keystore ~/.android/debug.keystore`
- 6. Configure a virtual device with Android 4.x with Google Play Services ([Guide to install Google Play Services on Genymotion](http://stackoverflow.com/questions/17831990/how-do-you-install-google-frameworks-play-accounts-etc-on-a-genymotion-virtu). Alternatively, use a hardware device
+5. Use your own API key in AndroidManifest.xml or have the SHA1 of your keystore registered with an existing API key (`keytool -list -v -keystore ~/.android/debug.keystore`)
+6. Configure a virtual device with Android 4.x with Google Play Services ([Guide to install Google Play Services on Genymotion](http://stackoverflow.com/questions/17831990/how-do-you-install-google-frameworks-play-accounts-etc-on-a-genymotion-virtu). Alternatively, use a hardware device
 
 To run the app, configure an Android Application in Run/Debug Configurations with the Stolpersteine Module. In a similar way, you can create an Android Tests configuration to run the unit tests. Build variants for different cities are chosen using the Build Variants window.
 
