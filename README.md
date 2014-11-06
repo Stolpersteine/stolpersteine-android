@@ -17,51 +17,18 @@ Andoid app to display the locations of [Stolpersteine](http://en.wikipedia.org/w
 
 ## Building the App with Android Studio
 
-Coming soon...
-
-## Building the App with ADT
-
-### Google Play Services
-
-1. Install Google Play Services in Extras through the Android SDK Manager
-2. File > Import > Android/Existing Android Code into Workspace and choose <android-sdk>/extras/google/google_play_services/libproject/google-play-services_lib/
-3. Check "Is Library" in Properties > Android
-
-See http://developer.android.com/google/play-services/setup.html
-
-### Android Maps Utils
-
-1. Make sure to also pull submodules (`git submodule init && git submodule update --recursive`)
-2. File > Import > Android/Existing Android Code into Workspace and choose android-maps-utils/library
-3. Check "Is Library" in Properties > Android
-4. Add Google Play Services as dependency in Properties > Android
-5. Add Stolpersteine/libs/android-support-v4.jar as dependency in Java Build Path > Libraries
-
-See http://googlemaps.github.io/android-maps-utils/#start
-
-### Run App
-
-1. File > Import... > Android/Existing Android Code Into Workspace
-2. Choose Stolpersteine folder and import
-3. Add dependency to Google Play Services and Android Maps Utils in Properties > Android > Library
-4. Fix the source-folders in Properties > Java Build Path > Source. You have to remove the /src-folder and add /src/main/java and /src/androidTest/java because Eclipse can't recognize standard layouts.
+1. Make sure you have [Java SE 7](http://www.oracle.com/technetwork/articles/javase/index-jsp-138363.html) or higher installed
+2. Install [Android Studio](https://developer.android.com/sdk/installing/studio.html)
+3. From within Android Studio's SDK Manage, install Android SDK (API 20) and SDK Tools (20)
+4. Import the project from the folder where you checked out this repo
 5. Use your own API key in AndroidManifest.xml or have the SHA1 of your keystore registered with an existing API key
 
-    keytool -list -v -keystore ~/.android/debug.keystore
-    
-6. Configure a virtual device with Android 4.x with Google Play Services ([Guide to install Google Play Services on Genymotion](http://stackoverflow.com/questions/17831990/how-do-you-install-google-frameworks-play-accounts-etc-on-a-genymotion-virtu). Alternatively, use a hardware device
-7. Run as Android Application
+    `keytool -list -v -keystore ~/.android/debug.keystore`
+ 6. Configure a virtual device with Android 4.x with Google Play Services ([Guide to install Google Play Services on Genymotion](http://stackoverflow.com/questions/17831990/how-do-you-install-google-frameworks-play-accounts-etc-on-a-genymotion-virtu). Alternatively, use a hardware device
 
-### Run Tests
+To run the app, configure an Android Application in Run/Debug Configurations with the Stolpersteine Module. In a similar way, you can create an Android Tests configuration to run the unit tests. Build variants for different cities are chosen using the Build Variants window.
 
-1. File > Import... > Android/Existing Android Code Into Workspace
-2. Choose StolpersteineTest folder and import
-3. Add dependency to Stolpersteine in Properties > Java Build Path > Projects
-3. Configure to run as Android JUnit Test
-
-Note: set the text encoding in ADT to UTF-8 (Preferences > General > Workspace). Otherwise, test cases that use German characters will fail.
-
-### Requires Android Version
+### Android Version
 
 API Level 15+, Android 4.0.x (Ice Cream Sandwich) or higher
 
