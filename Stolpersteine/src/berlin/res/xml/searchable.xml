@@ -7,6 +7,7 @@
     android:searchSuggestIntentAction="android.intent.action.VIEW"
     android:searchSettingsDescription="@string/app_name"
     android:includeInGlobalSearch="true"
+    android:imeOptions="actionSearch"
     android:label="@string/app_name"
     android:hint="@string/map_search_hint" >
 </searchable>
