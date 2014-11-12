@@ -146,8 +146,11 @@ public class DescriptionActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
-        unregisterReceiver(downloadReceiver);
+        try {
+            unregisterReceiver(downloadReceiver);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
         DownloadManager downloadManager = (DownloadManager)getSystemService(DOWNLOAD_SERVICE);
         downloadManager.remove(downloadReference);
     }
