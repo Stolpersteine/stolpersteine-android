@@ -65,8 +65,7 @@ public class CardsActivity extends Activity {
 
     private void showStolpersteine(ArrayList<Stolperstein> stolpersteine, ActionBar actionBar, final ListView listView) {
         Integer numStolpersteine = stolpersteine.size();
-        int resourceID = (numStolpersteine > 1) ? R.string.app_stolpersteine_plural : R.string.app_stolpersteine_singular;
-        String title = getResources().getString(resourceID);
+        String title = getResources().getQuantityString(R.plurals.stolpersteine, numStolpersteine);
         actionBar.setTitle(Integer.toString(numStolpersteine) + " " + title);
 
         StolpersteineAdapter stolpersteinAdapter = new StolpersteineAdapter(this, stolpersteine);

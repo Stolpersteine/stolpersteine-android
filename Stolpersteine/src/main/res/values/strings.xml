@@ -3,9 +3,7 @@
 
     <!-- General -->
     <string name="app_name">Stolpersteine</string>
-    <string name="app_stolpersteine_singular">Stolperstein</string>
-    <string name="app_stolpersteine_plural">Stolpersteine</string>
-    
+
     <!-- Map Activity UI -->
     <string name="map_label">Stolpersteine</string>
     <string name="map_search_title">Search</string>
@@ -20,5 +18,10 @@
     <string name="bio_label">Biography</string>
     <string name="bio_action_item_text">Text view</string>
     <string name="bio_action_item_web">Web view</string>
-        
+
+    <plurals name="stolpersteine">
+        <item quantity="one">Stolperstein</item>
+        <item quantity="other">Stolpersteine</item>
+    </plurals>
+
 </resources>
