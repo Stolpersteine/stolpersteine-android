@@ -14,11 +14,14 @@ import android.view.MenuItem;
 import android.widget.SearchView;
 import android.widget.SearchView.OnSuggestionListener;
 
+import com.androidmapsextensions.MarkerOptions;
+import com.androidmapsextensions.impl.ExtendedMapFactory;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 import com.option_u.stolpersteine.BuildConfig;
@@ -36,6 +39,7 @@ public class MapActivity extends Activity implements SynchronizationController.L
     private ClusterManager<Stolperstein> clusterManager;
     private LocationService locationService;
     private GoogleMap map;
+    private com.androidmapsextensions.GoogleMap extendedMap;
     private Menu menu;
 
     @Override
@@ -174,28 +178,50 @@ public class MapActivity extends Activity implements SynchronizationController.L
         return false;
     }
 
+    private static final double[] CLUSTER_SIZES = new double[]{180, 160, 144, 120, 96};
+
     @Override
     public void onStolpersteineAdded(List<Stolperstein> stolpersteine) {
-        if (clusterManager != null && stolpersteine != null) {
-            clusterManager.addItems(stolpersteine);
-            clusterManager.cluster();
+//        if (clusterManager != null && stolpersteine != null) {
+//            clusterManager.addItems(stolpersteine);
+//            clusterManager.cluster();
+//        }
+
+        MarkerOptions options = new MarkerOptions();
+        for (Stolperstein stolperstein: stolpersteine) {
+            com.androidmapsextensions.Marker marker = extendedMap.addMarker(options
+                            .title("title")
+                            .position(stolperstein.getLocation().getCoordinates())
+            );
+
         }
+
+        com.androidmapsextensions.ClusteringSettings clusteringSettings = new com.androidmapsextensions.ClusteringSettings();
+        clusteringSettings.addMarkersDynamically(true);
+
+//        clusteringSettings.clusterOptionsProvider(new com.androidmapsextensions.RealClusterOptionsProvider(context.getResources()));
+        double clusterSize = CLUSTER_SIZES[0];
+        clusteringSettings.clusterSize(clusterSize);
+        extendedMap.setClustering(clusteringSettings);
+
     }
 
     private void setUpMap() {
+        extendedMap = ExtendedMapFactory.create(map, this);
+
         map.setMyLocationEnabled(true);
         map.getUiSettings().setMyLocationButtonEnabled(false);
         map.getUiSettings().setZoomControlsEnabled(false);
         map.getUiSettings().setZoomGesturesEnabled(true);
 
         // Clustering
-        clusterManager = new ClusterManager<Stolperstein>(this, map);
-        // clusterManager.setAlgorithm(new GridBasedAlgorithm<Stolperstein>());
-        clusterManager.setRenderer(new ClusterRenderer(this, map, clusterManager));
-        clusterManager.setOnClusterClickListener(this);
-        clusterManager.setOnClusterItemClickListener(this);
-        map.setOnCameraChangeListener(clusterManager);
-        map.setOnMarkerClickListener(clusterManager);
+//        clusterManager = new ClusterManager<Stolperstein>(this, map);
+//        // clusterManager.setAlgorithm(new GridBasedAlgorithm<Stolperstein>());
+//        clusterManager.setRenderer(new ClusterRenderer(this, map, clusterManager));
+//        clusterManager.setOnClusterClickListener(this);
+//        clusterManager.setOnClusterItemClickListener(this);
+//        map.setOnCameraChangeListener(clusterManager);
+//        map.setOnMarkerClickListener(clusterManager);
     }
 
     private void setUpLocationService() {

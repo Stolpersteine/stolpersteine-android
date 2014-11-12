@@ -49,4 +49,5 @@ dependencies {
     compile 'com.google.maps.android:android-maps-utils:0.3.1'
     compile 'com.squareup.okhttp:okhttp:2.0.0'
     compile 'com.joanzapata.pdfview:android-pdfview:1.0.2@aar'
+    compile 'com.androidmapsextensions:android-maps-extensions:2.1.0'
 }
