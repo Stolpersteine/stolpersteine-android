@@ -146,13 +146,12 @@ public class DescriptionActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        try {
+
+        if (bioUrl.endsWith(".pdf")) {
             unregisterReceiver(downloadReceiver);
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
+            DownloadManager downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+            downloadManager.remove(downloadReference);
         }
-        DownloadManager downloadManager = (DownloadManager)getSystemService(DOWNLOAD_SERVICE);
-        downloadManager.remove(downloadReference);
     }
 
     @Override
