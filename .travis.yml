@@ -8,10 +8,10 @@ android:
         - android-20
         - extra-google-google_play_services
         - sys-img-armeabi-v7a-android-19
-  licenses:
-    - 'android-sdk-preview-license-52d11cd2'
-    - 'android-sdk-license-.+'
-    - 'google-gdk-license-.+'
+    licenses:
+        - 'android-sdk-preview-license-52d11cd2'
+        - 'android-sdk-license-.+'
+        - 'google-gdk-license-.+'
 
 # Emulator Management: Create, Start and Wait
 before_script:
