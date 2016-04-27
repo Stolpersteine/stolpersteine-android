@@ -30,7 +30,7 @@ import java.util.Locale;
 public class DescriptionActivity extends Activity {
 
     private static final String EXTRA_NAME = "url";
-    private static final String CSS_QUERY_STOLPERSTEINE_BERLIN = "div#biografie_seite";
+    private static final String CSS_QUERY_STOLPERSTEINE_BERLIN = "div.biografieData";
     private static final String PREFIX_GERMAN = "http://www.stolpersteine-berlin.de/de";
     private static final String PREFIX_ENGLISH = "http://www.stolpersteine-berlin.de/en";
 
