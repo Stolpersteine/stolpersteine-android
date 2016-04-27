@@ -8,7 +8,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -28,12 +27,19 @@ class HTMLContentLoader {
                 try {
                     Document document = Jsoup.parse(new URL(url).openStream(), "utf-8", url);
                     Elements elements = document.select(cssQuery);
+                    if (elements.isEmpty()) {
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                browser.loadUrl(url);
+                            }
+                        });
+                        return;
+                    }
                     String content = elements.toString();
                     content = removeHTMLTagHyperlink(content);
                     DataLoaderRunnable dataLoaderRunnable = new DataLoaderRunnable(browser, content);
                     activity.runOnUiThread(dataLoaderRunnable);
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
