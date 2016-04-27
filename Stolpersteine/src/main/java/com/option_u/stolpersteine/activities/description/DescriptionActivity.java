@@ -1,8 +1,5 @@
 package com.option_u.stolpersteine.activities.description;
 
-import java.io.File;
-import java.util.Locale;
-
 import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
@@ -26,6 +23,9 @@ import com.joanzapata.pdfview.PDFView;
 import com.option_u.stolpersteine.R;
 import com.option_u.stolpersteine.StolpersteineApplication;
 import com.option_u.stolpersteine.helpers.PreferenceHelper;
+
+import java.io.File;
+import java.util.Locale;
 
 public class DescriptionActivity extends Activity {
 
@@ -124,11 +124,11 @@ public class DescriptionActivity extends Activity {
             setContentView(R.layout.activity_description_web);
 
             ProgressBar progressBar = (ProgressBar)findViewById(R.id.progressBar);
-            WebView browser = (WebView)findViewById(R.id.webview);
-            browser.setWebViewClient(new SimpleWebViewClient(progressBar));
+            StolpersteineWebView browser = (StolpersteineWebView)findViewById(R.id.webview);
             WebSettings settings = browser.getSettings();
             settings.setBuiltInZoomControls(true);
             settings.setDisplayZoomControls(false);
+            browser.setWebViewClient(new SimpleWebViewClient(progressBar));
 
             preferenceHelper = new PreferenceHelper(this);
             viewFormat = preferenceHelper.readViewFormat();
@@ -185,8 +185,7 @@ public class DescriptionActivity extends Activity {
         viewFormat = ViewFormat.TEXT;
         preferenceHelper.saveViewFormat(viewFormat);
         setViewFormatMenuItemToWeb(selectedItem);
-
-        WebView browser = (WebView)findViewById(R.id.webview);
+        StolpersteineWebView browser = (StolpersteineWebView)findViewById(R.id.webview);
         WebSettings settings = browser.getSettings();
         settings.setLoadWithOverviewMode(false);
         settings.setUseWideViewPort(false);
@@ -198,9 +197,10 @@ public class DescriptionActivity extends Activity {
         preferenceHelper.saveViewFormat(viewFormat);
         setViewFormatMenuItemToText(selectedItem);
 
-        WebView browser = (WebView)findViewById(R.id.webview);
-        browser.getSettings().setLoadWithOverviewMode(true);
-        browser.getSettings().setUseWideViewPort(true);
+        StolpersteineWebView browser = (StolpersteineWebView)findViewById(R.id.webview);
+        WebSettings settings = browser.getSettings();
+        settings.setLoadWithOverviewMode(true);
+        settings.setUseWideViewPort(true);
         browser.loadUrl(bioUrl);
     }
 
@@ -224,7 +224,7 @@ public class DescriptionActivity extends Activity {
         } else {
             // Load in web only, and disable item option for unknown domain sources
             // e.g.: wikipedia.org
-            WebView browser = (WebView)findViewById(R.id.webview);
+            StolpersteineWebView browser = (StolpersteineWebView)findViewById(R.id.webview);
             browser.loadUrl(bioUrl);
             disableMenuItem(itemViewFormat);
         }

@@ -10,11 +10,11 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center" />
 
-	<WebView
+	<com.option_u.stolpersteine.activities.description.StolpersteineWebView
 	    android:id="@+id/webview"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
 	    android:background="@color/gray" >
-	</WebView>
+	</com.option_u.stolpersteine.activities.description.StolpersteineWebView>
 
 </LinearLayout>
