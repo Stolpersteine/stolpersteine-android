@@ -161,8 +161,15 @@ public class RetrieveStolpersteineRequest implements Callback {
         if (jsonPerson != null) {
             person.setFirstName(jsonPerson.optString("firstName"));
             person.setLastName(jsonPerson.optString("lastName"));
-            String uri = URLDecoder.decode(URLEncoder.encode(jsonPerson.optString("biographyUrl"), charsetName), charsetName);
-            person.setBiography(new URI(uri));
+            String biographyUrl = jsonPerson.optString("biographyUrl");
+            String biographyUrlDecoded = URLDecoder.decode(URLEncoder.encode(biographyUrl, charsetName), charsetName);
+            URI uri = null;
+            try {
+                uri = new URI(biographyUrlDecoded);
+            } catch (URISyntaxException e) {
+                // ignore
+            }
+            person.setBiography(uri);
         }
 
         Location location = new Location();
@@ -183,5 +190,4 @@ public class RetrieveStolpersteineRequest implements Callback {
 
         return stolperstein;
     }
-
 }
