@@ -168,8 +168,10 @@ public class MapActivity extends Activity implements SynchronizationController.L
 
     @Override
     public boolean onClusterItemClick(Stolperstein stolperstein) {
-        String bioUrl = stolperstein.getPerson().getBiographyUri().toString();
-        startActivity(DescriptionActivity.createIntent(this, bioUrl));
+        if (stolperstein.getPerson().getBiographyUri() != null) {
+            String bioUrl = stolperstein.getPerson().getBiographyUri().toString();
+            startActivity(DescriptionActivity.createIntent(this, bioUrl));
+        }
 
         return false;
     }
