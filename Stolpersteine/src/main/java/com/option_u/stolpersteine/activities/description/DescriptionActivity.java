@@ -218,12 +218,8 @@ public class DescriptionActivity extends Activity {
         if (bioUrl.endsWith(".pdf")) {
             // Skip for PDF
             disableMenuItem(itemViewFormat);
-        } else if (bioUrl.contains("stolpersteine-berlin")) {
-            // Load in whatever view provided by ViewFormat
-            loadViewBasedOnViewFormat(itemViewFormat);
         } else {
-            // Load in web only, and disable item option for unknown domain sources
-            // e.g.: wikipedia.org
+            // Load in web only
             StolpersteineWebView browser = (StolpersteineWebView)findViewById(R.id.webview);
             browser.loadUrl(bioUrl);
             disableMenuItem(itemViewFormat);
