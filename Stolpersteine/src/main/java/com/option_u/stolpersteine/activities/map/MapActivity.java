@@ -129,7 +129,9 @@ public class MapActivity extends Activity implements SynchronizationController.L
                 Cursor cursor = searchView.getSuggestionsAdapter().getCursor();
                 cursor.moveToPosition(position);
                 String bioUrl = cursor.getString(cursor.getColumnIndex(SearchSuggestionProvider.SUGGEST_COLUMN_URL));
-                startActivity(DescriptionActivity.createIntent(MapActivity.this, bioUrl));
+                if (bioUrl != null) {
+                    startActivity(DescriptionActivity.createIntent(MapActivity.this, bioUrl));
+                }
                 return true;
             }
         });
